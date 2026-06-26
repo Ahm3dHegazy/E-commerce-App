@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CartFlow.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260410194504_AddedTheRestOfEntitiesConfigurations")]
-    partial class AddedTheRestOfEntitiesConfigurations
+    [Migration("20260626175216_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,9 +95,6 @@ namespace CartFlow.Data.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CartItemId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -166,10 +163,8 @@ namespace CartFlow.Data.Migrations
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasDefaultValue("Credit");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<decimal>("TotalPrice")
                         .HasPrecision(18, 2)
@@ -199,9 +194,6 @@ namespace CartFlow.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderItemId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -229,9 +221,6 @@ namespace CartFlow.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CartItemId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -244,15 +233,6 @@ namespace CartFlow.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("OrderItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductImageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
@@ -286,9 +266,6 @@ namespace CartFlow.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductImageId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -315,9 +292,6 @@ namespace CartFlow.Data.Migrations
                     b.Property<decimal>("Rate")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -366,9 +340,7 @@ namespace CartFlow.Data.Migrations
 
                     b.Property<string>("UserRole")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("CUSTOMER");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -422,7 +394,7 @@ namespace CartFlow.Data.Migrations
             modelBuilder.Entity("CartFlow.Data.Entities.Category", b =>
                 {
                     b.HasOne("CartFlow.Data.Entities.Category", "ParentCategory")
-                        .WithMany()
+                        .WithMany("Subcategories")
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -508,6 +480,8 @@ namespace CartFlow.Data.Migrations
             modelBuilder.Entity("CartFlow.Data.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("Subcategories");
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Order", b =>

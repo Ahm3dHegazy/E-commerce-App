@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using CartFlow.Data.Entities;
+
 namespace CartFlow.Data.Data;
 
 public class AppDbContext : DbContext {

@@ -15,7 +15,7 @@ namespace CartFlow.Data.Data.Configurations {
                 .HasMaxLength(500);
 
             builder.HasOne(c => c.ParentCategory)
-                .WithMany()
+                .WithMany(c => c.Subcategories)
                 .HasForeignKey(c => c.ParentCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 

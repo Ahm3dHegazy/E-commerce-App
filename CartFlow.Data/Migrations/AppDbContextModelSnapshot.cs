@@ -58,53 +58,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Addresses", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Nasr City",
-                            Governorate = "Cairo",
-                            PostalCode = "11759",
-                            Street = "Abbas El Akkad St.",
-                            UserID = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Smouha",
-                            Governorate = "Alexandria",
-                            PostalCode = "21615",
-                            Street = "Victor Emmanuel St.",
-                            UserID = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Dokki",
-                            Governorate = "Giza",
-                            PostalCode = "12311",
-                            Street = "Street 9",
-                            UserID = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            City = "Mansoura",
-                            Governorate = "Dakahlia",
-                            PostalCode = "35511",
-                            Street = "El Gomhouria St.",
-                            UserID = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            City = "Hurghada",
-                            Governorate = "Red Sea",
-                            PostalCode = "84511",
-                            Street = "Sheraton Road",
-                            UserID = 5
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Cart", b =>
@@ -123,33 +76,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Carts", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            UserId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            UserId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            UserId = 5
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.CartItem", b =>
@@ -186,58 +112,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("CartItems", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CartId = 1,
-                            ProductId = 1,
-                            Quantity = 2,
-                            UnitPrice = 250.00m,
-                            UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CartId = 2,
-                            ProductId = 2,
-                            Quantity = 1,
-                            UnitPrice = 300.00m,
-                            UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AddedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CartId = 3,
-                            ProductId = 3,
-                            Quantity = 1,
-                            UnitPrice = 150.00m,
-                            UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AddedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CartId = 4,
-                            ProductId = 4,
-                            Quantity = 5,
-                            UnitPrice = 45.00m,
-                            UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AddedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CartId = 5,
-                            ProductId = 5,
-                            Quantity = 1,
-                            UnitPrice = 3500.00m,
-                            UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Category", b =>
@@ -266,38 +140,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descripion = "Premium 100% Egyptian Cotton Clothing and Textiles",
-                            Name = "Egyptian Cotton"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Descripion = "Delicious Oriental and Egyptian Desserts",
-                            Name = "Local Sweets"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Descripion = "Traditional Egyptian Pottery and Copper works",
-                            Name = "Handcrafts"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Descripion = "Authentic Egyptian Spices and Foods",
-                            Name = "Spices & Groceries"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Descripion = "Locally assembled electronics and appliances",
-                            Name = "Electronics"
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Order", b =>
@@ -336,58 +178,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            OrderDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OrderStatus = "Delivered",
-                            PaymentMethod = "Cash",
-                            TotalPrice = 500.00m,
-                            TotalQuantity = 2,
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            OrderDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OrderStatus = "Shipped",
-                            PaymentMethod = "Credit",
-                            TotalPrice = 300.00m,
-                            TotalQuantity = 1,
-                            UserId = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            OrderDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OrderStatus = "Ordered",
-                            PaymentMethod = "Cash",
-                            TotalPrice = 150.00m,
-                            TotalQuantity = 1,
-                            UserId = 4
-                        },
-                        new
-                        {
-                            Id = 4,
-                            OrderDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OrderStatus = "Cancelled",
-                            PaymentMethod = "Cash",
-                            TotalPrice = 225.00m,
-                            TotalQuantity = 5,
-                            UserId = 5
-                        },
-                        new
-                        {
-                            Id = 5,
-                            OrderDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OrderStatus = "Delivered",
-                            PaymentMethod = "Credit",
-                            TotalPrice = 3500.00m,
-                            TotalQuantity = 1,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.OrderItem", b =>
@@ -418,48 +208,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            OrderId = 1,
-                            Price = 250.00m,
-                            ProductId = 1,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            OrderId = 2,
-                            Price = 300.00m,
-                            ProductId = 2,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            OrderId = 3,
-                            Price = 150.00m,
-                            ProductId = 3,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            OrderId = 4,
-                            Price = 45.00m,
-                            ProductId = 4,
-                            Quantity = 5
-                        },
-                        new
-                        {
-                            Id = 5,
-                            OrderId = 5,
-                            Price = 3500.00m,
-                            ProductId = 5,
-                            Quantity = 1
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Product", b =>
@@ -495,53 +243,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Description = "100% genuine Egyptian cotton, highly breathable.",
-                            Name = "Classic White Cotton T-Shirt",
-                            StockQuantity = 150,
-                            UnitPrice = 250.00m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 2,
-                            Description = "Freshly baked Baklava and Konafa.",
-                            Name = "Box of Mixed Oriental Sweets",
-                            StockQuantity = 20,
-                            UnitPrice = 300.00m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 3,
-                            Description = "Handmade brass Kanaka for the perfect Turkish/Egyptian coffee.",
-                            Name = "Copper Kanaka",
-                            StockQuantity = 45,
-                            UnitPrice = 150.00m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 4,
-                            Description = "Authentic Egyptian Dukkah with nuts and spices.",
-                            Name = "Premium Dukkah Spice Blend",
-                            StockQuantity = 100,
-                            UnitPrice = 45.00m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 5,
-                            Description = "Local Egyptian Brand TV. High durability.",
-                            Name = "Tornado 32-inch LED TV",
-                            StockQuantity = 15,
-                            UnitPrice = 3500.00m
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.ProductImage", b =>
@@ -567,43 +268,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Image = "https://example.com/images/cotton-tshirt.jpg",
-                            IsPrimary = false,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Image = "https://example.com/images/oriental-sweets.jpg",
-                            IsPrimary = false,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Image = "https://example.com/images/copper-kanaka.jpg",
-                            IsPrimary = false,
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Image = "https://example.com/images/dukkah-spice.jpg",
-                            IsPrimary = false,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Image = "https://example.com/images/tornado-tv.jpg",
-                            IsPrimary = false,
-                            ProductId = 5
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Review", b =>
@@ -636,48 +300,6 @@ namespace CartFlow.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Comment = "Masha'allah, the cotton is so soft! Excellent Egyptian quality.",
-                            ProductId = 1,
-                            Rate = 5m,
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Comment = "Very tasty, exactly like the ones in El Hussain.",
-                            ProductId = 2,
-                            Rate = 4.5m,
-                            UserId = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Comment = "Makes the best coffee with great Wesh (foam).",
-                            ProductId = 3,
-                            Rate = 5m,
-                            UserId = 4
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Comment = "Ghalya shwaya, bas helwa. (A bit expensive but good)",
-                            ProductId = 4,
-                            Rate = 3.5m,
-                            UserId = 5
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Comment = "Good value for money. Local industry rocks.",
-                            ProductId = 5,
-                            Rate = 4m,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.User", b =>
@@ -723,58 +345,6 @@ namespace CartFlow.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "ahmed.hassan@example.com",
-                            FirstName = "Ahmed",
-                            LastName = "Hassan",
-                            Password = "password123",
-                            Phone = "01000000001",
-                            UserRole = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "mohamed.ali@example.com",
-                            FirstName = "Mohamed",
-                            LastName = "Ali",
-                            Password = "password123",
-                            Phone = "01100000002",
-                            UserRole = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "fatma.ibrahim@example.com",
-                            FirstName = "Fatma",
-                            LastName = "Ibrahim",
-                            Password = "password123",
-                            Phone = "01200000003",
-                            UserRole = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "mahmoud.sayed@example.com",
-                            FirstName = "Mahmoud",
-                            LastName = "Sayed",
-                            Password = "password123",
-                            Phone = "01500000004",
-                            UserRole = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Email = "aisha.mostafa@example.com",
-                            FirstName = "Aisha",
-                            LastName = "Mostafa",
-                            Password = "password123",
-                            Phone = "01011111111",
-                            UserRole = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Address", b =>
@@ -821,7 +391,7 @@ namespace CartFlow.Data.Migrations
             modelBuilder.Entity("CartFlow.Data.Entities.Category", b =>
                 {
                     b.HasOne("CartFlow.Data.Entities.Category", "ParentCategory")
-                        .WithMany()
+                        .WithMany("Subcategories")
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -907,6 +477,8 @@ namespace CartFlow.Data.Migrations
             modelBuilder.Entity("CartFlow.Data.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("Subcategories");
                 });
 
             modelBuilder.Entity("CartFlow.Data.Entities.Order", b =>
