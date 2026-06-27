@@ -3,29 +3,32 @@
 }
 
 <div class="auth-page">
-    <section class="section-card auth-shell">
-        <div class="auth-copy">
-            <p class="section-label">Account</p>
-            <h1>Sign in</h1>
-            <p class="section-text">Use this page layout as the base for your login screen later.</p>
-        </div>
+    <div class="auth-card">
+        <div class="brand">CartFlow</div>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in to your account to continue.</p>
 
-        <form class="auth-form">
-            <div class="field-grid">
-                <label class="form-field">
-                    <span>Email</span>
-                    <input class="form-control" type="email" placeholder="name@example.com" />
-                </label>
-                <label class="form-field">
-                    <span>Password</span>
-                    <input class="form-control" type="password" placeholder="••••••••" />
-                </label>
+        <form class="auth-form" asp-controller="Account" asp-action="SignIn" method="post">
+            <div>
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" required />
             </div>
 
-            <div class="auth-actions">
-                <button type="button" class="btn btn-primary">Sign in</button>
-                <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back home</a>
+            <div>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" id="password" name="password" type="password" placeholder="Enter your password" required />
             </div>
+
+            <div class="form-check">
+                <input class="form-check-input" id="remember" name="remember" type="checkbox" />
+                <label class="form-check-label" for="remember">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
-    </section>
+
+        <div class="auth-footer">
+            Don't have an account? <a asp-controller="Account" asp-action="SignUp">Sign up</a>
+        </div>
+    </div>
 </div>
