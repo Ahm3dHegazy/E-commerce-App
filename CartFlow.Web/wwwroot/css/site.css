@@ -10,8 +10,8 @@
 
 :root {
   --primary: #1a1a2e;
-  --accent: #e94560;
-  --accent-hover: #d63851;
+  --accent: #10b981;
+  --accent-hover: #059669;
   --surface: #ffffff;
   --surface-alt: #f4f6f8;
   --text: #2d3436;
@@ -25,8 +25,8 @@
   --shadow-hover: 0 4px 16px rgba(0,0,0,0.1);
   --radius: 12px;
   --radius-sm: 8px;
-  --accent-bg: rgba(233, 69, 96, 0.06);
-  --accent-glow: rgba(233, 69, 96, 0.25);
+  --accent-bg: rgba(16, 185, 129, 0.06);
+  --accent-glow: rgba(16, 185, 129, 0.25);
   --img-gradient: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   --img-gradient-sm: linear-gradient(135deg, #1a1a2e, #16213e);
   --img-text: rgba(255,255,255,0.2);
@@ -48,8 +48,8 @@
     --border: #2d3561;
     --shadow: 0 2px 12px rgba(0,0,0,0.3);
     --shadow-hover: 0 4px 16px rgba(0,0,0,0.4);
-    --accent-bg: rgba(233, 69, 96, 0.12);
-    --accent-glow: rgba(233, 69, 96, 0.35);
+    --accent-bg: rgba(16, 185, 129, 0.12);
+    --accent-glow: rgba(16, 185, 129, 0.35);
     --img-gradient: linear-gradient(135deg, #0f3460, #1a1a2e, #16213e);
     --img-gradient-sm: linear-gradient(135deg, #0f3460, #1a1a2e);
     --img-text: rgba(255,255,255,0.15);
@@ -71,8 +71,8 @@
   --border: #2d3561;
   --shadow: 0 2px 12px rgba(0,0,0,0.3);
   --shadow-hover: 0 4px 16px rgba(0,0,0,0.4);
-  --accent-bg: rgba(233, 69, 96, 0.12);
-  --accent-glow: rgba(233, 69, 96, 0.35);
+  --accent-bg: rgba(16, 185, 129, 0.12);
+  --accent-glow: rgba(16, 185, 129, 0.35);
   --img-gradient: linear-gradient(135deg, #0f3460, #1a1a2e, #16213e);
   --img-gradient-sm: linear-gradient(135deg, #0f3460, #1a1a2e);
   --img-text: rgba(255,255,255,0.15);
@@ -84,7 +84,7 @@
 }
 
 html {
-  font-size: 15px;
+  font-size: 16px;
   position: relative;
   min-height: 100%;
 }
@@ -95,6 +95,7 @@ body {
   color: var(--text);
   background: var(--surface-alt);
   font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 300;
   line-height: 1.6;
   transition: background 0.2s, color 0.2s;
 }
