@@ -19,9 +19,10 @@ public class AppDbContext : DbContext {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         base.OnConfiguring(optionsBuilder);
 
+        var assemblyDir = System.IO.Path.GetDirectoryName(typeof(AppDbContext).Assembly.Location);
         var config = new ConfigurationBuilder()
-            .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-            .AddJsonFile("Data/appsettings.json", optional: false, reloadOnChange: true)
+            .SetBasePath(assemblyDir)
+            .AddJsonFile(System.IO.Path.Combine("Data", "appsettings.json"), optional: false, reloadOnChange: true)
             .Build();
 
         var connectionString = config.GetSection("constr").Value;
