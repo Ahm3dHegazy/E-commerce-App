@@ -1,49 +1,16 @@
-using CartFlow.Data.Entities;
+using CartFlow.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CartFlow.Web.Controllers {
     public class CategoriesController : Controller {
-        public IActionResult Index() {
-            // Build a sample category -> subcategory -> products hierarchy
-            var apparel = new Category { Id = 1, Name = "Apparel", Descripion = "Clothing and wearables" };
-            var hoodies = new Category { Id = 2, Name = "Hoodies", Descripion = "Warm hooded sweatshirts", ParentCategory = apparel, ParentCategoryId = apparel.Id };
-            var tshirts = new Category { Id = 3, Name = "T-Shirts", Descripion = "Casual t-shirts", ParentCategory = apparel, ParentCategoryId = apparel.Id };
-            apparel.Subcategories.Add(hoodies);
-            apparel.Subcategories.Add(tshirts);
+        private readonly ICategoryService _categoryService;
 
-            var accessories = new Category { Id = 4, Name = "Accessories", Descripion = "Small add-ons" };
-            var mugs = new Category { Id = 5, Name = "Mugs", Descripion = "Drinkware", ParentCategory = accessories, ParentCategoryId = accessories.Id };
-            accessories.Subcategories.Add(mugs);
+        public CategoriesController(ICategoryService categoryService) {
+            _categoryService = categoryService;
+        }
 
-            // Sample products
-            var p1 = new Product {
-                Id = 1,
-                Name = "Starter Hoodie",
-                Description = "A simple sample product to trace the Product entity end to end.",
-                StockQuantity = 12,
-                UnitPrice = 49.99m,
-                Category = hoodies,
-                CategoryId = hoodies.Id
-            };
-
-            var p2 = new Product {
-                Id = 2,
-                Name = "CartFlow Mug",
-                Description = "A second sample product for the listing page.",
-                StockQuantity = 30,
-                UnitPrice = 14.50m,
-                Category = mugs,
-                CategoryId = mugs.Id
-            };
-
-            // Attach products to subcategories
-            hoodies.Products.Add(p1);
-            mugs.Products.Add(p2);
-
-            var categories = new List<Category> { apparel, accessories };
-
+        public async Task<IActionResult> Index() {
+            var categories = await _categoryService.GetAllWithHierarchyAsync();
             return View(categories);
         }
     }

@@ -1,10 +1,18 @@
+using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CartFlow.Web.Controllers {
     public class HomeController : Controller {
-        public IActionResult Index() {
+        private readonly IProductService _productService;
+
+        public HomeController(IProductService productService) {
+            _productService = productService;
+        }
+
+        public async Task<IActionResult> Index() {
+            ViewBag.FeaturedProducts = await _productService.GetFeaturedAsync(4);
             return View();
         }
 
