@@ -1,48 +1,79 @@
-﻿@{
+﻿@using CartFlow.Data.Entities
+@{
     ViewData["Title"] = "Home";
+    var featured = ViewBag.FeaturedProducts as List<Product> ?? new();
 }
 
-<div class="landing-page">
-    <section class="section-card landing-hero">
-        <div class="landing-copy">
+<div class="page-section">
+    <section class="hero-section">
+        <div class="hero-copy">
             <p class="section-label">CartFlow</p>
-            <h1>Simple ecommerce pages, built cleanly.</h1>
-            <p class="section-text">A professional starting point for product browsing, account screens, and later checkout flows.</p>
+            <h1>Your one-stop shop for everything.</h1>
+            <p>Browse our curated collection of products with fast checkout and reliable delivery.</p>
             <div class="action-row">
                 <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
-                <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="SignIn">Sign in</a>
-                <a class="btn btn-link px-0" asp-controller="Account" asp-action="SignUp">Create account</a>
+                <a class="btn btn-outline-primary" asp-controller="Account" asp-action="SignUp">Create account</a>
             </div>
-        </div>
-
-        <div class="landing-summary">
-            <div class="summary-chip summary-chip--stacked">
-                <strong>Compact</strong>
-                <span>Aligned cards and forms</span>
-            </div>
-            <div class="summary-chip summary-chip--stacked">
-                <strong>Reusable</strong>
-                <span>Shared layout and styles</span>
-            </div>
-            <div class="summary-chip summary-chip--stacked">
-                <strong>Ready</strong>
-                <span>Easy to extend later</span>
+            <div class="hero-tags">
+                <span class="hero-tag">Free shipping</span>
+                <span class="hero-tag">Easy returns</span>
+                <span class="hero-tag">24/7 support</span>
             </div>
         </div>
     </section>
 
+    @if (featured.Count > 0) {
+        <section class="section-card">
+            <div class="section-header section-header--row">
+                <div>
+                    <p class="section-label">Featured</p>
+                    <h1>Featured products</h1>
+                </div>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Index">View all</a>
+            </div>
+
+            <div class="product-grid mt-3">
+                @foreach (var product in featured) {
+                    <div class="product-card">
+                        <div class="product-image">
+                            @product.Name[0]
+                        </div>
+                        <div class="product-body">
+                            <span class="category-badge">@product.Category?.Name</span>
+                            <h3>@product.Name</h3>
+                            <div class="product-meta">
+                                <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
+                                @if (product.StockQuantity > 10) {
+                                    <span class="stock-badge stock-in">In stock</span>
+                                } else if (product.StockQuantity > 0) {
+                                    <span class="stock-badge stock-low">@product.StockQuantity left</span>
+                                } else {
+                                    <span class="stock-badge stock-out">Out of stock</span>
+                                }
+                            </div>
+                            <div class="action-row">
+                                <a class="btn btn-primary btn-sm" asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id">Add to cart</a>
+                                <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
     <section class="info-grid">
         <article class="info-card">
-            <h2>Products</h2>
-            <p>List items with clean spacing and readable details.</p>
+            <h2>Fast delivery</h2>
+            <p>Get your order within 2-5 business days, anywhere in the country.</p>
         </article>
         <article class="info-card">
-            <h2>Authentication</h2>
-            <p>Static sign in and sign up pages ready for wiring later.</p>
+            <h2>Secure payments</h2>
+            <p>Your payment information is encrypted and never shared with third parties.</p>
         </article>
         <article class="info-card">
-            <h2>Admin ready</h2>
-            <p>Use the same style for forms, dashboard, and management screens.</p>
+            <h2>Quality guaranteed</h2>
+            <p>Every product is checked for quality before it reaches your doorstep.</p>
         </article>
     </section>
 </div>

@@ -1,17 +1,24 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CartFlow.Web</title>
+    <title>@ViewData["Title"] - CartFlow</title>
     <script type="importmap"></script>
+    <script>
+        (function() {
+            var theme = localStorage.getItem('theme');
+            if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CartFlow.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header class="site-header border-bottom">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg navbar-light py-2">
             <div class="container-lg">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CartFlow</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav"
@@ -19,29 +26,43 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    @await Component.InvokeAsync("CategoryMenu")
+
+                    <ul class="navbar-nav me-auto align-items-lg-center gap-lg-1">
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Checkout" asp-action="Index">Checkout</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link--muted" asp-area="" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
-                        <li class="nav-item"><a class="btn btn-primary btn-sm nav-cta" asp-area="" asp-controller="Account" asp-action="SignUp">Sign up</a></li>
                     </ul>
 
-                    @await Component.InvokeAsync("CategoryMenu")
+                    <ul class="navbar-nav align-items-lg-center gap-lg-1">
+                        <li class="nav-item">
+                            <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">☀</button>
+                        </li>
+                        @if (Context.User.Identity?.IsAuthenticated == true) {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">
+                                    Hi, @(ViewData["UserName"] ?? Context.User.Identity?.Name ?? "User")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        } else {
+                            <li class="nav-item"><a class="nav-link nav-link--muted" asp-area="" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+                            <li class="nav-item"><a class="btn btn-primary btn-sm nav-cta" asp-area="" asp-controller="Account" asp-action="SignUp">Sign up</a></li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="container-lg py-3" role="main">
+    <main class="container-lg py-4" role="main">
         @RenderBody()
     </main>
 
-    <footer class="site-footer border-top text-muted">
-        <div class="container-lg py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <span>&copy; 2026 - CartFlow.Web</span>
+    <footer class="site-footer border-top">
+        <div class="container-lg py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>&copy; 2026 - CartFlow</span>
             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
@@ -49,6 +70,21 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            var theme = document.documentElement.getAttribute('data-theme');
+            btn.textContent = theme === 'dark' ? '☀' : '☾';
+            btn.addEventListener('click', function() {
+                var html = document.documentElement;
+                var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                this.textContent = next === 'dark' ? '☀' : '☾';
+            });
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
