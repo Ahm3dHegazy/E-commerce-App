@@ -1,4 +1,4 @@
-namespace CartFlow.Data.Entities {
+namespace CartFlow.Data.Enums {
     public enum Status {
         Ordered,
         Shipped,
