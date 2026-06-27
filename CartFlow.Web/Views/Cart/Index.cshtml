@@ -34,9 +34,9 @@
                     <tr>
                         <td class="fw-semibold">@item.ProductName</td>
                         <td>@item.CategoryName</td>
-                        <td class="text-end">@item.UnitPrice.ToString("C")</td>
+                        <td class="text-end">EGP @item.UnitPrice.ToString("N2")</td>
                         <td class="text-end">@item.Quantity</td>
-                        <td class="text-end">@item.LineTotal.ToString("C")</td>
+                        <td class="text-end">EGP @item.LineTotal.ToString("N2")</td>
                     </tr>
                 }
                 </tbody>
@@ -46,15 +46,15 @@
         <div class="cart-total mt-3">
             <div>
                 <span>Subtotal</span>
-                <strong>@Model.Subtotal.ToString("C")</strong>
+                <strong>EGP @Model.Subtotal.ToString("N2")</strong>
             </div>
             <div>
                 <span>Shipping</span>
-                <strong>@Model.Shipping.ToString("C")</strong>
+                <strong>EGP @Model.Shipping.ToString("N2")</strong>
             </div>
             <div>
                 <span>Total</span>
-                <strong>@Model.Total.ToString("C")</strong>
+                <strong>EGP @Model.Total.ToString("N2")</strong>
             </div>
         </div>
 

@@ -37,7 +37,7 @@
                             <div class="text-muted small text-truncate">@product.Description</div>
                         </td>
                         <td>@product.Category?.Name</td>
-                        <td class="text-end">@product.UnitPrice.ToString("C")</td>
+                        <td class="text-end">EGP @product.UnitPrice.ToString("N2")</td>
                         <td class="text-end">@product.StockQuantity</td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@product.Id">Details</a>
