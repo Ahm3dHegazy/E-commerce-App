@@ -9,6 +9,7 @@
       "CartFlow.Web/1.0.0": {
         "dependencies": {
           "CartFlow.Data": "1.0.0",
+          "CartFlow.Services": "1.0.0",
           "Microsoft.EntityFrameworkCore.Design": "10.0.5"
         },
         "runtime": {
@@ -757,6 +758,17 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "CartFlow.Services/1.0.0": {
+        "dependencies": {
+          "CartFlow.Data": "1.0.0"
+        },
+        "runtime": {
+          "CartFlow.Services.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -1068,6 +1080,11 @@
       "hashPath": "system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
     },
     "CartFlow.Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CartFlow.Services/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

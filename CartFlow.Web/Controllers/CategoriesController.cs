@@ -1,17 +1,13 @@
 using CartFlow.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CartFlow.Web.Controllers {
-    public class CategoriesController : Controller {
-        private readonly ICategoryService _categoryService;
+namespace CartFlow.Web.Controllers;
 
-        public CategoriesController(ICategoryService categoryService) {
-            _categoryService = categoryService;
-        }
-
-        public async Task<IActionResult> Index() {
-            var categories = await _categoryService.GetAllWithHierarchyAsync();
-            return View(categories);
-        }
+public class CategoriesController(ICategoryService categoryService) : Controller
+{
+    public async Task<IActionResult> Index()
+    {
+        var categories = await categoryService.GetAllWithHierarchyAsync();
+        return View(categories);
     }
 }

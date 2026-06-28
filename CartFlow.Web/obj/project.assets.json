@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "Azure.Core/1.47.1": {
@@ -1035,6 +1035,19 @@
         },
         "runtime": {
           "bin/placeholder/CartFlow.Data.dll": {}
+        }
+      },
+      "CartFlow.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "CartFlow.Data": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/CartFlow.Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CartFlow.Services.dll": {}
         }
       }
     }
@@ -3059,29 +3072,35 @@
       "type": "project",
       "path": "../CartFlow.Data/CartFlow.Data.csproj",
       "msbuildProject": "../CartFlow.Data/CartFlow.Data.csproj"
+    },
+    "CartFlow.Services/1.0.0": {
+      "type": "project",
+      "path": "../CartFlow.Services/CartFlow.Services.csproj",
+      "msbuildProject": "../CartFlow.Services/CartFlow.Services.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "CartFlow.Data >= 1.0.0",
+      "CartFlow.Services >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.5"
     ]
   },
   "packageFolders": {
     "C:\\Users\\abdel\\.nuget\\packages\\": {},
-    "E:\\Program Files\\Visual studio\\Shared\\NuGetPackages": {}
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
+      "projectUniqueName": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
       "projectName": "CartFlow.Web",
-      "projectPath": "E:\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
+      "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
       "packagesPath": "C:\\Users\\abdel\\.nuget\\packages\\",
-      "outputPath": "E:\\ecommerce-app\\CartFlow.Web\\obj\\",
+      "outputPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "E:\\Program Files\\Visual studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
         "C:\\Users\\abdel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3097,10 +3116,14 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {
-              "projectPath": "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj"
+            "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {
+              "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj"
+            },
+            "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Services\\CartFlow.Services.csproj": {
+              "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Services\\CartFlow.Services.csproj"
             }
           }
         }
@@ -3115,10 +3138,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": {
@@ -3147,7 +3171,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

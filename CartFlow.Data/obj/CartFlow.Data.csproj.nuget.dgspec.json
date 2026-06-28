@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {}
+    "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {}
   },
   "projects": {
-    "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {
+    "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
+        "projectUniqueName": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
         "projectName": "CartFlow.Data",
-        "projectPath": "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
+        "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
         "packagesPath": "C:\\Users\\abdel\\.nuget\\packages\\",
-        "outputPath": "E:\\ecommerce-app\\CartFlow.Data\\obj\\",
+        "outputPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\Program Files\\Visual studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
           "C:\\Users\\abdel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -30,6 +30,7 @@
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -44,10 +45,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
@@ -89,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
