@@ -25,7 +25,7 @@ public class ProductService(AppDbContext context) : IProductService
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
-            query = query.Where(p => p.Name.Contains(searchTerm));
+            query = query.Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()));
 
         if (categoryId.HasValue)
             query = query.Where(p => p.CategoryId == categoryId);
