@@ -9,6 +9,7 @@
         <p class="subtitle">Sign in to your account to continue.</p>
 
         <form class="auth-form" asp-controller="Account" asp-action="SignIn" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-semibold"></div>
             <div>
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" required />
@@ -32,3 +33,5 @@
         </div>
     </div>
 </div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

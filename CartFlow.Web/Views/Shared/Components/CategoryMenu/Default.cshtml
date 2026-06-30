@@ -1,26 +1,15 @@
 @model IEnumerable<CartFlow.Data.Entities.Category>
 
-<nav class="category-menu d-none d-lg-block">
-    <ul class="list-unstyled mb-0 d-flex gap-3 align-items-center">
-        @foreach (var cat in Model) {
-            <li class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">@cat.Name</a>
-                <div class="dropdown-menu p-3 shadow">
-                    <div class="row">
-                        @foreach (var sub in cat.Subcategories) {
-                            <div class="col-4">
-                                <h6 class="mb-1">@sub.Name</h6>
-                                <p class="small text-muted mb-2">@sub.Descripion</p>
-                                <div class="d-flex flex-column gap-2">
-                                    @foreach (var prod in sub.Products) {
-                                        <a class="text-decoration-none" asp-controller="Products" asp-action="Details" asp-route-id="@prod.Id">@prod.Name</a>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Category</a>
+    <ul class="dropdown-menu">
+        @foreach (var cat in Model)
+        {
+            <li>
+                <a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-categoryId="@cat.Id">
+                    @cat.Name
+                </a>
             </li>
         }
     </ul>
-</nav>
+</li>

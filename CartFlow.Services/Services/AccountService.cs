@@ -24,5 +24,21 @@ public class AccountService(AppDbContext context) : IAccountService {
         return user;
     }
 
+    public async Task<User?> GetByIdAsync(int id) {
+        return await context.Users.FindAsync(id);
+    }
+
+    public async Task<User?> UpdateProfileAsync(int id, string firstName, string lastName, string email, string phone) {
+        var user = await context.Users.FindAsync(id);
+        if (user is null) return null;
+
+        user.FirstName = firstName;
+        user.LastName= lastName;
+        user.Email = email;
+        user.Phone = phone;
+
+        await context.SaveChangesAsync();
+        return user;
+    }
 
 }
