@@ -3,517 +3,39 @@
     ViewData["Title"] = "Products";
 }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;400;600;700;800&display=swap" rel="stylesheet">
+<div class="page-section">
+    <section class="section-card">
+        <div class="section-header">
+            <p class="section-label">CartFlow Store</p>
+            <h1>Products</h1>
+        </div>
 
-<style>
-    :root {
-        --primary: #1a1a2e;
-        --accent: #10b981;
-        --accent-hover: #059669;
-        --surface: #ffffff;
-        --surface-alt: #f4f6f8;
-        --text: #2d3436;
-        --muted: #636e72;
-        --border: #dfe6e9;
-        --radius: 12px;
-        --radius-sm: 8px;
-    }
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: 'Bricolage Grotesque', sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-        color: var(--text);
-        background: var(--surface-alt);
-    }
-
-    .container {
-        max-width: 1024px;
-        margin: 0 auto;
-        padding: 0 24px;
-    }
-
-    /* ── Page header ── */
-    .page-header {
-        background: var(--primary);
-        padding: 36px 0 28px;
-    }
-
-    .page-eyebrow {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--accent);
-        margin-bottom: 4px;
-    }
-
-    .page-header h1 {
-        font-size: 28px;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: -0.5px;
-        line-height: 1.15;
-        margin-bottom: 2px;
-    }
-
-    .page-subtitle {
-        font-size: 13px;
-        color: rgba(255,255,255,.38);
-        margin-bottom: 24px;
-    }
-
-    /* ── Search row ── */
-    .search-row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .search-wrap {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(255,255,255,.07);
-        border: 1px solid rgba(255,255,255,.1);
-        border-radius: var(--radius-sm);
-        padding: 0 16px;
-        height: 46px;
-        transition: border-color .2s, background .2s;
-    }
-
-        .search-wrap:focus-within {
-            border-color: var(--accent);
-            background: rgba(255,255,255,.1);
-            box-shadow: 0 0 0 4px rgba(16,185,129,.18);
-        }
-
-        .search-wrap svg {
-            color: rgba(255,255,255,.3);
-            flex-shrink: 0;
-        }
-
-    .search-input {
-        flex: 1;
-        background: none;
-        border: none;
-        outline: none;
-        color: #fff;
-        font-family: inherit;
-        font-size: 14px;
-        padding: 0;
-    }
-
-        .search-input::placeholder {
-            color: rgba(255,255,255,.28);
-        }
-
-    .search-clear {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: none;
-        background: rgba(255,255,255,.1);
-        color: rgba(255,255,255,.6);
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: background .15s, color .15s;
-    }
-
-        .search-clear.visible {
-            display: flex;
-        }
-
-        .search-clear:hover {
-            background: rgba(255,255,255,.18);
-            color: #fff;
-        }
-
-    .btn-spinner {
-        display: none;
-        width: 14px;
-        height: 14px;
-        border: 2px solid rgba(255,255,255,.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin .6s linear infinite;
-    }
-
-    .header-btn.loading .btn-spinner {
-        display: inline-block;
-    }
-
-    .header-btn.loading .btn-label,
-    .header-btn.loading svg:not(.btn-spinner) {
-        display: none;
-    }
-
-    @@keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .header-btn {
-        height: 46px;
-        padding: 0 20px;
-        border-radius: var(--radius-sm);
-        background: rgba(255,255,255,.07);
-        border: 1px solid rgba(255,255,255,.1);
-        color: rgba(255,255,255,.65);
-        font-family: inherit;
-        font-size: 13.5px;
-        font-weight: 500;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        white-space: nowrap;
-        transition: all .3s;
-        text-decoration: none;
-        flex-shrink: 0;
-    }
-
-        .header-btn:hover {
-            background: rgba(255,255,255,.13);
-            color: #fff;
-            border-color: rgba(255,255,255,.22);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(0,0,0,.18);
-        }
-
-        .header-btn.primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            font-weight: 600;
-        }
-
-            .header-btn.primary:hover {
-                background: var(--accent-hover);
-                border-color: var(--accent-hover);
-            }
-
-    @@media (max-width: 580px) {
-        .search-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .header-btn.primary {
-            justify-content: center;
-        }
-    }
-
-    /* ── Category chips ── */
-    .chips-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-        margin-top: 16px;
-    }
-
-    .chip {
-        display: inline-block;
-        padding: 6px 15px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,.13);
-        background: transparent;
-        color: rgba(255,255,255,.55);
-        font-family: inherit;
-        font-size: 12.5px;
-        font-weight: 500;
-        cursor: pointer;
-        text-decoration: none;
-        transition: background .15s, border-color .15s, color .15s;
-        white-space: nowrap;
-    }
-
-        .chip:hover {
-            background: rgba(255,255,255,.09);
-            color: rgba(255,255,255,.9);
-            border-color: rgba(255,255,255,.25);
-        }
-
-        .chip.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            font-weight: 600;
-        }
-
-    /* ── Main content ── */
-    .main {
-        padding: 32px 0 60px;
-    }
-
-    /* ── Grid ── */
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-    }
-
-    @@media (max-width: 900px) {
-        .product-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    @@media (max-width: 640px) {
-        .product-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @@media (max-width: 400px) {
-        .product-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* ── Card ── */
-    .card {
-        background: var(--surface);
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition: transform .2s, box-shadow .2s, border-color .2s;
-    }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(26,26,46,.11);
-            border-color: #c8d6da;
-        }
-
-    .card-img {
-        height: 160px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, var(--primary) 0%, #16213e 60%, #0f3460 100%);
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-        .card-img::before {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--accent);
-            opacity: .12;
-            top: -25px;
-            right: -15px;
-            z-index: 0;
-        }
-
-    .card-img-link {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-    }
-
-    .card-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        inset: 0;
-    }
-
-    .card-initial {
-        font-size: 52px;
-        font-weight: 800;
-        color: rgba(255,255,255,.15);
-        letter-spacing: -2px;
-        line-height: 1;
-        position: relative;
-        z-index: 1;
-        user-select: none;
-    }
-
-    .card-body {
-        padding: 13px 13px 15px;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        gap: 8px;
-    }
-
-    .card-name {
-        font-size: 13.5px;
-        font-weight: 700;
-        color: var(--text);
-        line-height: 1.3;
-    }
-
-    .card-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-
-    .badge-category {
-        font-size: 10.5px;
-        font-weight: 600;
-        background: var(--surface-alt);
-        color: var(--muted);
-        border-radius: 6px;
-        padding: 2px 8px;
-        border: 1px solid var(--border);
-    }
-
-    .badge-stock {
-        font-size: 10.5px;
-        font-weight: 600;
-        border-radius: 6px;
-        padding: 2px 8px;
-    }
-
-        .badge-stock.in {
-            background: rgba(16,185,129,.12);
-            color: #065f46;
-        }
-
-        .badge-stock.low {
-            background: rgba(251,191,36,.15);
-            color: #92400e;
-        }
-
-        .badge-stock.out {
-            background: rgba(239,68,68,.10);
-            color: #991b1b;
-        }
-
-    .card-price {
-        font-size: 16px;
-        font-weight: 800;
-        color: var(--accent);
-        letter-spacing: -0.3px;
-        margin-top: auto;
-    }
-
-        .card-price span {
-            font-size: 10.5px;
-            font-weight: 600;
-            opacity: .75;
-            margin-right: 2px;
-        }
-
-    .card-actions {
-        display: flex;
-        gap: 6px;
-        margin-top: 2px;
-    }
-
-    .btn-cart {
-        flex: 1;
-        padding: 8px 0;
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        border-radius: var(--radius-sm);
-        font-family: inherit;
-        font-size: 12.5px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background .15s;
-        text-align: center;
-        width: 100%;
-    }
-
-        .btn-cart:hover:not(:disabled) {
-            background: var(--accent-hover);
-        }
-
-        .btn-cart:disabled {
-            background: var(--border);
-            color: var(--muted);
-            cursor: not-allowed;
-        }
-</style>
-
-<div class="page-header">
-    <div class="container">
-        <div class="page-eyebrow">CartFlow Store</div>
-        <h1>Products</h1>
-        <p class="page-subtitle">Browse our full collection</p>
-
-        <form method="get" action="">
-            <div class="search-row">
-                <div class="search-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <input class="search-input" type="text" name="searchTerm" id="searchInput"
-                           value="@Model.SearchTerm"
-                           placeholder="Search products…"
-                           autocomplete="off" />
-                    <button type="button" class="search-clear @(string.IsNullOrEmpty(Model.SearchTerm) ? "" : "visible")" id="searchClear" title="Clear search">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 6 6 18M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <button type="submit" class="header-btn primary" id="searchSubmit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <span class="btn-spinner"></span>
-                    <span class="btn-label">Search</span>
-                </button>
+        <form method="get" action="" style="margin-top: 0.75rem;">
+            <div class="search-bar">
+                <input class="form-control" type="text" name="searchTerm" id="searchInput"
+                       value="@Model.SearchTerm" placeholder="Search products…" autocomplete="off" />
+                <button type="submit" class="btn btn-primary btn-sm" id="searchSubmit">Search</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="searchClear"
+                        style="display:@(string.IsNullOrEmpty(Model.SearchTerm) ? "none" : "inline-block")">Clear</button>
             </div>
 
-            <div class="chips-row">
+            <div class="filter-chips">
                 <a href="?searchTerm=@Model.SearchTerm"
-                   class="chip @(Model.SelectedCategoryId == null ? "active" : "")">All</a>
-
+                   class="filter-chip @(Model.SelectedCategoryId == null ? "active" : "")">All</a>
                 @foreach (var cat in Model.Categories)
                 {
                     <a href="?searchTerm=@Model.SearchTerm&categoryId=@cat.Id"
-                       class="chip @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+                       class="filter-chip @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
                         @cat.Name
                     </a>
                 }
             </div>
         </form>
-    </div>
-</div>
+    </section>
 
-<div id="productsContainer">
-    @Html.Partial("_ProductGrid", Model)
+    <div id="productsContainer">
+        <partial name="_ProductGrid" model="@Model" />
+    </div>
 </div>
 
 <script>
@@ -535,7 +57,7 @@
 
     function toggleClearBtn() {
         if (!searchClear || !searchInput) return;
-        searchClear.classList.toggle('visible', searchInput.value.length > 0);
+        searchClear.style.display = searchInput.value.length > 0 ? 'inline-block' : 'none';
     }
 
     async function performSearch(term, categoryId) {
@@ -545,17 +67,15 @@
         if (categoryId) params.set('categoryId', categoryId);
         const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
 
-        // Cancel previous request if pending
         if (currentAbortController) {
             try { currentAbortController.abort(); } catch (e) { }
         }
         const controller = new AbortController();
         currentAbortController = controller;
 
-        // show loading state on the search button for feedback (only for the active request)
         if (searchSubmit) {
-            searchSubmit.classList.add('loading');
             searchSubmit.disabled = true;
+            searchSubmit.textContent = 'Searching…';
         }
 
         try {
@@ -567,7 +87,6 @@
             if (!res.ok) throw new Error('Network response was not ok');
             const html = await res.text();
 
-            // Only update UI if this response is for the latest request
             if (controller !== currentAbortController) return;
 
             productsContainer.innerHTML = html;
@@ -578,8 +97,8 @@
         }
         finally {
             if (searchSubmit && controller === currentAbortController) {
-                searchSubmit.classList.remove('loading');
                 searchSubmit.disabled = false;
+                searchSubmit.textContent = 'Search';
                 currentAbortController = null;
             }
         }
@@ -587,23 +106,19 @@
 
     const debouncedSearch = debounce(() => performSearch(searchInput.value.trim(), currentCategoryId || undefined), 300);
 
-    // Wire input and clear button
     if (searchInput) searchInput.addEventListener('input', () => { toggleClearBtn(); debouncedSearch(); });
     if (searchClear) searchClear.addEventListener('click', () => { if (searchInput) searchInput.value = ''; toggleClearBtn(); debouncedSearch(); });
 
-    // Intercept category chip clicks to filter via AJAX and update active class
-    document.querySelectorAll('.chips-row a').forEach(a => {
+    document.querySelectorAll('.filter-chip').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
             const href = new URL(a.href, window.location.origin);
             const cat = href.searchParams.get('categoryId');
             currentCategoryId = cat || '';
 
-            // Update active class visually
-            document.querySelectorAll('.chips-row a').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
             a.classList.add('active');
 
-            // keep searchTerm in sync (href includes searchTerm param)
             const term = href.searchParams.get('searchTerm') || '';
             if (searchInput) searchInput.value = term;
             toggleClearBtn();
@@ -612,7 +127,6 @@
         });
     });
 
-    // Prevent full page submit; perform AJAX instead on form submit (enter key)
     const form = searchInput ? searchInput.closest('form') : null;
     if (form) {
         form.addEventListener('submit', (e) => {
@@ -621,6 +135,5 @@
         });
     }
 
-    // Initialize UI state
     toggleClearBtn();
 </script>

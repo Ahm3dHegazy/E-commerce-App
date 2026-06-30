@@ -4,19 +4,6 @@
 }
 
 <style>
-    :root {
-        --primary: #1a1a2e;
-        --accent: #10b981;
-        --accent-hover: #059669;
-        --surface: #ffffff;
-        --surface-alt: #f4f6f8;
-        --text: #2d3436;
-        --muted: #636e72;
-        --border: #dfe6e9;
-        --radius: 12px;
-        --radius-sm: 8px;
-    }
-
     * {
         box-sizing: border-box;
         margin: 0;
@@ -39,8 +26,8 @@
 
     /* ── Breadcrumb strip ── */
     .breadcrumb-bar {
-        background: var(--primary);
-        padding: 14px 0;
+        background: #1a1a2e;
+        padding: 14px 24px;
     }
 
     .breadcrumb {
@@ -71,7 +58,7 @@
 
     /* ── Main layout ── */
     .main {
-        padding: 40px 0 72px;
+        padding: 40px 24px 72px;
     }
 
     .detail-grid {
@@ -90,7 +77,7 @@
 
     /* ── Left: image ── */
     .img-panel {
-        background: linear-gradient(135deg, var(--primary) 0%, #16213e 60%, #0f3460 100%);
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
         border-radius: var(--radius);
         width: 100%;
         aspect-ratio: 1 / 1;
@@ -302,22 +289,19 @@
 
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar">
-    <div class="container">
-        <nav class="breadcrumb">
-            <a asp-action="Index">Products</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-            <span>@Model.Name</span>
-        </nav>
-    </div>
+    <nav class="breadcrumb">
+        <a asp-action="Index">Products</a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span>@Model.Name</span>
+    </nav>
 </div>
 
 <!-- Detail layout -->
 <div class="main">
-    <div class="container">
-        <div class="detail-grid">
+    <div class="detail-grid">
 
             <!-- Left: image -->
             <div class="img-panel">
@@ -390,5 +374,4 @@
 
             </div>
         </div>
-    </div>
 </div>
