@@ -8,15 +8,10 @@
     ".NETCoreApp,Version=v10.0": {
       "CartFlow.Web/1.0.0": {
         "dependencies": {
-<<<<<<< HEAD
           "CartFlow.Data": "1.0.0",
-          "CartFlow.Services": "1.0.0",
-          "Microsoft.EntityFrameworkCore.Design": "10.0.5"
-=======
           "CartFlow.Services": "1.0.0",
           "Microsoft.EntityFrameworkCore.Design": "10.0.5",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "10.0.2"
->>>>>>> 14d6e048c5f0d76ef47275d1cde5c1bd6b551647
         },
         "runtime": {
           "CartFlow.Web.dll": {}
