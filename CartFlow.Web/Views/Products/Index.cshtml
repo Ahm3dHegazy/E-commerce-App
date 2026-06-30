@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;400;600;700;800&display=swap" rel="stylesheet">
 
- <style>
+<style>
     :root {
         --primary: #1a1a2e;
         --accent: #10b981;
@@ -80,25 +80,25 @@
 
     .search-wrap {
         flex: 1;
-        max-width: 480px;
         display: flex;
         align-items: center;
         gap: 10px;
         background: rgba(255,255,255,.07);
         border: 1px solid rgba(255,255,255,.1);
         border-radius: var(--radius-sm);
-        padding: 0 14px;
-        height: 42px;
+        padding: 0 16px;
+        height: 46px;
         transition: border-color .2s, background .2s;
     }
 
         .search-wrap:focus-within {
             border-color: var(--accent);
-            background: rgba(255,255,255,.11);
+            background: rgba(255,255,255,.1);
+            box-shadow: 0 0 0 4px rgba(16,185,129,.18);
         }
 
         .search-wrap svg {
-            color: rgba(255,255,255,.35);
+            color: rgba(255,255,255,.3);
             flex-shrink: 0;
         }
 
@@ -114,39 +114,115 @@
     }
 
         .search-input::placeholder {
-            color: rgba(255,255,255,.3);
+            color: rgba(255,255,255,.28);
         }
 
+    .search-clear {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255,255,255,.1);
+        color: rgba(255,255,255,.6);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background .15s, color .15s;
+    }
+
+        .search-clear.visible {
+            display: flex;
+        }
+
+        .search-clear:hover {
+            background: rgba(255,255,255,.18);
+            color: #fff;
+        }
+
+    .btn-spinner {
+        display: none;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255,255,255,.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin .6s linear infinite;
+    }
+
+    .header-btn.loading .btn-spinner {
+        display: inline-block;
+    }
+
+    .header-btn.loading .btn-label,
+    .header-btn.loading svg:not(.btn-spinner) {
+        display: none;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
     .header-btn {
-        height: 42px;
-        padding: 0 16px;
+        height: 46px;
+        padding: 0 20px;
         border-radius: var(--radius-sm);
         background: rgba(255,255,255,.07);
         border: 1px solid rgba(255,255,255,.1);
-        color: rgba(255,255,255,.6);
+        color: rgba(255,255,255,.65);
         font-family: inherit;
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 500;
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
         white-space: nowrap;
-        transition: all .15s;
+        transition: all .3s;
         text-decoration: none;
+        flex-shrink: 0;
     }
 
         .header-btn:hover {
             background: rgba(255,255,255,.13);
             color: #fff;
-            border-color: rgba(255,255,255,.2);
+            border-color: rgba(255,255,255,.22);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0,0,0,.18);
         }
+
+        .header-btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+            .header-btn.primary:hover {
+                background: var(--accent-hover);
+                border-color: var(--accent-hover);
+            }
+
+    @@media (max-width: 580px) {
+        .search-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .header-btn.primary {
+            justify-content: center;
+        }
+    }
 
     /* ── Category chips ── */
     .chips-row {
         display: flex;
         flex-wrap: wrap;
         gap: 7px;
+        margin-top: 16px;
     }
 
     .chip {
@@ -177,50 +253,6 @@
             color: #fff;
             font-weight: 600;
         }
-
-    /* ── Divider + stat strip ── */
-    .header-divider {
-        height: 1px;
-        background: rgba(255,255,255,.07);
-        margin: 22px 0;
-    }
-
-    .stat-strip {
-        display: flex;
-        gap: 0;
-        padding-bottom: 4px;
-    }
-
-    .stat-item {
-        flex: 1;
-        padding-right: 20px;
-        border-right: 1px solid rgba(255,255,255,.07);
-        margin-right: 20px;
-    }
-
-        .stat-item:last-child {
-            border-right: none;
-            margin-right: 0;
-        }
-
-    .stat-val {
-        font-size: 20px;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: -0.5px;
-        line-height: 1;
-        margin-bottom: 2px;
-    }
-
-        .stat-val.accent {
-            color: var(--accent);
-        }
-
-    .stat-label {
-        font-size: 11px;
-        color: rgba(255,255,255,.35);
-        font-weight: 500;
-    }
 
     /* ── Main content ── */
     .main {
@@ -269,7 +301,6 @@
             border-color: #c8d6da;
         }
 
-    /* Image area */
     .card-img {
         height: 160px;
         display: flex;
@@ -291,15 +322,28 @@
             opacity: .12;
             top: -25px;
             right: -15px;
+            z-index: 0;
         }
 
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            inset: 0;
-        }
+    .card-img-link {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        inset: 0;
+    }
 
     .card-initial {
         font-size: 52px;
@@ -312,7 +356,6 @@
         user-select: none;
     }
 
-    /* Body */
     .card-body {
         padding: 13px 13px 15px;
         display: flex;
@@ -402,6 +445,7 @@
         cursor: pointer;
         transition: background .15s;
         text-align: center;
+        width: 100%;
     }
 
         .btn-cart:hover:not(:disabled) {
@@ -413,54 +457,8 @@
             color: var(--muted);
             cursor: not-allowed;
         }
-
-    .btn-details {
-        height: 33px;
-        width: 33px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--surface-alt);
-        color: var(--muted);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        text-decoration: none;
-        font-size: 16px;
-        transition: border-color .15s, color .15s, background .15s;
-    }
-
-        .btn-details:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(16,185,129,.05);
-        }
-
-    /* ── Empty state ── */
-    .empty-state {
-        text-align: center;
-        padding: 80px 20px;
-    }
-
-        .empty-state svg {
-            color: var(--border);
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 6px;
-        }
-
-        .empty-state p {
-            color: var(--muted);
-            font-size: 14px;
-        }
 </style>
 
-<!-- Page header -->
 <div class="page-header">
     <div class="container">
         <div class="page-eyebrow">CartFlow Store</div>
@@ -468,7 +466,6 @@
         <p class="page-subtitle">Browse our full collection</p>
 
         <form method="get" action="">
-            <!-- Search + action buttons -->
             <div class="search-row">
                 <div class="search-wrap">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
@@ -476,23 +473,29 @@
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.35-4.35" />
                     </svg>
-                    <input class="search-input" type="text" name="searchTerm"
+                    <input class="search-input" type="text" name="searchTerm" id="searchInput"
                            value="@Model.SearchTerm"
                            placeholder="Search products…"
                            autocomplete="off" />
+                    <button type="button" class="search-clear @(string.IsNullOrEmpty(Model.SearchTerm) ? "" : "visible")" id="searchClear" title="Clear search">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 6 6 18M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
 
-                <button type="submit" class="header-btn">
+                <button type="submit" class="header-btn primary" id="searchSubmit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M3 4a1 1 0 0 1 1-1h16a1 1 0 0 1 .78 1.63L14 12.17V19a1 1 0 0 1-1.45.89l-4-2A1 1 0 0 1 8 17v-4.83L3.22 5.63A1 1 0 0 1 3 4z" />
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
                     </svg>
-                    Filter
+                    <span class="btn-spinner"></span>
+                    <span class="btn-label">Search</span>
                 </button>
             </div>
 
-            <!-- Category chips -->
             <div class="chips-row">
                 <a href="?searchTerm=@Model.SearchTerm"
                    class="chip @(Model.SelectedCategoryId == null ? "active" : "")">All</a>
@@ -506,96 +509,118 @@
                 }
             </div>
         </form>
-
-        <!-- Divider + stat strip -->
-        <div class="header-divider"></div>
-
-        <div class="stat-strip">
-            <div class="stat-item">
-                <div class="stat-val">@Model.Products.Count</div>
-                <div class="stat-label">Products</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-val">@Model.Categories.Count</div>
-                <div class="stat-label">Categories</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-val">@Model.Products.Count(p => p.StockQuantity > 0)</div>
-                <div class="stat-label">In stock</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-val accent">EGP</div>
-                <div class="stat-label">Local pricing</div>
-            </div>
-        </div>
     </div>
 </div>
 
-<!-- Product grid -->
-<div class="main">
-    <div class="container">
-
-        @if (!Model.Products.Any())
-        {
-            <div class="empty-state">
-                <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                </svg>
-                <h3>No products found</h3>
-                <p>Try a different search term or browse all categories.</p>
-            </div>
-        }
-        else
-        {
-            <div class="product-grid">
-                @foreach (var p in Model.Products)
-                {
-                    <div class="card">
-                        <div class="card-img">
-                            @if (!string.IsNullOrEmpty(p.ImageUrl))
-                            {
-                                <img src="@p.ImageUrl" alt="@p.Name" />
-                            }
-                            else
-                            {
-                                <span class="card-initial">@p.Initial</span>
-                            }
-                        </div>
-
-                        <div class="card-body">
-                            <div class="card-name">@p.Name</div>
-
-                            <div class="card-meta">
-                                <span class="badge-category">@p.CategoryName</span>
-                                <span class="badge-stock @(p.StockQuantity > 10 ? "in" : p.StockQuantity > 0 ? "low" : "out")">
-                                    @(p.StockQuantity > 10 ? "In Stock" : p.StockQuantity > 0 ? "Low Stock" : "Out of Stock")
-                                </span>
-                            </div>
-
-                            <div class="card-price">
-                                <span>EGP</span>@p.UnitPrice.ToString("N2")
-                            </div>
-
-                            <div class="card-actions">
-                                <button class="btn-cart" @(p.StockQuantity == 0 ? "disabled" : "")>
-                                    @(p.StockQuantity == 0 ? "Out of stock" : "Add to cart")
-                                </button>
-                                <a class="btn-details" asp-action="Details" asp-route-id="@p.Id"
-                                   title="View details">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
-                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-
-    </div>
+<div id="productsContainer">
+    @Html.Partial("_ProductGrid", Model)
 </div>
-        
+
+<script>
+    // Live search: 300ms debounce, Fetch API + AbortController. Preserves category filter.
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+    const searchSubmit = document.getElementById('searchSubmit');
+    const productsContainer = document.getElementById('productsContainer');
+    let currentCategoryId = '@(Model.SelectedCategoryId?.ToString() ?? "")';
+    let currentAbortController = null;
+
+    function debounce(fn, delay) {
+        let t;
+        return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), delay);
+        };
+    }
+
+    function toggleClearBtn() {
+        if (!searchClear || !searchInput) return;
+        searchClear.classList.toggle('visible', searchInput.value.length > 0);
+    }
+
+    async function performSearch(term, categoryId) {
+        if (!productsContainer) return;
+        const params = new URLSearchParams();
+        if (term) params.set('searchTerm', term);
+        if (categoryId) params.set('categoryId', categoryId);
+        const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+
+        // Cancel previous request if pending
+        if (currentAbortController) {
+            try { currentAbortController.abort(); } catch (e) { }
+        }
+        const controller = new AbortController();
+        currentAbortController = controller;
+
+        // show loading state on the search button for feedback (only for the active request)
+        if (searchSubmit) {
+            searchSubmit.classList.add('loading');
+            searchSubmit.disabled = true;
+        }
+
+        try {
+            const res = await fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html' },
+                signal: controller.signal
+            });
+
+            if (!res.ok) throw new Error('Network response was not ok');
+            const html = await res.text();
+
+            // Only update UI if this response is for the latest request
+            if (controller !== currentAbortController) return;
+
+            productsContainer.innerHTML = html;
+        }
+        catch (e) {
+            if (e && (e.name === 'AbortError' || e.code === 'ERR_ABORTED')) return;
+            console.error('Live search error', e);
+        }
+        finally {
+            if (searchSubmit && controller === currentAbortController) {
+                searchSubmit.classList.remove('loading');
+                searchSubmit.disabled = false;
+                currentAbortController = null;
+            }
+        }
+    }
+
+    const debouncedSearch = debounce(() => performSearch(searchInput.value.trim(), currentCategoryId || undefined), 300);
+
+    // Wire input and clear button
+    if (searchInput) searchInput.addEventListener('input', () => { toggleClearBtn(); debouncedSearch(); });
+    if (searchClear) searchClear.addEventListener('click', () => { if (searchInput) searchInput.value = ''; toggleClearBtn(); debouncedSearch(); });
+
+    // Intercept category chip clicks to filter via AJAX and update active class
+    document.querySelectorAll('.chips-row a').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const href = new URL(a.href, window.location.origin);
+            const cat = href.searchParams.get('categoryId');
+            currentCategoryId = cat || '';
+
+            // Update active class visually
+            document.querySelectorAll('.chips-row a').forEach(x => x.classList.remove('active'));
+            a.classList.add('active');
+
+            // keep searchTerm in sync (href includes searchTerm param)
+            const term = href.searchParams.get('searchTerm') || '';
+            if (searchInput) searchInput.value = term;
+            toggleClearBtn();
+
+            debouncedSearch();
+        });
+    });
+
+    // Prevent full page submit; perform AJAX instead on form submit (enter key)
+    const form = searchInput ? searchInput.closest('form') : null;
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            performSearch(searchInput.value.trim(), currentCategoryId || undefined);
+        });
+    }
+
+    // Initialize UI state
+    toggleClearBtn();
+</script>

@@ -32,6 +32,12 @@ public class ProductsController(IProductService productService, AppDbContext con
             Categories = await context.Categories.ToListAsync()
         };
 
+        // If this is an AJAX request return only the products grid partial so we can update the list dynamically.
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            return PartialView("_ProductGrid", viewModel);
+        }
+
         return View(viewModel);
     }
 

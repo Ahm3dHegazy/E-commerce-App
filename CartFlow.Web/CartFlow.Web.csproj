@@ -19,4 +19,8 @@
     <ProjectReference Include="..\CartFlow.Services\CartFlow.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Categories\" />
+  </ItemGroup>
+
 </Project>

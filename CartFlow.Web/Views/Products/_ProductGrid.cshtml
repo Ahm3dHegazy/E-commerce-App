@@ -1,0 +1,63 @@
+@model CartFlow.Web.Models.ProductListViewModel
+
+<div class="main">
+    <div class="container">
+
+        @if (!Model.Products.Any())
+        {
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                </svg>
+                <h3>No products found</h3>
+                <p>Try a different search term or browse all categories.</p>
+            </div>
+        }
+        else
+        {
+            <div class="product-grid">
+                @foreach (var p in Model.Products)
+                {
+                    <div class="card">
+                        <div class="card-img">
+                            <a href="@Url.Action("Details", "Products", new { id = p.Id })" class="card-img-link">
+                                @if (!string.IsNullOrEmpty(p.ImageUrl))
+                                {
+                                    <img src="@p.ImageUrl" alt="@p.Name" />
+                                }
+                                else
+                                {
+                                    <span class="card-initial">@p.Initial</span>
+                                }
+                            </a>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="card-name">@p.Name</div>
+
+                            <div class="card-meta">
+                                <span class="badge-category">@p.CategoryName</span>
+                                <span class="badge-stock @(p.StockQuantity > 10 ? "in" : p.StockQuantity > 0 ? "low" : "out")">
+                                    @(p.StockQuantity > 10 ? "In Stock" : p.StockQuantity > 0 ? "Low Stock" : "Out of Stock")
+                                </span>
+                            </div>
+
+                            <div class="card-price">
+                                <span>EGP</span>@p.UnitPrice.ToString("N2")
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-cart" @(p.StockQuantity == 0 ? "disabled" : "")>
+                                    @(p.StockQuantity == 0 ? "Out of stock" : "Add to cart")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+</div>
