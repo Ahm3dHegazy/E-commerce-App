@@ -30,3 +30,19 @@ E:\ecommerce-app\CartFlow.Data\obj\Debug\net10.0\refint\CartFlow.Data.dll
 E:\ecommerce-app\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.pdb
 E:\ecommerce-app\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.genruntimeconfig.cache
 E:\ecommerce-app\CartFlow.Data\obj\Debug\net10.0\ref\CartFlow.Data.dll
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\bin\Debug\net10.0\Data\appsettings.json
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\bin\Debug\net10.0\CartFlow.Data.deps.json
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\bin\Debug\net10.0\CartFlow.Data.runtimeconfig.json
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\bin\Debug\net10.0\CartFlow.Data.dll
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\bin\Debug\net10.0\CartFlow.Data.pdb
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.csproj.AssemblyReference.cache
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.AssemblyInfoInputs.cache
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.AssemblyInfo.cs
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.csproj.CoreCompileInputs.cache
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.sourcelink.json
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.dll
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\refint\CartFlow.Data.dll
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.pdb
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\CartFlow.Data.genruntimeconfig.cache
+C:\Users\Domain\Desktop\final project DEPI\CartFlow.Data\obj\Debug\net10.0\ref\CartFlow.Data.dll

@@ -19,77 +19,77 @@ build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = CartFlow.Web
 build_property.RootNamespace = CartFlow.Web
-build_property.ProjectDir = E:\ecommerce-app\CartFlow.Web\
+build_property.ProjectDir = C:\Users\Domain\Desktop\final project DEPI\CartFlow.Web\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\ecommerce-app\CartFlow.Web
+build_property.MSBuildProjectDirectory = C:\Users\Domain\Desktop\final project DEPI\CartFlow.Web
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Account/SignIn.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Account/SignIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduSW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Account/SignUp.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Account/SignUp.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduVXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Cart/Index.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Cart/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Categories/Index.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Categories/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Checkout/Confirmation.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Checkout/Confirmation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcQ29uZmlybWF0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Checkout/Index.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Checkout/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Home/Index.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Home/Privacy.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Products/Details.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Products/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Products/Index.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Products/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Shared/Components/CategoryMenu/Default.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Shared/Components/CategoryMenu/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcQ2F0ZWdvcnlNZW51XERlZmF1bHQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Shared/Error.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/_ViewImports.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/_ViewStart.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/ecommerce-app/CartFlow.Web/Views/Shared/_Layout.cshtml]
+[C:/Users/Domain/Desktop/final project DEPI/CartFlow.Web/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-qhj79pjk6x

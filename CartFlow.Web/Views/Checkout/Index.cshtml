@@ -1,57 +1,148 @@
-@model CheckoutViewModel
+@model CartFlow.Web.Models.CheckoutViewModel
 
 @{
     ViewData["Title"] = "Checkout";
 }
 
-<div class="page-section">
-    <section class="section-card">
-        <div class="section-header">
-            <p class="section-label">Checkout</p>
-            <h1>Shipping details</h1>
-            <p class="section-text">A simple checkout form layout that stays compact and easy to scan.</p>
+<div class="container my-5">
+    <div class="row g-5">
+        
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3 fw-bold text-primary">Shipping Address</h4>
+            
+            <form asp-controller="Checkout" asp-action="Index" method="post" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-semibold"></div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label asp-for="FirstName" class="form-label fw-medium">First Name</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Eslam" />
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label asp-for="LastName" class="form-label fw-medium">Last Name</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Mohamed" />
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Email" class="form-label fw-medium">Email Address</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="example@bsu.edu.eg" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="AddressLine1" class="form-label fw-medium">Address</label>
+                        <input asp-for="AddressLine1" class="form-control" placeholder="123 Main St, Beni Suef" />
+                        <span asp-validation-for="AddressLine1" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label asp-for="City" class="form-label fw-medium">City</label>
+                        <input asp-for="City" class="form-control" placeholder="Beni Suef" />
+                        <span asp-validation-for="City" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="State" class="form-label fw-medium">State / Region</label>
+                        <input asp-for="State" class="form-control" placeholder="Beni Suef Governorate" />
+                        <span asp-validation-for="State" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="PostalCode" class="form-label fw-medium">Postal Code</label>
+                        <input asp-for="PostalCode" class="form-control" placeholder="62511" />
+                        <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Country" class="form-label fw-medium">Country</label>
+                        <input asp-for="Country" class="form-control" placeholder="Egypt" />
+                        <span asp-validation-for="Country" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h4 class="mb-3 fw-bold text-primary">Payment Method</h4>
+                <div class="my-3">
+                    <div class="form-check mb-2">
+                        <input id="cash" name="PaymentMethod" type="radio" class="form-check-input" value="Cash" checked required>
+                        <label class="form-check-label" for="cash">Cash on Delivery (COD)</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="credit" name="PaymentMethod" type="radio" class="form-check-input" value="CreditCard" required>
+                        <label class="form-check-label" for="credit">Credit Card / Visa</label>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <button class="w-100 btn btn-warning btn-lg fw-bold py-3 shadow-sm" type="submit" style="background-color: #ffc107; color: #000; border: none;">
+                    <i class="bi bi-shield-check"></i> Place Order
+                </button>
+            </form>
         </div>
 
-        <form class="checkout-form mt-3">
-            <div class="field-grid field-grid--two">
-                <label class="form-field">
-                    <span>First name</span>
-                    <input class="form-control" type="text" placeholder="First name" />
-                </label>
-                <label class="form-field">
-                    <span>Last name</span>
-                    <input class="form-control" type="text" placeholder="Last name" />
-                </label>
-                <label class="form-field field-span-2">
-                    <span>Email</span>
-                    <input class="form-control" type="email" placeholder="name@example.com" />
-                </label>
-                <label class="form-field field-span-2">
-                    <span>Address</span>
-                    <input class="form-control" type="text" placeholder="Street address" />
-                </label>
-                <label class="form-field">
-                    <span>City</span>
-                    <input class="form-control" type="text" placeholder="City" />
-                </label>
-                <label class="form-field">
-                    <span>State</span>
-                    <input class="form-control" type="text" placeholder="State" />
-                </label>
-                <label class="form-field">
-                    <span>Postal code</span>
-                    <input class="form-control" type="text" placeholder="Postal code" />
-                </label>
-                <label class="form-field">
-                    <span>Country</span>
-                    <input class="form-control" type="text" placeholder="Country" />
-                </label>
-            </div>
+        <div class="col-md-5 col-lg-4">
+            <div class="card border-0 bg-light p-4 rounded-3 shadow-sm sticky-md-top" style="top: 2rem;">
+                <h4 class="d-flex justify-content-between align-middle mb-3 text-secondary fw-semibold">
+                    <span>Order Summary</span>
+                </h4>
+                
+                <ul class="list-group list-group-flush mb-3 rounded-2 bg-transparent">
+                    @{
+                        var checkoutItems = ViewBag.CartItems as List<CartFlow.Web.Models.CartItemViewModel>;
+                    }
 
-            <div class="auth-actions mt-3">
-                <button type="button" class="btn btn-primary">Continue</button>
-                <a class="btn btn-outline-secondary" asp-controller="Cart" asp-action="Index">Back to cart</a>
+                    @if (checkoutItems != null && checkoutItems.Any())
+                    {
+                        @foreach (var item in checkoutItems)
+                        {
+                            <li class="list-group-item d-flex justify-content-between lh-sm bg-transparent border-bottom py-3">
+                                <div>
+                                    <h6 class="my-0 fw-semibold">@item.ProductName</h6>
+                                    <small class="text-muted">Qty: @item.Quantity × EGP @item.UnitPrice.ToString("N2")</small>
+                                </div>
+                                <span class="text-muted fw-medium">EGP @((item.Quantity * item.UnitPrice).ToString("N2"))</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item bg-transparent text-center py-3 text-muted">
+                            No items in checkout.
+                        </li>
+                    }
+                </ul>
+
+                <div class="card-footer bg-transparent border-0 px-0">
+                    @{
+                        decimal subtotal = checkoutItems?.Sum(i => i.Quantity * i.UnitPrice) ?? 0;
+                        decimal shipping = 50.00m;
+                        decimal total = subtotal + shipping;
+                    }
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal</span>
+                        <span class="text-dark">EGP @subtotal.ToString("N2")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Shipping</span>
+                        <span class="text-dark">EGP @shipping.ToString("N2")</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between text-dark">
+                        <strong class="fs-5">Total</strong>
+                        <strong class="fs-5 text-success">EGP @total.ToString("N2")</strong>
+                    </div>
+                </div>
             </div>
-        </form>
-    </section>
+        </div>
+
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

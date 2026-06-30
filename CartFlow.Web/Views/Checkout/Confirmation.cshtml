@@ -1,35 +1,59 @@
-@model OrderSummaryViewModel
+@model CartFlow.Web.Models.OrderSummaryViewModel
 
 @{
-    ViewData["Title"] = "Order confirmation";
+    ViewData["Title"] = "Order Confirmed";
 }
 
-<div class="page-section">
-    <section class="section-card">
-        <div class="section-header">
-            <p class="section-label">Complete</p>
-            <h1>Order confirmed</h1>
-            <p class="section-text">Use this page as the final confirmation layout after checkout is implemented.</p>
-        </div>
+<div class="container my-5 text-center" style="max-width: 600px;">
+    
+    <div class="mb-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+    </div>
 
-        <div class="details-list">
-            <div>
-                <span>Order number</span>
-                <strong>@Model.OrderNumber</strong>
-            </div>
-            <div>
-                <span>Items</span>
-                <strong>@Model.ItemCount</strong>
-            </div>
-            <div>
-                <span>Total</span>
-                <strong>@Model.Total.ToString("C")</strong>
-            </div>
-        </div>
+    <h1 class="display-5 fw-bold text-dark mb-3">Order Confirmed!</h1>
+    <p class="text-muted fs-5 mb-5">Thank you for your purchase. Your order has been placed successfully and is being processed.</p>
 
-        <div class="action-row mt-3">
-            <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Back to products</a>
-            <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Home</a>
+    <div class="card border-0 bg-light p-4 rounded-3 text-start mb-4 shadow-sm">
+        <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">Order Information</h5>
+        
+        <div class="row g-2">
+            <div class="col-6 text-muted">Order Number:</div>
+            <div class="col-6 text-end fw-bold text-dark">#CF-@Model.OrderNumber</div>
+
+            <div class="col-6 text-muted">Date & Time:</div>
+            <div class="col-6 text-end fw-medium text-dark">@DateTime.Now.ToString("MMMM dd, yyyy HH:mm")</div>
+
+            <div class="col-6 text-muted">Status:</div>
+            <div class="col-6 text-end">
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">
+                    Processing
+                </span>
+            </div>
         </div>
-    </section>
+    </div>
+
+    <div class="card border-0 bg-light p-4 rounded-3 text-start mb-5 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="my-0 fw-bold text-secondary">Total Quantity</h6>
+                <small class="text-muted">Total number of items purchased</small>
+            </div>
+            <span class="badge bg-secondary text-white rounded-pill fs-6 px-3">@Model.ItemCount items</span>
+        </div>
+        <hr class="my-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <strong class="fs-5 text-dark">Total Paid (with shipping)</strong>
+            <strong class="fs-4 text-success">EGP @Model.Total.ToString("N2")</strong>
+        </div>
+    </div>
+
+    <div class="d-flex gap-3 justify-content-center">
+        <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg px-4 fw-semibold shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back to Products
+        </a>
+        <a asp-controller="Orders" asp-action="MyOrders" class="btn btn-outline-secondary btn-lg px-4 fw-semibold">
+            <i class="bi bi-bag-check"></i> View My Orders
+        </a>
+    </div>
+
 </div>

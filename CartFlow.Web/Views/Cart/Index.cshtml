@@ -5,62 +5,106 @@
 }
 
 <div class="page-section">
-    <section class="section-card">
-        <div class="section-header section-header--row">
-            <div>
-                <p class="section-label">Cart</p>
-                <h1>Your shopping cart</h1>
-                <p class="section-text">A compact review screen for the items selected by the customer.</p>
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <section class="section-card">
+            <div class="section-header section-header--row">
+                <div>
+                    <p class="section-label">Cart</p>
+                    <h1>Your shopping cart</h1>
+                    <p class="section-text">A compact review screen for the items selected by the customer.</p>
+                </div>
+                <div class="summary-chip summary-chip--price">
+                    <strong>@Model.Items.Count</strong>
+                    <span>items</span>
+                </div>
             </div>
-            <div class="summary-chip summary-chip--price">
-                <strong>@Model.Items.Count</strong>
-                <span>items</span>
-            </div>
-        </div>
 
-        <div class="table-responsive mt-3">
-            <table class="table table-borderless align-middle products-table mb-0">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Category</th>
-                        <th class="text-end">Price</th>
-                        <th class="text-end">Qty</th>
-                        <th class="text-end">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach (var item in Model.Items) {
-                    <tr>
-                        <td class="fw-semibold">@item.ProductName</td>
-                        <td>@item.CategoryName</td>
-                        <td class="text-end">EGP @item.UnitPrice.ToString("N2")</td>
-                        <td class="text-end">@item.Quantity</td>
-                        <td class="text-end">EGP @item.LineTotal.ToString("N2")</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
+            <div class="table-responsive mt-3">
+                <table class="table table-borderless align-middle products-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th class="text-end">Price</th>
+                            <th class="text-center" style="width: 160px;">Qty</th>
+                            <th class="text-end">Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.ProductName</td>
+                                <td>@item.CategoryName</td>
+                                <td class="text-end">EGP @item.UnitPrice.ToString("N2")</td>
+                            
+                                <td class="text-center">
+                                    <div class="d-inline-flex align-items-center gap-2 justify-content-center">
+                                        <form asp-action="UpdateQuantity" method="post" class="d-inline m-0">
+                                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                                            <input type="hidden" name="quantity" value="@(item.Quantity - 1)" />
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold">-</button>
+                                        </form>
 
-        <div class="cart-total mt-3">
-            <div>
-                <span>Subtotal</span>
-                <strong>EGP @Model.Subtotal.ToString("N2")</strong>
-            </div>
-            <div>
-                <span>Shipping</span>
-                <strong>EGP @Model.Shipping.ToString("N2")</strong>
-            </div>
-            <div>
-                <span>Total</span>
-                <strong>EGP @Model.Total.ToString("N2")</strong>
-            </div>
-        </div>
+                                        <span class="fw-semibold" style="min-width: 25px; display: inline-block;">@item.Quantity</span>
 
-        <div class="action-row mt-3">
-            <a class="btn btn-primary" asp-controller="Checkout" asp-action="Index">Proceed to checkout</a>
-            <a class="btn btn-outline-secondary" asp-controller="Products" asp-action="Index">Continue shopping</a>
-        </div>
-    </section>
+                                        <form asp-action="UpdateQuantity" method="post" class="d-inline m-0">
+                                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                                            <input type="hidden" name="quantity" value="@(item.Quantity + 1)" />
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold">+</button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                                <td class="text-end">EGP @item.LineTotal.ToString("N2")</td>
+                            
+                                <td class="text-end" style="width: 40px;">
+                                    <form asp-action="RemoveFromCart" method="post" class="d-inline m-0">
+                                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                                        <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0" title="Remove item">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-total mt-3">
+                <div>
+                    <span>Subtotal</span>
+                    <strong>EGP @Model.Subtotal.ToString("N2")</strong>
+                </div>
+                <div>
+                    <span>Shipping</span>
+                    <strong>EGP @Model.Shipping.ToString("N2")</strong>
+                </div>
+                <hr style="border-color: rgba(0,0,0,0.08); margin: 0.5rem 0;" />
+                <div>
+                    <span>Total</span>
+                    <strong style="font-size: 1.25rem;">EGP @Model.Total.ToString("N2")</strong>
+                </div>
+            </div>
+
+            <div class="action-row mt-3">
+                <a class="btn btn-primary" asp-controller="Checkout" asp-action="Index">Proceed to checkout</a>
+                <a class="btn btn-outline-secondary" asp-controller="Products" asp-action="Index">Continue shopping</a>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="section-card text-center py-5">
+            <div class="mb-3 text-muted" style="font-size: 2.5rem;">
+                <i class="bi bi-cart-x"></i>
+            </div>
+            <h2 class="fw-bold mb-2">Your cart is empty</h2>
+            <p class="text-muted mb-4">Looks like you haven't added any products to your cart yet.</p>
+            <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
+        </section>
+    }
 </div>

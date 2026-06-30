@@ -3958,23 +3958,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\abdel\\.nuget\\packages\\": {},
-    "E:\\Program Files\\Visual studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Domain\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
+      "projectUniqueName": "C:\\Users\\Domain\\Desktop\\final project DEPI\\CartFlow.Data\\CartFlow.Data.csproj",
       "projectName": "CartFlow.Data",
-      "projectPath": "E:\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
-      "packagesPath": "C:\\Users\\abdel\\.nuget\\packages\\",
-      "outputPath": "E:\\ecommerce-app\\CartFlow.Data\\obj\\",
+      "projectPath": "C:\\Users\\Domain\\Desktop\\final project DEPI\\CartFlow.Data\\CartFlow.Data.csproj",
+      "packagesPath": "C:\\Users\\Domain\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Domain\\Desktop\\final project DEPI\\CartFlow.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "E:\\Program Files\\Visual studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\abdel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Domain\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3987,6 +3987,7 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -4005,6 +4006,7 @@
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
