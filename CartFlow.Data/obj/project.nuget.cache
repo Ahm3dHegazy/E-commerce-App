@@ -68,15 +68,5 @@
     "C:\\Users\\abdel\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.4\\system.security.cryptography.pkcs.9.0.4.nupkg.sha512",
     "C:\\Users\\abdel\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.4\\system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problem reading the cache file C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Data\\CartFlow.Data.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

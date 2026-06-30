@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CartFlow.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d73bf0c5c50d016111ead3d274ad89063129959c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d179a526f3c3d0d2f6d761b819211154994d0b8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CartFlow.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CartFlow.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

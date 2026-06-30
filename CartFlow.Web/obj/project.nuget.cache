@@ -130,15 +130,6 @@
   ],
   "logs": [
     {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problem reading the cache file C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\abdel\\source\\repos\\E-Commerce-project\\ecommerce-app\\CartFlow.Web\\CartFlow.Web.csproj",
-      "targetGraphs": []
-    },
-    {
       "code": "NU1901",
       "level": "Warning",
       "message": "Package 'NuGet.Packaging' 6.12.1 has a known low severity vulnerability, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg",
