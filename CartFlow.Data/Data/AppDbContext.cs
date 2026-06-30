@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using CartFlow.Data.Entities;
+﻿using CartFlow.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CartFlow.Data.Data;
 
 public class AppDbContext : DbContext {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
     public DbSet<Order> Orders { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
@@ -15,20 +16,6 @@ public class AppDbContext : DbContext {
     public DbSet<Category> Categories { get; set; }
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<Review> Reviews { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        base.OnConfiguring(optionsBuilder);
-
-        var assemblyDir = System.IO.Path.GetDirectoryName(typeof(AppDbContext).Assembly.Location);
-        var config = new ConfigurationBuilder()
-            .SetBasePath(assemblyDir)
-            .AddJsonFile(System.IO.Path.Combine("Data", "appsettings.json"), optional: false, reloadOnChange: true)
-            .Build();
-
-        var connectionString = config.GetSection("constr").Value;
-
-        optionsBuilder.UseSqlServer(connectionString);
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
