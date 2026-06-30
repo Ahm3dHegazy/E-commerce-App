@@ -1,7 +1,6 @@
 using CartFlow.Data.Data;
 using CartFlow.Services.Interfaces;
 using CartFlow.Services.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +12,6 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => {
-        options.LoginPath = "/Account/SignIn";
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/SignIn";
-    });
 
 var app = builder.Build();
 
@@ -38,7 +30,6 @@ if (!app.Environment.IsDevelopment()) {
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

@@ -103,16 +103,23 @@ body {
 /* Theme toggle */
 .theme-toggle {
   background: none;
-  border: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: var(--text);
-  font-size: 1.2rem;
-  padding: 0.25rem;
-  line-height: 1;
-  transition: color 0.15s;
+  font-size: 1rem;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .theme-toggle:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
   color: var(--accent);
 }
 
