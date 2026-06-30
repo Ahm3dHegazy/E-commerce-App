@@ -1,4 +1,5 @@
 using CartFlow.Services.Interfaces;
+using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,39 @@ namespace CartFlow.Web.Controllers {
             await HttpContext.SignInAsync(principal);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString)) return RedirectToAction("SignIn");
+
+            var user = await accountService.GetByIdAsync(int.Parse(userIdString));
+            if (user is null) return RedirectToAction("SignIn");
+
+            return View(new ProfileViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString)) return RedirectToAction("SignIn");
+
+            var user = await accountService.UpdateProfileAsync(int.Parse(userIdString), model.FirstName, model.LastName, model.Email, model.Phone);
+            if (user is null) return NotFound();
+
+            TempData["Success"] = "Profile updated successfully.";
+            return RedirectToAction("Profile");
         }
 
         public async Task<IActionResult> Logout() {
