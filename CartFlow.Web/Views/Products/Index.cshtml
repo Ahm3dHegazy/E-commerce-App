@@ -6,6 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;400;600;700;800&display=swap" rel="stylesheet">
 
+<<<<<<< HEAD
 <style>
     :root {
         --primary: #1a1a2e;
@@ -598,3 +599,47 @@
 
     </div>
 </div>
+=======
+        <div class="table-responsive">
+            <table class="table table-borderless align-middle products-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">@product.Name</div>
+                                <div class="text-muted small text-truncate">@product.Description</div>
+                            </td>
+                            <td>@product.Category?.Name</td>
+                            <td class="text-end">EGP @product.UnitPrice.ToString("N2")</td>
+                            <td class="text-end">@product.StockQuantity</td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@product.Id">Details</a>
+                                
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                        <input type="hidden" name="productId" value="@product.Id" />
+                                        <input type="hidden" name="quantity" value="1" />
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+>>>>>>> 14d6e048c5f0d76ef47275d1cde5c1bd6b551647
