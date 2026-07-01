@@ -1,14 +1,24 @@
 @model IEnumerable<CartFlow.Data.Entities.Category>
 
-<li class="nav-item dropdown">
+<li class="nav-item dropdown dropdown-hover">
     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Category</a>
     <ul class="dropdown-menu">
         @foreach (var cat in Model)
         {
-            <li>
+            <li class="dropdown-submenu">
                 <a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-categoryId="@cat.Id">
-                    @cat.Name
+                    @cat.Name <i class="bi bi-chevron-right float-end"></i>
                 </a>
+                <ul class="dropdown-menu">
+                    @foreach (var sub in cat.Subcategories.OrderBy(s => s.Name))
+                    {
+                        <li>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="Index" asp-route-categoryId="@sub.Id">
+                                @sub.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
             </li>
         }
     </ul>
