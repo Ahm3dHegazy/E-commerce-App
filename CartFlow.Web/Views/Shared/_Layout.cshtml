@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject CartFlow.Data.Data.AppDbContext DbContext
+@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8" />
@@ -6,11 +8,11 @@
     <title>@ViewData["Title"] - CartFlow</title>
     <script type="importmap"></script>
     <script>
-        (function() {
-            var theme = localStorage.getItem('theme');
-            if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
+            (function() {
+                var theme = localStorage.getItem('theme');
+                if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            })();
     </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -30,21 +32,44 @@
                     <ul class="navbar-nav me-auto align-items-lg-center gap-lg-1">
                         @await Component.InvokeAsync("CategoryMenu")
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>
+                        
+                        <!-- التعديل هنا: إضافة عداد المنتجات ذكي وبشكل متناسق مع التصميم -->
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
+                                Cart
+                                @{
+                                    var userIdString = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                    if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int loggedInUserId))
+                                    {
+                                        var itemsCount = DbContext.CartItems
+                                            .Where(ci => ci.Cart.UserId == loggedInUserId)
+                                            .Sum(ci => ci.Quantity);
+
+                                        if (itemsCount > 0)
+                                        {
+                                            <span class="badge bg-danger rounded-pill" style="position: absolute; top: -2px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.45em;">
+                                                @itemsCount
+                                            </span>
+                                        }
+                                    }
+                                }
+                            </a>
+                        </li>
                     </ul>
 
                     <div class="d-flex align-items-center gap-1">
                         <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">☀</button>
                         <form class="d-flex nav-search" role="search" asp-controller="Products" asp-action="Index" method="get">
-                        <div class="input-group input-group-sm">
-                            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
-                            <input class="form-control" type="search" name="searchTerm" placeholder="Search products…" aria-label="Search" />
-                        </div>
-                    </form>
+                            <div class="input-group input-group-sm">
+                                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+                                <input class="form-control" type="search" name="searchTerm" placeholder="Search products…" aria-label="Search" />
+                            </div>
+                        </form>
                     </div>
 
                     <ul class="navbar-nav align-items-lg-center gap-lg-1">
-                        @if (Context.User.Identity?.IsAuthenticated == true) {
+                        @if (Context.User.Identity?.IsAuthenticated == true)
+                        {
                             <li class="nav-item dropdown">
                                 <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown" role="button">
                                     <i class="bi bi-person-circle fs-5"></i>
@@ -56,7 +81,9 @@
                                     <li><a class="dropdown-item" asp-action="Logout">Log out</a></li>
                                 </ul>
                             </li>
-                        } else {
+                        }
+                        else
+                        {
                             <li class="nav-item"><a class="nav-link nav-link--muted" asp-area="" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
                             <li class="nav-item"><a class="btn btn-primary btn-sm nav-cta" asp-area="" asp-controller="Account" asp-action="SignUp">Sign up</a></li>
                         }
@@ -81,19 +108,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-        (function() {
-            var btn = document.getElementById('themeToggle');
-            if (!btn) return;
-            var theme = document.documentElement.getAttribute('data-theme');
-            btn.textContent = theme === 'dark' ? '☀' : '☾';
-            btn.addEventListener('click', function() {
-                var html = document.documentElement;
-                var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                html.setAttribute('data-theme', next);
-                localStorage.setItem('theme', next);
-                this.textContent = next === 'dark' ? '☀' : '☾';
-            });
-        })();
+            (function() {
+                var btn = document.getElementById('themeToggle');
+                if (!btn) return;
+                var theme = document.documentElement.getAttribute('data-theme');
+                btn.textContent = theme === 'dark' ? '☀' : '☾';
+                btn.addEventListener('click', function() {
+                    var html = document.documentElement;
+                    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    this.textContent = next === 'dark' ? '☀' : '☾';
+                });
+            })();
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

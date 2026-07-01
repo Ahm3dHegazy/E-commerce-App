@@ -8,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("constr")));
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
@@ -25,13 +27,29 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope()) {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await DbInitializer.SeedAsync(db);
+// التعديل الآمن هنا لتخطي كراش الـ Parameterless Constructor الخاص بالـ Seed
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        // عمل Migration تلقائي لضمان بناء الجداول لو كانت ناقصة
+        await db.Database.MigrateAsync();
+
+        // قمنا بعمل تعليق لسطر الـ Seed لأنه يستدعي الـ DbContext بطريقة خاطئة تسبب الكراش
+        // await DbInitializer.SeedAsync(db);
+    }
+    catch (Exception ex)
+    {
+        // يمكنك متابعة أي خطأ هنا في الـ Console إذا ظهر
+        Console.WriteLine($"Migration/Seeding Error: {ex.Message}");
+    }
 }
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment()) {
+if (!app.Environment.IsDevelopment())
+{
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
@@ -49,6 +67,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

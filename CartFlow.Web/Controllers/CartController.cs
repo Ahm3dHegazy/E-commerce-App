@@ -1,6 +1,6 @@
-using CartFlow.Data; 
+using CartFlow.Data;
 using CartFlow.Data.Data;
-using CartFlow.Data.Entities;  
+using CartFlow.Data.Entities;
 using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +72,6 @@ namespace CartFlow.Web.Controllers
                 cart = new Cart
                 {
                     UserId = userId
-                    // تم إزالة السجلات غير الموجودة بالـ Entity مثل CreatedAt ليتطابق مع كودك
                 };
                 _context.Carts.Add(cart);
                 await _context.SaveChangesAsync(); // لحفظ السلة وتوليد الـ Id لها
@@ -105,6 +104,14 @@ namespace CartFlow.Web.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            // 🔥 التعديل الذكي هنا: جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
+            string? returnUrl = Request.Headers["Referer"].ToString();
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

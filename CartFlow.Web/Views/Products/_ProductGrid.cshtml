@@ -50,9 +50,14 @@ else
                     </div>
 
                     <div class="action-row">
-                        <button class="btn btn-primary btn-sm" @(p.StockQuantity == 0 ? "disabled" : "")>
-                            @(p.StockQuantity == 0 ? "Out of stock" : "Add to cart")
-                        </button>
+                        <!-- تم استبدال البوتون العادي بفورم POST آمن ممرر به معرف المنتج p.Id والكمية الافتراضية 1 -->
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100">
+                            <input type="hidden" name="productId" value="@p.Id" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="btn btn-primary btn-sm w-100" @(p.StockQuantity == 0 ? "disabled" : "")>
+                                @(p.StockQuantity == 0 ? "Out of stock" : "Add to cart")
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
