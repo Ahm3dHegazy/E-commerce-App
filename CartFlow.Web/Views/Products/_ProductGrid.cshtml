@@ -41,12 +41,11 @@ else
                     </div>
 
                     @* Star rating placed below name and above price. Uses shared partial. *@
-                    <div class="mt-2">
-                        @{
-                            var avg = p.Reviews?.Any() == true ? Math.Round(p.Reviews.Average(r => r.Rate), 2) : 0m;
-                            var count = p.Reviews?.Count() ?? 0;
-                        }
-                        @Html.Partial("~/Views/Shared/_StarRating.cshtml", (avg, count))
+                    <div class="mt-2" style="display:inline-flex;align-items:center;gap:8px;">
+                        @{ var avg = p.Reviews?.Any() == true ? Math.Round(p.Reviews.Average(r => r.Rate), 1) : 0m; var count = p.Reviews?.Count() ?? 0; }
+                        @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
+                        <span class="avg-rating-text" style="margin-left:6px;font-weight:600;">@avg.ToString("0.0")</span>
+                        <span class="rating-count" style="margin-left:6px;opacity:.8;">(@count reviews)</span>
                     </div>
 
                     <div class="product-meta">
@@ -59,7 +58,7 @@ else
                     </div>
 
                     <div class="action-row">
-                        <!-- تم استبدال البوتون العادي بفورم POST آمن ممرر به معرف المنتج p.Id والكمية الافتراضية 1 -->
+
                         <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100">
                             <input type="hidden" name="productId" value="@p.Id" />
                             <input type="hidden" name="quantity" value="1" />

@@ -9,6 +9,7 @@ namespace CartFlow.Web.Controllers;
 
 public class ProductsController(IProductService productService, AppDbContext context, CartFlow.Services.Interfaces.IReviewService reviewService) : Controller
 {
+    // No-op patch: update file timestamp
     public async Task<IActionResult> Index(string? searchTerm, int? categoryId)
     {
         var products = await productService.GetAllAsync(searchTerm, categoryId);
@@ -71,13 +72,14 @@ public class ProductsController(IProductService productService, AppDbContext con
             CategoryName = product.Category?.Name,
             CategoryId = product.CategoryId,
             ImageUrl = product.ProductImages?.FirstOrDefault()?.Image,
+            ImageUrls = product.ProductImages?.Select(pi => pi.Image).ToList() ?? new List<string>(),
             Initial = string.IsNullOrEmpty(product.Name) ? string.Empty : product.Name[0].ToString().ToUpper()
         };
 
-        // Attach reviews from IReviewService (currently in-memory). Map service DTOs to Web view models.
+        // Attach reviews from IReviewService (currently in-memory).
         var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<CartFlow.Services.Models.ReviewDto>();
-        // ProductViewModel.Reviews uses the services-level ReviewDto to avoid circular dependencies — assign directly.
         viewModel.Reviews = dtos.ToList();
+
 
         return View(viewModel);
     }

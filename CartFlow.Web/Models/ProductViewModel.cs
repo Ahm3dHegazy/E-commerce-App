@@ -15,6 +15,9 @@
         // URL of the first ProductImage (null when no images exist)
         public string? ImageUrl { get; set; }
 
+        // All product image URLs (used by the details gallery)
+        public List<string> ImageUrls { get; set; } = new();
+
         // First letter of the product name — used as a fallback avatar/placeholder in the UI
         public string Initial { get; set; } = string.Empty;
 

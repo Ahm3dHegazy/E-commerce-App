@@ -3,6 +3,33 @@
     ViewData["Title"] = Model.Name;
 }
 
+@{
+    // Generate mock reviews per product (1..10) using deterministic seed (Model.Id)
+    var reviewerNames = new[] { "Layla", "Omar", "Sara", "Hassan", "Amina", "Youssef", "Nora", "Khaled", "Maya", "Tarek" };
+    var reviewComments = new[] {
+        "Fast shipping and works as described.",
+        "Not what I expected, quality could be better.",
+        "Decent but arrived with minor scratches.",
+        "Excellent quality, highly recommend!",
+        "Good value for money.",
+        "Size runs a bit large, consider ordering one size down.",
+        "Perfect fit and very comfortable.",
+        "Color faded a little after wash.",
+        "Customer service was helpful and responsive.",
+        "Loved it! Would buy again."
+    };
+
+    var rnd = new Random((Model.Id > 0 ? Model.Id : 1) * 1009);
+    var mockCount = rnd.Next(1, 11); // between 1 and 10
+    var mockReviews = Enumerable.Range(0, mockCount).Select(i => {
+        var name = reviewerNames[rnd.Next(reviewerNames.Length)];
+        var rating = rnd.Next(1, 6);
+        var date = DateTime.Today.AddDays(-rnd.Next(0, 365)).ToString("yyyy-MM-dd");
+        var text = reviewComments[rnd.Next(reviewComments.Length)];
+        return new { Name = name, Rating = (decimal)rating, Date = date, Text = text };
+    }).ToArray();
+}
+
 <link rel="stylesheet" href="~/css/products.css" asp-append-version="true" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,22 +51,57 @@
 <div class="main">
     <div class="detail-grid">
 
-            <!-- Left: image -->
-            <div class="img-panel">
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            <!-- Left: image + thumbnails gallery -->
+            <div>
+                <div class="img-panel">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <span class="img-initial">@Model.Initial</span>
+                    }
+                </div>
+
+                @if (Model.ImageUrls != null && Model.ImageUrls.Any())
                 {
-                    <img src="@Model.ImageUrl" alt="@Model.Name" />
+                    <div class="thumbnails" role="list">
+                        @foreach (var img in Model.ImageUrls)
+                        {
+                            var active = img == Model.ImageUrl ? "active" : string.Empty;
+                            <button type="button" class="thumb @active" data-src="@img" aria-label="Thumbnail">
+                                <img src="@img" alt="@Model.Name" />
+                            </button>
+                        }
+                    </div>
                 }
-                else
-                {
-                    <span class="img-initial">@Model.Initial</span>
-                }
+
+                <!-- Mock reviews block placed under thumbnails (left column) - always shown -->
+                <div class="left-mock-reviews" style="margin-top:90px;">
+                    <a class="reviews-link" href="#" style="color:var(--bs-body-color);text-decoration:none;font-weight:600;">
+                        Reviews (@mockReviews.Length)
+                    </a>
+
+                    <div class="mock-reviews-list" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+                        @foreach(var r in mockReviews) {
+                            <div class="mock-review" style="background:#fff;border:1px solid #eef0f2;border-radius:8px;padding:12px;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                                    <strong>@r.Name</strong>
+                                    <span style="display:flex;align-items:center;gap:8px;">
+                                        @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
+                                        <small style="opacity:.7;margin-left:6px;">@r.Date</small>
+                                    </span>
+                                </div>
+                                <div style="margin-top:8px;color:var(--bs-body-color);opacity:.9;">@r.Text</div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
 
             <!-- Right: info -->
             <div class="info-panel">
-
-                <h2>@Model.Name</h2>
 
                 <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="category-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none"
@@ -50,36 +112,45 @@
                     @Model.CategoryName
                 </a>
 
-                <div class="price-display">
-                    <span class="currency">EGP</span>@Model.UnitPrice.ToString("N2")
+                <h2>@Model.Name</h2>
+
+                <!-- Ratings summary directly under product name -->
+                <div class="rating-summary" style="display:flex;align-items:center;gap:8px;">
+                    @{
+                        var avg = Model.AverageRating;
+                        var count = mockReviews.Length;
+                    }
+                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
+                    <span class="avg-rating-text" style="font-weight:600;">@avg.ToString("0.0")</span>
+                    <span class="rating-count" style="opacity:.8;">(@count reviews)</span>
                 </div>
 
                 <div class="divider"></div>
 
+                <div class="price-display">
+                    <span class="currency">EGP</span>@Model.UnitPrice.ToString("N2")
+                </div>
                 @if (!string.IsNullOrWhiteSpace(Model.Description))
                 {
                     <p class="description">@Model.Description</p>
                 }
 
-                <!-- Ratings summary -->
                 <div class="divider"></div>
-                <div class="rating-summary">
-                    <strong>Average rating:</strong>
-                    <span class="avg-rating">@Model.AverageRating</span>
-                    <span class="rating-count">(@Model.ReviewCount reviews)</span>
-                </div>
 
                 <div class="stock-row">
-                    <span class="stock-label">Stock:</span>
-                    <span class="stock-value">@Model.StockQuantity units available</span>
+                    <span class="stock-dot" aria-hidden="true"></span>
+                    <span class="stock-value">@(Model.StockQuantity > 0 ? "In Stock" : "Out of Stock")</span>
+                    <span class="stock-count">(@Model.StockQuantity units available)</span>
                 </div>
 
-                <!-- Quantity -->
+                <!-- Quantity with +/- -->
                 <div class="qty-block">
-                    <label class="qty-label" for="qty">Quantity</label>
-                    <input class="qty-input" type="number" id="qty" name="qty"
-                           min="1" max="10" value="1"
-                    @(Model.StockQuantity == 0 ? "disabled" : "") />
+                    <label class="qty-label" for="qtyInput">Quantity</label>
+                    <div class="qty-control">
+                        <button type="button" class="btn-qty" data-action="decrement">-</button>
+                        <input class="qty-input" type="number" id="qtyInput" name="qty" min="1" value="1" />
+                        <button type="button" class="btn-qty" data-action="increment">+</button>
+                    </div>
                 </div>
 
                 <!-- Add to Cart -->
@@ -105,10 +176,32 @@
         </div>
 </div>
 
-<!-- Reviews -->
-<div class="main">
-    <div class="container">
-        <h3>Customer reviews</h3>
-        @Html.Partial("_Reviews", Model.Reviews)
-    </div>
-</div>
+<!-- Reviews removed from product details; average rating kept above -->
+
+<script>
+    (function(){
+        // Thumbnail click swaps main image
+        document.addEventListener('click', function(e){
+            var btn = e.target.closest('.thumb');
+            if(!btn) return;
+            var src = btn.getAttribute('data-src');
+            if(src){
+                var main = document.getElementById('mainImage');
+                if(main) main.src = src;
+                document.querySelectorAll('.thumbnails .thumb').forEach(t=>t.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        });
+
+        // Quantity buttons
+        document.addEventListener('click', function(e){
+            var action = e.target.getAttribute('data-action') || e.target.closest('[data-action]')?.getAttribute('data-action');
+            if(!action) return;
+            var input = document.getElementById('qtyInput');
+            if(!input) return;
+            var val = parseInt(input.value || '1');
+            if(action === 'increment') input.value = Math.min(val + 1, 999);
+            if(action === 'decrement') input.value = Math.max(val - 1, 1);
+        });
+    })();
+</script>

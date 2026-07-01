@@ -40,4 +40,6 @@ public class ProductService(AppDbContext context) : IProductService
             .Include(p => p.ProductImages)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
+
+
 }

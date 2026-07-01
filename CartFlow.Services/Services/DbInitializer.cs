@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CartFlow.Services.Services;
 
-public static class DbInitializer {
-    public static async Task SeedAsync(AppDbContext db) {
+public static class DbInitializer
+{
+    public static async Task SeedAsync(AppDbContext db)
+    {
         var catApparel = await GetOrCreateCategoryAsync(db, "Apparel", "Clothing and fashion wearables", null);
         var catAccessories = await GetOrCreateCategoryAsync(db, "Accessories", "Small add-ons and complements", null);
         var catElectronics = await GetOrCreateCategoryAsync(db, "Electronics", "Gadgets and electronic devices", null);
@@ -88,8 +90,10 @@ public static class DbInitializer {
         await db.SaveChangesAsync();
 
         // Seed user
-        if (!await db.Users.AnyAsync(u => u.Email == "ahmed@example.com")) {
-            db.Users.Add(new User {
+        if (!await db.Users.AnyAsync(u => u.Email == "ahmed@example.com"))
+        {
+            db.Users.Add(new User
+            {
                 FirstName = "Ahmed",
                 LastName = "Ali",
                 Email = "ahmed@example.com",
@@ -101,7 +105,8 @@ public static class DbInitializer {
         }
     }
 
-    private static async Task<Category> GetOrCreateCategoryAsync(AppDbContext db, string name, string description, Category? parent) {
+    private static async Task<Category> GetOrCreateCategoryAsync(AppDbContext db, string name, string description, Category? parent)
+    {
         var existing = await db.Categories.FirstOrDefaultAsync(c => c.Name == name);
         if (existing is not null) return existing;
 
@@ -111,15 +116,18 @@ public static class DbInitializer {
         return category;
     }
 
-    private static async Task GetOrCreateProductAsync(AppDbContext db, string name, string description, int stock, decimal price, Category category) {
+    private static async Task GetOrCreateProductAsync(AppDbContext db, string name, string description, int stock, decimal price, Category category)
+    {
         if (await db.Products.AnyAsync(p => p.Name == name)) return;
 
-        db.Products.Add(new Product {
+        db.Products.Add(new Product
+        {
             Name = name,
             Description = description,
             StockQuantity = stock,
             UnitPrice = price,
             CategoryId = category.Id
         });
+        await db.SaveChangesAsync();
     }
 }
