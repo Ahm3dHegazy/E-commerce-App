@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CartFlow.Web.Controllers {
@@ -40,19 +41,49 @@ namespace CartFlow.Web.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> SignUp(string firstName, string lastName, string email, string password) {
-            var user = await accountService.SignUpAsync(firstName, lastName, email, password);
+            try
+            {
+                var user = await accountService.SignUpAsync(firstName, lastName, email, password);
 
-            var claims = new List<Claim> {
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new(ClaimTypes.Email, user.Email)
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+                var claims = new List<Claim> {
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+                    new(ClaimTypes.Email, user.Email)
+                };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(principal);
+                await HttpContext.SignInAsync(principal);
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Preserve entered values so the form is not cleared
+                ViewData["firstName"] = firstName;
+                ViewData["lastName"] = lastName;
+                ViewData["email"] = email;
+
+                // Detect unique index violation for Email (SQL Server index name used: IX_Users_Email)
+                var inner = dbEx.InnerException?.Message ?? string.Empty;
+                if (inner.Contains("IX_Users_Email") || inner.Contains("duplicate key") || inner.Contains("Unique index"))
+                {
+                    ModelState.AddModelError("Email", "This email is already registered.");
+                    return View();
+                }
+
+                ModelState.AddModelError(string.Empty, "An error occurred while creating your account.");
+                return View();
+            }
+            catch (Exception)
+            {
+                ViewData["firstName"] = firstName;
+                ViewData["lastName"] = lastName;
+                ViewData["email"] = email;
+
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred. Please try again later.");
+                return View();
+            }
         }
 
         [HttpGet]

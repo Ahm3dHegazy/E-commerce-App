@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using CartFlow.Data.Validation;
 
 namespace CartFlow.Data.Entities {
     public class User {
@@ -12,6 +13,7 @@ namespace CartFlow.Data.Entities {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         [EmailAddress]
+        [UniqueEmail]
         public string Email { get; set; } = string.Empty;
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;

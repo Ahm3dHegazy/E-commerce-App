@@ -20,8 +20,16 @@ public class AccountService(AppDbContext context) : IAccountService {
         };
 
         context.Users.Add(user);
-        await context.SaveChangesAsync();
-        return user;
+        try
+        {
+            await context.SaveChangesAsync();
+            return user;
+        }
+        catch (DbUpdateException)
+        {
+            // Re-throw to be handled by the controller so we can return a user-friendly message
+            throw;
+        }
     }
 
     public async Task<User?> GetByIdAsync(int id) {
