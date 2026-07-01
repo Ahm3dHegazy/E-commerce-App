@@ -1,12 +1,13 @@
 using CartFlow.Data.Data;
 using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
+using CartFlow.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CartFlow.Web.Controllers;
 
-public class ProductsController(IProductService productService, AppDbContext context) : Controller
+public class ProductsController(IProductService productService, AppDbContext context, CartFlow.Services.Interfaces.IReviewService reviewService) : Controller
 {
     public async Task<IActionResult> Index(string? searchTerm, int? categoryId)
     {
@@ -31,6 +32,20 @@ public class ProductsController(IProductService productService, AppDbContext con
             SelectedCategoryId = categoryId,
             Categories = await context.Categories.ToListAsync()
         };
+
+        // Populate reviews for each product (in-memory via IReviewService). This provides
+        // average rating and review counts for the index product cards without changing
+        // the details page behaviour.
+        if (viewModel.Products.Any())
+        {
+            var reviewTasks = viewModel.Products.Select(p => reviewService.GetReviewsForProductAsync(p.Id)).ToList();
+            var reviewResults = await Task.WhenAll(reviewTasks);
+
+            for (int i = 0; i < viewModel.Products.Count; i++)
+            {
+                viewModel.Products[i].Reviews = reviewResults[i].ToList();
+            }
+        }
 
         // If this is an AJAX request return only the products grid partial so we can update the list dynamically.
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -59,6 +74,13 @@ public class ProductsController(IProductService productService, AppDbContext con
             Initial = string.IsNullOrEmpty(product.Name) ? string.Empty : product.Name[0].ToString().ToUpper()
         };
 
+        // Attach reviews from IReviewService (currently in-memory). Map service DTOs to Web view models.
+        var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<CartFlow.Services.Models.ReviewDto>();
+        // ProductViewModel.Reviews uses the services-level ReviewDto to avoid circular dependencies — assign directly.
+        viewModel.Reviews = dtos.ToList();
+
         return View(viewModel);
     }
+
+
 }

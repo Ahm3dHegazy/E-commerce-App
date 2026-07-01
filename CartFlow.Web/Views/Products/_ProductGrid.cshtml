@@ -40,6 +40,15 @@ else
                         <span class="category-badge">@p.CategoryName</span>
                     </div>
 
+                    @* Star rating placed below name and above price. Uses shared partial. *@
+                    <div class="mt-2">
+                        @{
+                            var avg = p.Reviews?.Any() == true ? Math.Round(p.Reviews.Average(r => r.Rate), 2) : 0m;
+                            var count = p.Reviews?.Count() ?? 0;
+                        }
+                        @Html.Partial("~/Views/Shared/_StarRating.cshtml", (avg, count))
+                    </div>
+
                     <div class="product-meta">
                         <span class="price">
                             <span style="font-size:.7rem;font-weight:600;opacity:.75;">EGP</span> @p.UnitPrice.ToString("N2")

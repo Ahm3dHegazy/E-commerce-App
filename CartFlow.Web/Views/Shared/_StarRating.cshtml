@@ -1,0 +1,43 @@
+@model (decimal average, int count)
+
+<!-- Compatible with new star-only partial; no functional change, preserved for backward compatibility -->
+
+@{
+    var avg = Model.average;
+    var count = Model.count;
+    // Determine star classes: full, half, empty for 5 stars
+    var stars = new List<string>();
+    for (int i = 1; i <= 5; i++)
+    {
+        if (avg >= i) stars.Add("full");
+        else if (avg >= i - 0.5m) stars.Add("half");
+        else stars.Add("empty");
+    }
+}
+
+<div class="star-rating d-flex align-items-center" aria-label="Average rating">
+    <div class="stars me-2">
+        @for (int i = 0; i < 5; i++)
+        {
+            if (stars[i] == "full") {
+                <i class="bi bi-star-fill text-warning" aria-hidden="true"></i>
+            } else if (stars[i] == "half") {
+                <i class="bi bi-star-half text-warning" aria-hidden="true"></i>
+            } else {
+                <i class="bi bi-star text-muted" aria-hidden="true"></i>
+            }
+        }
+    </div>
+
+    <div class="rating-meta" style="font-size:.9rem;color:var(--muted);">
+        @if (count > 0)
+        {
+            <span class="avg-val" style="font-weight:700;color:var(--text);">@avg.ToString("0.##")</span>
+            <span class="count"> (@count)</span>
+        }
+        else
+        {
+            <span class="no-reviews">No reviews yet</span>
+        }
+    </div>
+</div>

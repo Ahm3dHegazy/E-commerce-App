@@ -524,6 +524,59 @@ body {
   padding: 0.45rem 0.8rem;
 }
 
+/* Reviews (moved from Details view) */
+.reviews-list {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.review-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-user { font-weight: 700; }
+.review-rate { color: var(--accent); font-weight: 800; }
+.review-date { color: var(--muted); font-size: 13px; }
+
+.review-body { color: var(--text); }
+
+/* Star rating tweaks */
+.star-rating .stars i {
+  font-size: 1rem; /* slightly larger to match card text */
+  margin-right: 6px;
+  line-height: 1;
+}
+
+.star-rating .stars i:last-child {
+  margin-right: 0;
+}
+
+.star-rating .rating-meta { display: inline-flex; align-items: center; gap: 6px; }
+.star-rating .avg-val { font-weight: 700; color: var(--text); }
+.star-rating .no-reviews { color: var(--muted); font-style: italic; }
+
+/* Mobile: make stars slightly smaller for compact cards */
+@media (max-width: 576px) {
+  .star-rating .stars i {
+    font-size: 0.85rem;
+    margin-right: 4px;
+  }
+
+  .star-rating .rating-meta { font-size: 0.85rem; }
+}
+
 /* Search / Filter */
 .search-bar {
   display: flex;

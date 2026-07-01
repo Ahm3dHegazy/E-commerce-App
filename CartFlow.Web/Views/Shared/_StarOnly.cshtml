@@ -1,0 +1,25 @@
+@model decimal
+
+@{
+    var avg = Model;
+    var stars = new List<string>();
+    for (int i = 1; i <= 5; i++)
+    {
+        if (avg >= i) stars.Add("full");
+        else if (avg >= i - 0.5m) stars.Add("half");
+        else stars.Add("empty");
+    }
+}
+
+<div class="stars" aria-hidden="true" style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;">
+    @for (int i = 0; i < 5; i++)
+    {
+        if (stars[i] == "full") {
+            <i class="bi bi-star-fill text-warning" aria-hidden="true"></i>
+        } else if (stars[i] == "half") {
+            <i class="bi bi-star-half text-warning" aria-hidden="true"></i>
+        } else {
+            <i class="bi bi-star text-muted" aria-hidden="true"></i>
+        }
+    }
+</div>

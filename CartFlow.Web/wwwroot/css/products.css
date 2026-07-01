@@ -1,0 +1,282 @@
+/* Page-specific styles for Products/Details view (extracted from Details.cshtml)
+   Keep visual appearance identical; these are localized styles and can be moved
+   into a scoped stylesheet later if desired. */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--surface-alt);
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ── Breadcrumb strip ── */
+.breadcrumb-bar {
+    background: #1a1a2e;
+    padding: 14px 24px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,.5);
+}
+
+    .breadcrumb a {
+        color: rgba(255,255,255,.7);
+        text-decoration: none;
+        transition: color .15s;
+    }
+
+        .breadcrumb a:hover {
+            color: var(--accent);
+        }
+
+    .breadcrumb svg {
+        flex-shrink: 0;
+    }
+
+    .breadcrumb span {
+        color: rgba(255,255,255,.9);
+    }
+
+/* ── Main layout ── */
+.main {
+    padding: 40px 24px 72px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 680px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+
+/* ── Left: image ── */
+.img-panel {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    border-radius: var(--radius);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+    .img-panel::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 70% 25%, rgba(16,185,129,.22) 0%, transparent 65%);
+    }
+
+    .img-panel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius);
+    }
+
+.img-initial {
+    font-size: 120px;
+    font-weight: 800;
+    color: rgba(255,255,255,.15);
+    line-height: 1;
+    letter-spacing: -4px;
+    position: relative;
+    z-index: 1;
+    user-select: none;
+}
+
+/* ── Right: info panel ── */
+.info-panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+    .info-panel h2 {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--text);
+        line-height: 1.2;
+        letter-spacing: -0.4px;
+    }
+
+.category-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    transition: border-color .15s, color .15s;
+    width: fit-content;
+}
+
+    .category-link:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+.price-display {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+    .price-display .currency {
+        font-size: 16px;
+        font-weight: 700;
+        margin-right: 4px;
+        vertical-align: baseline;
+    }
+
+.divider {
+    height: 1px;
+    background: var(--border);
+}
+
+.description {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.stock-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.stock-label {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.stock-value {
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Quantity selector */
+.qty-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.qty-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.qty-input {
+    width: 90px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+    -moz-appearance: textfield;
+}
+
+    .qty-input::-webkit-inner-spin-button,
+    .qty-input::-webkit-outer-spin-button {
+        opacity: 1;
+    }
+
+    .qty-input:focus {
+        border-color: var(--accent);
+    }
+
+/* Buttons */
+.btn-add-cart {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+    .btn-add-cart:hover {
+        background: var(--accent-hover);
+    }
+
+    .btn-add-cart:active {
+        transform: scale(.99);
+    }
+
+    .btn-add-cart:disabled {
+        background: var(--border);
+        color: var(--muted);
+        cursor: not-allowed;
+    }
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .15s;
+}
+
+    .back-link:hover {
+        color: var(--accent);
+    }

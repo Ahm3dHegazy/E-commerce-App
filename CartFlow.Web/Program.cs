@@ -17,6 +17,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+// Register ephemeral in-memory review service for development. Replace with DB-backed impl later.
+builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow.Services.Services.InMemoryReviewService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
