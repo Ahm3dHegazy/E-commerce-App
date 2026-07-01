@@ -33,10 +33,17 @@
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>
                     </ul>
 
+                    <div class="d-flex align-items-center gap-1">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">☀</button>
+                        <form class="d-flex nav-search" role="search" asp-controller="Products" asp-action="Index" method="get">
+                        <div class="input-group input-group-sm">
+                            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+                            <input class="form-control" type="search" name="searchTerm" placeholder="Search products…" aria-label="Search" />
+                        </div>
+                    </form>
+                    </div>
+
                     <ul class="navbar-nav align-items-lg-center gap-lg-1">
-                        <li class="nav-item">
-                            <button class="theme-toggle" id="themeToggle" title="Toggle theme" type="button">☀</button>
-                        </li>
                         @if (Context.User.Identity?.IsAuthenticated == true) {
                             <li class="nav-item dropdown">
                                 <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown" role="button">

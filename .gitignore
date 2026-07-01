@@ -1,6 +1,9 @@
 ## .NET
 bin/
 obj/
+
+# Catch any path with literal backslashes (Windows→macOS migration artifacts)
+*[\\]*
 *.user
 *.suo
 *.userosscache
