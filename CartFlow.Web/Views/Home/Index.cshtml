@@ -40,37 +40,37 @@
                 @foreach (var product in featured)
                 {
                     <div class="product-card">
-                        <div class="product-image">
-                            @product.Name[0]
-                        </div>
-                        <div class="product-body">
-                            <span class="category-badge">@product.Category?.Name</span>
-                            <h3>@product.Name</h3>
-                            <div class="product-meta">
-                                <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
-                                @if (product.StockQuantity > 10)
-                                {
-                                    <span class="stock-badge stock-in">In stock</span>
-                                }
-                                else if (product.StockQuantity > 0)
-                                {
-                                    <span class="stock-badge stock-low">@product.StockQuantity left</span>
-                                }
-                                else
-                                {
-                                    <span class="stock-badge stock-out">Out of stock</span>
-                                }
+                        <a class="product-link" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" style="text-decoration:none;color:inherit;display:block;">
+                            <div class="product-image">
+                                @product.Name[0]
                             </div>
-                            <div class="action-row">
-                                <!-- تم تحويل الزر هنا إلى Form لإرسال طلب POST آمن يطابق الـ Controller تماماً ويمنع الـ 404 -->
-                                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
-                                    <input type="hidden" name="productId" value="@product.Id" />
-                                    <input type="hidden" name="quantity" value="1" />
-                                    <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
-                                </form>
+                            <div class="product-body">
+                                <span class="category-badge">@product.Category?.Name</span>
+                                <h3>@product.Name</h3>
+                                <div class="product-meta">
+                                    <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
+                                    @if (product.StockQuantity > 10)
+                                    {
+                                        <span class="stock-badge stock-in">In stock</span>
+                                    }
+                                    else if (product.StockQuantity > 0)
+                                    {
+                                        <span class="stock-badge stock-low">@product.StockQuantity left</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="stock-badge stock-out">Out of stock</span>
+                                    }
+                                </div>
+                            </div>
+                        </a>
 
-                                <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">Details</a>
-                            </div>
+                        <div class="action-row mt-2">
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 }
