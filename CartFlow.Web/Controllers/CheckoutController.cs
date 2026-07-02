@@ -1,9 +1,12 @@
-using CartFlow.Data; 
+using CartFlow.Data;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
+using CartFlow.Data.Enums;
+using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
 namespace CartFlow.Web.Controllers
@@ -11,13 +14,16 @@ namespace CartFlow.Web.Controllers
     public class CheckoutController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IStripePaymentService _paymentService;
+        private readonly IConfiguration _configuration;
 
-        public CheckoutController(AppDbContext context)
+        public CheckoutController(AppDbContext context, IStripePaymentService paymentService, IConfiguration configuration)
         {
             _context = context;
+            _paymentService = paymentService;
+            _configuration = configuration;
         }
 
-        // 1. [HttpGet] Index()
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -45,7 +51,6 @@ namespace CartFlow.Web.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
-            // Pre-fill user's FirstName + LastName + Email from Identity
             var viewModel = new CheckoutViewModel
             {
                 FirstName = user.FirstName,
@@ -65,10 +70,11 @@ namespace CartFlow.Web.Controllers
                     ?? string.Empty
             }).ToList();
 
+            ViewBag.StripePublishableKey = _configuration["StripeKeys:PublishableKey"];
+
             return View(viewModel);
         }
 
-        // 2. [HttpPost] Index(CheckoutViewModel model)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CheckoutViewModel model)
@@ -81,7 +87,6 @@ namespace CartFlow.Web.Controllers
 
             int userId = int.Parse(userIdString);
 
-            // Validate model
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -97,7 +102,6 @@ namespace CartFlow.Web.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
-            // Check stock for each item (if insufficient -> ModelState error)
             foreach (var item in cart.CartItems)
             {
                 if (item.Product.StockQuantity < item.Quantity)
@@ -112,20 +116,48 @@ namespace CartFlow.Web.Controllers
             decimal totalPrice = subtotal + shipping;
             int totalQuantity = cart.CartItems.Sum(item => item.Quantity);
 
-            // Create Order
+            PaymentMethod paymentMethod = model.PaymentMethod == "CreditCard" ? PaymentMethod.Credit : PaymentMethod.Cash;
+
+            string? stripePaymentIntentId = null;
+
+            if (paymentMethod == PaymentMethod.Credit)
+            {
+                if (string.IsNullOrEmpty(model.PaymentMethodId))
+                {
+                    ModelState.AddModelError("", "Credit card information is required.");
+                    return View(model);
+                }
+
+                var paymentResult = await _paymentService.CreatePaymentIntentAsync(totalPrice, "egp", model.PaymentMethodId);
+
+                if (!paymentResult.Success)
+                {
+                    ModelState.AddModelError("", $"Payment failed: {paymentResult.ErrorMessage}");
+                    return View(model);
+                }
+
+                stripePaymentIntentId = paymentResult.PaymentIntentId;
+            }
+
             var order = new Order
             {
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
-                // OrderStatus = CartFlow.Data.Enums.OrderStatus.Ordered, 
+                OrderStatus = Status.Ordered,
                 TotalQuantity = totalQuantity,
-                TotalPrice = totalPrice 
+                TotalPrice = totalPrice,
+                PaymentMethod = paymentMethod,
+                StripePaymentIntentId = stripePaymentIntentId,
+                AddressLine1 = model.AddressLine1,
+                City = model.City,
+                State = model.State,
+                PostalCode = model.PostalCode,
+                Country = model.Country
             };
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // Create OrderItems from cart items
             foreach (var item in cart.CartItems)
             {
                 var orderItem = new OrderItem
@@ -133,30 +165,25 @@ namespace CartFlow.Web.Controllers
                     OrderId = order.Id,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    Price = item.UnitPrice 
+                    Price = item.UnitPrice
                 };
                 _context.OrderItems.Add(orderItem);
 
-                // تحديث المخزون
                 item.Product.StockQuantity -= item.Quantity;
             }
 
-            // Clear cart items
             _context.CartItems.RemoveRange(cart.CartItems);
 
-            // SaveChanges
             await _context.SaveChangesAsync();
 
-            // Redirect to Confirmation(order.Id)
             return RedirectToAction(nameof(Confirmation), new { id = order.Id });
         }
 
-        // 3. Confirmation(int id)
         [HttpGet]
         public async Task<IActionResult> Confirmation(int id)
         {
             var order = await _context.Orders
-                .Include(order => order.OrderItems)
+                .Include(o => o.OrderItems)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
@@ -166,13 +193,13 @@ namespace CartFlow.Web.Controllers
 
             var summaryViewModel = new OrderSummaryViewModel
             {
-                OrderNumber = order.Id.ToString(), 
+                OrderNumber = order.Id.ToString(),
                 ItemCount = order.TotalQuantity,
-                Total = order.TotalPrice
+                Total = order.TotalPrice,
+                PaymentMethod = order.PaymentMethod == PaymentMethod.Credit ? "Credit Card" : "Cash on Delivery"
             };
 
             return View(summaryViewModel);
         }
     }
 }
-

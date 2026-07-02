@@ -15,5 +15,9 @@ namespace CartFlow.Web.Models {
         public string PostalCode { get; set; } = string.Empty;
 
         public string Country { get; set; } = string.Empty;
+
+        public string PaymentMethod { get; set; } = "Cash";
+
+        public string? PaymentMethodId { get; set; }
     }
 }

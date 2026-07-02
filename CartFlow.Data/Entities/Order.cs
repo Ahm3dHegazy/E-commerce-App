@@ -1,9 +1,6 @@
 ﻿using CartFlow.Data.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace CartFlow.Data.Entities {
     public class Order {
@@ -19,5 +16,13 @@ namespace CartFlow.Data.Entities {
         public int TotalQuantity { get; set; }
         public Status OrderStatus { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+
+        public string? StripePaymentIntentId { get; set; }
+
+        public string AddressLine1 { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
     }
 }

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Checkout";
+    var stripeKey = ViewBag.StripePublishableKey as string ?? "";
 }
 
 <div class="page-section">
@@ -9,12 +10,14 @@
         <div class="section-header">
             <p class="section-label">Checkout</p>
             <h1>Complete your order</h1>
-            <p class="section-text">Fill in your shipping details and choose a payment method.</p>
+            <p class="section-text">Review your items and choose how to pay.</p>
         </div>
 
         <div class="checkout-layout">
-            <form asp-controller="Checkout" asp-action="Index" method="post" class="checkout-form" novalidate>
+            <form asp-controller="Checkout" asp-action="Index" method="post" class="checkout-form" id="checkout-form" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-semibold"></div>
+
+                <input type="hidden" asp-for="PaymentMethodId" />
 
                 <div class="checkout-fieldset">
                     <h4 class="checkout-legend"><i class="bi bi-geo-alt"></i> Shipping Address</h4>
@@ -64,38 +67,72 @@
                             <span asp-validation-for="PostalCode" class="text-danger small"></span>
                         </div>
                     </div>
-
-                    <div class="field-group">
-                        <label asp-for="Country" class="form-label">Country</label>
-                        <input asp-for="Country" class="form-control" placeholder="Egypt" />
-                        <span asp-validation-for="Country" class="text-danger small"></span>
-                    </div>
                 </div>
 
                 <div class="checkout-fieldset">
-                    <h4 class="checkout-legend"><i class="bi bi-credit-card"></i> Payment Method</h4>
+                    <div class="payment-section">
+                        <h4 class="checkout-legend"><i class="bi bi-lock-fill"></i> Payment</h4>
+                        <p class="secure-notice"><i class="bi bi-shield-check"></i> All transactions are secure and encrypted.</p>
 
-                    <div class="payment-options">
-                        <label class="payment-option">
-                            <input type="radio" name="PaymentMethod" value="Cash" checked required>
-                            <span class="payment-option-content">
-                                <i class="bi bi-cash-stack"></i>
-                                <div>
-                                    <strong>Cash on Delivery</strong>
-                                    <small>Pay when you receive</small>
+                        <div class="payment-options">
+                            <label class="payment-option" id="payment-credit">
+                                <input type="radio" asp-for="PaymentMethod" value="CreditCard" checked>
+                                <span class="payment-option-content">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <div class="payment-option-text">
+                                        <strong>Credit Card</strong>
+                                        <small>Pay with VISA, Mastercard, or other cards</small>
+                                    </div>
+                                    <span class="card-brand-icons">
+                                        <svg viewBox="0 0 48 32" width="38" height="26">
+                                            <rect width="48" height="32" rx="4" fill="#1a1f71"/>
+                                            <text x="24" y="20" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">VISA</text>
+                                        </svg>
+                                        <svg viewBox="0 0 48 32" width="38" height="26">
+                                            <rect width="48" height="32" rx="4" fill="#eb001b"/>
+                                            <circle cx="18" cy="16" r="10" fill="#f79e1b"/>
+                                            <circle cx="30" cy="16" r="10" fill="#eb001b" opacity=".7"/>
+                                            <text x="24" y="20" text-anchor="middle" fill="white" font-size="6" font-weight="bold" font-family="Arial">MC</text>
+                                        </svg>
+                                    </span>
+                                </span>
+
+                                <div class="credit-card-expand" id="credit-card-section">
+                                    <div class="credit-card-body">
+                                        <div class="card-field">
+                                            <label class="form-label">Card Number</label>
+                                            <div id="card-number-element" class="stripe-input"></div>
+                                        </div>
+                                        <div class="card-row">
+                                            <div class="card-field">
+                                                <label class="form-label">Expiry Date</label>
+                                                <div id="card-expiry-element" class="stripe-input"></div>
+                                            </div>
+                                            <div class="card-field">
+                                                <label class="form-label">CVC</label>
+                                                <div id="card-cvc-element" class="stripe-input"></div>
+                                            </div>
+                                        </div>
+                                        <div class="card-field">
+                                            <label class="form-label">Cardholder Name</label>
+                                            <input type="text" id="cardholder-name" class="form-control" placeholder="John Doe" value="@(Model.FirstName + " " + Model.LastName)" />
+                                        </div>
+                                        <div id="card-errors" class="text-danger small mt-2" role="alert"></div>
+                                    </div>
                                 </div>
-                            </span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="PaymentMethod" value="CreditCard" required>
-                            <span class="payment-option-content">
-                                <i class="bi bi-credit-card-2-front"></i>
-                                <div>
-                                    <strong>Credit Card / Visa</strong>
-                                    <small>Pay securely online</small>
-                                </div>
-                            </span>
-                        </label>
+                            </label>
+
+                            <label class="payment-option" id="payment-cash">
+                                <input type="radio" asp-for="PaymentMethod" value="Cash">
+                                <span class="payment-option-content">
+                                    <i class="bi bi-cash-stack"></i>
+                                    <div class="payment-option-text">
+                                        <strong>Cash on Delivery</strong>
+                                        <small>Pay when you receive your order</small>
+                                    </div>
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -166,5 +203,10 @@
 </div>
 
 @section Scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripePublishableKey = '@stripeKey';
+    </script>
+    <script src="~/js/checkout-stripe.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

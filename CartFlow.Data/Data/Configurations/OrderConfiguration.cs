@@ -16,6 +16,24 @@ namespace CartFlow.Data.Data.Configurations {
                 .HasConversion<string>()
                 .HasMaxLength(20);
 
+            builder.Property(o => o.StripePaymentIntentId)
+                .HasMaxLength(255);
+
+            builder.Property(o => o.AddressLine1)
+                .HasMaxLength(200);
+
+            builder.Property(o => o.City)
+                .HasMaxLength(100);
+
+            builder.Property(o => o.State)
+                .HasMaxLength(100);
+
+            builder.Property(o => o.PostalCode)
+                .HasMaxLength(20);
+
+            builder.Property(o => o.Country)
+                .HasMaxLength(100);
+
             builder.HasOne(o => o.User)
                 .WithMany()
                 .HasForeignKey(o => o.UserId)
