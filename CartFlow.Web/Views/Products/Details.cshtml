@@ -154,6 +154,7 @@
             </div>
 
             <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post" class="d-flex flex-column gap-3">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="productId" value="@Model.Id" />
 
                 <button type="submit" class="btn-add-cart" @(Model.StockQuantity == 0 ? "disabled" : "")>

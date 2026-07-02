@@ -60,6 +60,7 @@ else
                     <div class="action-row">
 
                         <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="productId" value="@p.Id" />
                             <input type="hidden" name="quantity" value="1" />
                             <button type="submit" class="btn btn-primary btn-sm w-100" @(p.StockQuantity == 0 ? "disabled" : "")>

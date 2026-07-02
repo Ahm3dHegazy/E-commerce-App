@@ -1,5 +1,6 @@
 ﻿@inject CartFlow.Data.Data.AppDbContext DbContext
 @using System.Security.Claims
+@using CartFlow.Web.Extensions
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -36,20 +37,38 @@
                         <li class="nav-item">
                             <a class="nav-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
                                 Cart
-                                @{
+                                @{ 
                                     var userIdString = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                    int itemsCount = 0;
+
                                     if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int loggedInUserId))
                                     {
-                                        var itemsCount = DbContext.CartItems
+                                        itemsCount = DbContext.CartItems
                                             .Where(ci => ci.Cart.UserId == loggedInUserId)
                                             .Sum(ci => ci.Quantity);
-
-                                        if (itemsCount > 0)
+                                    }
+                                    else
+                                    {
+                                        // Try to read guest cart from session
+                                        try
                                         {
-                                            <span class="badge bg-danger rounded-pill" style="position: absolute; top: -2px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.45em;">
-                                                @itemsCount
-                                            </span>
+                                            var sessionCart = Context.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
+                                            if (sessionCart != null)
+                                            {
+                                                itemsCount = sessionCart.Sum(ci => ci.Quantity);
+                                            }
                                         }
+                                        catch
+                                        {
+                                            itemsCount = 0;
+                                        }
+                                    }
+
+                                    if (itemsCount > 0)
+                                    {
+                                        <span class="badge bg-danger rounded-pill" style="position: absolute; top: -2px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.45em;">
+                                            @itemsCount
+                                        </span>
                                     }
                                 }
                             </a>

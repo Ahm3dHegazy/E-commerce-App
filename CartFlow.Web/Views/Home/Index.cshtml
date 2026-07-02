@@ -75,6 +75,7 @@
                             </div>
                             <div class="action-row">
                                 <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="productId" value="@product.Id"/>
                                     <input type="hidden" name="quantity" value="1"/>
                                     <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>

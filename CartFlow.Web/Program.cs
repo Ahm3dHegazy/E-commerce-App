@@ -31,6 +31,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/SignIn";
     });
 
+// Add session support for anonymous shopping cart storage
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -62,6 +65,8 @@ app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

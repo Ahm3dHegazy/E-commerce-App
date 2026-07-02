@@ -1,10 +1,8 @@
-using CartFlow.Data;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
 using CartFlow.Services.Interfaces;
-using CartFlow.Services.Services;
 using CartFlow.Web.Models;
-using Microsoft.AspNetCore.Authorization;
+using CartFlow.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -16,7 +14,7 @@ namespace CartFlow.Web.Controllers
         private readonly AppDbContext _context;
         private readonly ICartService _cartService;
 
-        public CartController(AppDbContext context,ICartService cartService)
+        public CartController(AppDbContext context, ICartService cartService)
         {
             _context = context;
             _cartService = cartService;
@@ -29,9 +27,16 @@ namespace CartFlow.Web.Controllers
 
             var viewModel = new CartViewModel();
 
-            // If user is not authenticated, show an empty cart page rather than redirecting to login
+            // If user is not authenticated, try loading anonymous cart from session
             if (string.IsNullOrEmpty(userIdString))
             {
+                // Try to load anonymous cart from session
+                var sessionItems = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart");
+                if (sessionItems != null)
+                {
+                    viewModel.Items = sessionItems;
+                }
+
                 return View(viewModel);
             }
 
@@ -65,60 +70,89 @@ namespace CartFlow.Web.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
-            int userId = int.Parse(userIdString);
+            var product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == productId);
 
-            // البحث عن السلة الخاصة بالمستخدم أو إنشاؤها
-            var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
-            if (cart == null)
-            {
-                cart = new Cart
-                {
-                    UserId = userId
-                };
-                _context.Carts.Add(cart);
-                await _context.SaveChangesAsync(); // لحفظ السلة وتوليد الـ Id لها
-            }
-
-            var product = await _context.Products.FindAsync(productId);
             if (product == null)
             {
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItems
-                .FirstOrDefaultAsync(ci => ci.CartId == cart.Id && ci.ProductId == productId);
-
-            if (cartItem != null)
+            if (string.IsNullOrEmpty(userIdString))
             {
-                cartItem.Quantity += quantity;
-                cartItem.UnitPrice = product.UnitPrice;
+                // Anonymous user: store cart in session
+                var sessionCart = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
+                var existing = sessionCart.FirstOrDefault(ci => ci.ProductId == productId);
+                if (existing != null)
+                {
+                    existing.Quantity += quantity;
+                    existing.UnitPrice = product.UnitPrice;
+                }
+                else
+                {
+                    sessionCart.Add(new CartItemViewModel
+                    {
+                        ProductId = productId,
+                        ProductName = product.Name,
+                        CategoryName = product.Category?.Name ?? "No Category",
+                        UnitPrice = product.UnitPrice,
+                        Quantity = quantity,
+                        ImageUrl = product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                                   ?? product.ProductImages?.FirstOrDefault()?.Image
+                                   ?? string.Empty
+                    });
+                }
+
+                HttpContext.Session.SetObject("Cart", sessionCart);
             }
             else
             {
-                cartItem = new CartItem
+                int userId = int.Parse(userIdString);
+
+                // Find or create cart for authenticated user
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+                if (cart == null)
                 {
-                    CartId = cart.Id,
-                    ProductId = productId,
-                    Quantity = quantity,
-                    UnitPrice = product.UnitPrice
-                };
-                _context.CartItems.Add(cartItem);
+                    cart = new Cart
+                    {
+                        UserId = userId
+                    };
+                    _context.Carts.Add(cart);
+                    await _context.SaveChangesAsync(); // save to generate id
+                }
+
+                var cartItem = await _context.CartItems
+                    .FirstOrDefaultAsync(ci => ci.CartId == cart.Id && ci.ProductId == productId);
+
+                if (cartItem != null)
+                {
+                    cartItem.Quantity += quantity;
+                    cartItem.UnitPrice = product.UnitPrice;
+                }
+                else
+                {
+                    cartItem = new CartItem
+                    {
+                        CartId = cart.Id,
+                        ProductId = productId,
+                        Quantity = quantity,
+                        UnitPrice = product.UnitPrice
+                    };
+                    _context.CartItems.Add(cartItem);
+                }
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
-
-            // جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
+            // Return user to referring page when possible
             string? returnUrl = Request.Headers["Referer"].ToString();
             if (!string.IsNullOrEmpty(returnUrl))
             {
