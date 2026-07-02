@@ -1,7 +1,10 @@
 using CartFlow.Data;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
+using CartFlow.Services.Interfaces;
+using CartFlow.Services.Services;
 using CartFlow.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -11,24 +14,30 @@ namespace CartFlow.Web.Controllers
     public class CartController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ICartService _cartService;
 
-        public CartController(AppDbContext context)
+        public CartController(AppDbContext context,ICartService cartService)
         {
             _context = context;
+            _cartService = cartService;
         }
 
-        // 1. Index() : عرض السلة وتفاصيلها بناءً على الـ Cart و الـ ViewModels
+        
         public async Task<IActionResult> Index()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var viewModel = new CartViewModel();
+
+            // If user is not authenticated, show an empty cart page rather than redirecting to login
             if (string.IsNullOrEmpty(userIdString))
             {
-                return RedirectToAction("Login", "Account");
+                return View(viewModel);
             }
 
             int userId = int.Parse(userIdString);
 
-            // جلب السلة بناءً على الـ UserId الخاص بـ Cart Flow Entities
+            // Load cart for authenticated user
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
@@ -37,8 +46,6 @@ namespace CartFlow.Web.Controllers
                     .ThenInclude(ci => ci.Product)
                         .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
-
-            var viewModel = new CartViewModel();
 
             if (cart != null)
             {
@@ -58,7 +65,7 @@ namespace CartFlow.Web.Controllers
             return View(viewModel);
         }
 
-        // 2. [HttpPost] AddToCart: إضافة منتج للسلة أو تحديثه لـ User الحالي
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
@@ -156,6 +163,14 @@ namespace CartFlow.Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearCart()
+        {
+            await _cartService.ClearCartAsync();
             return RedirectToAction(nameof(Index));
         }
     }

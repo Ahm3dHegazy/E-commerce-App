@@ -9,7 +9,6 @@ namespace CartFlow.Web.Controllers;
 
 public class ProductsController(IProductService productService, AppDbContext context, CartFlow.Services.Interfaces.IReviewService reviewService) : Controller
 {
-    // No-op patch: update file timestamp
     public async Task<IActionResult> Index(string? searchTerm, int? categoryId)
     {
         var products = await productService.GetAllAsync(searchTerm, categoryId);
@@ -34,9 +33,7 @@ public class ProductsController(IProductService productService, AppDbContext con
             Categories = await context.Categories.ToListAsync()
         };
 
-        // Populate reviews for each product (in-memory via IReviewService). This provides
-        // average rating and review counts for the index product cards without changing
-        // the details page behaviour.
+        // تمرير المراجعات الحقيقية لكروت الصفحة الرئيسية والـ ViewModel سيحسب الـ AverageRating تلقائياً
         if (viewModel.Products.Any())
         {
             var reviewTasks = viewModel.Products.Select(p => reviewService.GetReviewsForProductAsync(p.Id)).ToList();
@@ -44,11 +41,10 @@ public class ProductsController(IProductService productService, AppDbContext con
 
             for (int i = 0; i < viewModel.Products.Count; i++)
             {
-                viewModel.Products[i].Reviews = reviewResults[i].ToList();
+                viewModel.Products[i].Reviews = reviewResults[i]?.ToList() ?? new List<ReviewDto>();
             }
         }
 
-        // If this is an AJAX request return only the products grid partial so we can update the list dynamically.
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
         {
             return PartialView("_ProductGrid", viewModel);
@@ -76,13 +72,10 @@ public class ProductsController(IProductService productService, AppDbContext con
             Initial = string.IsNullOrEmpty(product.Name) ? string.Empty : product.Name[0].ToString().ToUpper()
         };
 
-        // Attach reviews from IReviewService (currently in-memory).
-        var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<CartFlow.Services.Models.ReviewDto>();
+        // جلب المراجعات الـ 9 الحقيقية وضخها في الـ ViewModel ليقوم بحساب المتوسط تلقائياً
+        var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<ReviewDto>();
         viewModel.Reviews = dtos.ToList();
-
 
         return View(viewModel);
     }
-
-
 }

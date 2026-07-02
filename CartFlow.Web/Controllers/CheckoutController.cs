@@ -4,6 +4,7 @@ using CartFlow.Data.Entities;
 using CartFlow.Data.Enums;
 using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,6 +12,7 @@ using System.Security.Claims;
 
 namespace CartFlow.Web.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private readonly AppDbContext _context;
@@ -25,7 +27,7 @@ namespace CartFlow.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? productId, int? quantity)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString))
@@ -40,15 +42,59 @@ namespace CartFlow.Web.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Carts
-                .Include(c => c.CartItems)
-                    .ThenInclude(ci => ci.Product)
-                        .ThenInclude(p => p.ProductImages)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
-
-            if (cart == null || !cart.CartItems.Any())
+            // If a single product is passed (Buy Now flow), prepare checkout items from that product
+            if (productId.HasValue)
             {
-                return RedirectToAction("Index", "Cart");
+                var prod = await _context.Products
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefaultAsync(p => p.Id == productId.Value);
+
+                if (prod == null)
+                {
+                    return NotFound();
+                }
+
+                var qty = (quantity.HasValue && quantity.Value > 0) ? quantity.Value : 1;
+
+                ViewBag.CartItems = new List<CartItemViewModel>
+                {
+                    new CartItemViewModel
+                    {
+                        Id = 0,
+                        ProductId = prod.Id,
+                        ProductName = prod.Name,
+                        UnitPrice = prod.UnitPrice,
+                        Quantity = qty,
+                        ImageUrl = prod.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                                   ?? prod.ProductImages?.FirstOrDefault()?.Image
+                                   ?? string.Empty
+                    }
+                };
+            }
+            else
+            {
+                var cart = await _context.Carts
+                    .Include(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                            .ThenInclude(p => p.ProductImages)
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
+
+                if (cart == null || !cart.CartItems.Any())
+                {
+                    return RedirectToAction("Index", "Cart");
+                }
+
+                ViewBag.CartItems = cart.CartItems.Select(ci => new CartItemViewModel
+                {
+                    Id = ci.Id,
+                    ProductId = ci.ProductId,
+                    ProductName = ci.Product.Name,
+                    UnitPrice = ci.UnitPrice,
+                    Quantity = ci.Quantity,
+                    ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                        ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
+                        ?? string.Empty
+                }).ToList();
             }
 
             var viewModel = new CheckoutViewModel
@@ -58,20 +104,7 @@ namespace CartFlow.Web.Controllers
                 Email = user.Email
             };
 
-            ViewBag.CartItems = cart.CartItems.Select(ci => new CartItemViewModel
-            {
-                Id = ci.Id,
-                ProductId = ci.ProductId,
-                ProductName = ci.Product.Name,
-                UnitPrice = ci.UnitPrice,
-                Quantity = ci.Quantity,
-                ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
-                    ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
-                    ?? string.Empty
-            }).ToList();
-
             ViewBag.StripePublishableKey = _configuration["StripeKeys:PublishableKey"];
-
             return View(viewModel);
         }
 
