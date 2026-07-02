@@ -34,6 +34,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
 
+<style>
+    /* Fix: .img-panel was capped at max-width:400px in products.css,
+           causing empty space in its grid column before the info panel starts */
+    .img-panel {
+        max-width: none;
+        width: 100%;
+        aspect-ratio: auto;
+        min-height: 480px;
+    }
+
+        .img-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+        }
+</style>
+
 <div class="breadcrumb-bar">
     <nav class="breadcrumb">
         <a asp-action="Index">Products</a>
