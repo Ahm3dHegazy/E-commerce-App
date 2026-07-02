@@ -4,6 +4,7 @@ using CartFlow.Data.Entities;
 using CartFlow.Services.Interfaces;
 using CartFlow.Services.Services;
 using CartFlow.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace CartFlow.Web.Controllers
             _cartService = cartService;
         }
 
-        // 1. Index() : عرض السلة وتفاصيلها بناءً على الـ Cart و الـ ViewModels
+        
         public async Task<IActionResult> Index()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -62,7 +63,7 @@ namespace CartFlow.Web.Controllers
             return View(viewModel);
         }
 
-        // 2. [HttpPost] AddToCart: إضافة منتج للسلة أو تحديثه لـ User الحالي
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity)

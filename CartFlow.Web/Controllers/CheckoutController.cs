@@ -2,12 +2,14 @@ using CartFlow.Data;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
 using CartFlow.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CartFlow.Web.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private readonly AppDbContext _context;
