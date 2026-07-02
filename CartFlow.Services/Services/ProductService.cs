@@ -12,6 +12,8 @@ public class ProductService(AppDbContext context) : IProductService
         return await context.Products
             .Include(p => p.Category)
             .Include(p => p.ProductImages)
+            .GroupBy(p => p.CategoryId)
+            .SelectMany(g => g.OrderBy(p => EF.Functions.Random()).Take(1))
             .OrderBy(p => EF.Functions.Random())
             .Take(count)
             .ToListAsync();

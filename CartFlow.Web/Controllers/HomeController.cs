@@ -12,7 +12,7 @@ namespace CartFlow.Web.Controllers {
         }
 
         public async Task<IActionResult> Index() {
-            ViewBag.FeaturedProducts = await _productService.GetFeaturedAsync(8);
+            ViewBag.FeaturedProducts = await _productService.GetFeaturedAsync(6);
             return View();
         }
 
