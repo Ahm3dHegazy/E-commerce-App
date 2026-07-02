@@ -3,33 +3,6 @@
     ViewData["Title"] = Model.Name;
 }
 
-@{
-    // Generate mock reviews per product (1..10) using deterministic seed (Model.Id)
-    var reviewerNames = new[] { "Layla", "Omar", "Sara", "Hassan", "Amina", "Youssef", "Nora", "Khaled", "Maya", "Tarek" };
-    var reviewComments = new[] {
-        "Fast shipping and works as described.",
-        "Not what I expected, quality could be better.",
-        "Decent but arrived with minor scratches.",
-        "Excellent quality, highly recommend!",
-        "Good value for money.",
-        "Size runs a bit large, consider ordering one size down.",
-        "Perfect fit and very comfortable.",
-        "Color faded a little after wash.",
-        "Customer service was helpful and responsive.",
-        "Loved it! Would buy again."
-    };
-
-    var rnd = new Random((Model.Id > 0 ? Model.Id : 1) * 1009);
-    var mockCount = rnd.Next(1, 11); // between 1 and 10
-    var mockReviews = Enumerable.Range(0, mockCount).Select(i =>
-    {
-        var name = reviewerNames[rnd.Next(reviewerNames.Length)];
-        var rating = rnd.Next(1, 6);
-        var date = DateTime.Today.AddDays(-rnd.Next(0, 365)).ToString("yyyy-MM-dd");
-        var text = reviewComments[rnd.Next(reviewComments.Length)];
-        return new { Name = name, Rating = (decimal)rating, Date = date, Text = text };
-    }).ToArray();
-}
 <link rel="stylesheet" href="~/css/products.css" asp-append-version="true" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
@@ -220,24 +193,31 @@
 
     <div class="reviews-section">
         <div class="reviews-inner">
-            <h4 class="reviews-heading">Reviews <span class="reviews-count">(@mockReviews.Length)</span></h4>
+            <h4 class="reviews-heading">Reviews <span class="reviews-count">(@Model.ReviewCount)</span></h4>
 
             <div class="reviews-list">
-                @foreach (var r in mockReviews)
+                @if (Model.Reviews != null && Model.Reviews.Any())
                 {
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div class="review-avatar">@r.Name[0]</div>
-                            <div class="review-meta">
-                                <span class="review-name">@r.Name</span>
-                                <div class="review-stars">
-                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
+                    @foreach (var r in Model.Reviews)
+                    {
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">U</div>
+                                <div class="review-meta">
+                                    <span class="review-name">Verified Buyer</span>
+                                    <div class="review-stars">
+                                        @Html.Partial("~/Views/Shared/_StarOnly.cshtml", (decimal)r.Rate)
+                                    </div>
                                 </div>
+                                <span class="review-date">@DateTime.Today.ToString("yyyy-MM-dd")</span>
                             </div>
-                            <span class="review-date">@r.Date</span>
+                            <p class="review-text">@r.Comment</p>
                         </div>
-                        <p class="review-text">@r.Text</p>
-                    </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted p-3">No reviews yet for this product. Be the first to review!</p>
                 }
             </div>
         </div>
