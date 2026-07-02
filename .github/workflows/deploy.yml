@@ -1,0 +1,58 @@
+name: Deploy to MonsterASP
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Publish app
+        run: dotnet publish CartFlow.Web -c Release -o ./publish
+
+      - name: Write production appsettings
+        run: |
+          cat > ./publish/appsettings.json <<'EOF'
+          {
+            "Logging": {
+              "LogLevel": {
+                "Default": "Information",
+                "Microsoft.AspNetCore": "Warning"
+              }
+            },
+            "AllowedHosts": "*",
+            "ConnectionStrings": {
+              "constr": "${{ secrets.DB_CONNECTION_STRING }}"
+            },
+            "StripeKeys": {
+              "SecretKey": "${{ secrets.STRIPE_SECRET_KEY }}",
+              "PublishableKey": "${{ secrets.STRIPE_PUBLISHABLE_KEY }}"
+            }
+          }
+          EOF
+
+      - name: FTP deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_ROOT }}/
+          local-dir: ./publish/
+          exclude: |
+            **/*.pdb
+            **/*.config
+            appsettings.Development.json
