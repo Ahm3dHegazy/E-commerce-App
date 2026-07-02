@@ -24,7 +24,6 @@ body {
 
 /* ── Breadcrumb strip ── */
 .breadcrumb-bar {
-    background: #1a1a2e;
     padding: 14px 24px;
 }
 
@@ -33,11 +32,11 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: rgba(255,255,255,.5);
+    color: var(--muted);
 }
 
     .breadcrumb a {
-        color: rgba(255,255,255,.7);
+        color: var(--primary);
         text-decoration: none;
         transition: color .15s;
     }
@@ -51,7 +50,7 @@ body {
     }
 
     .breadcrumb span {
-        color: rgba(255,255,255,.9);
+        color: var(--text);
     }
 
 /* ── Main layout ── */
