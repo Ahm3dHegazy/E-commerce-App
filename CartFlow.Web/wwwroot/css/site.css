@@ -155,6 +155,25 @@ body {
   box-shadow: 0 0 0 0.1rem var(--surface), 0 0 0 0.2rem var(--accent-glow);
 }
 
+/* Forms */
+.form-label {
+  color: var(--text);
+}
+
+.form-control {
+  color: var(--text);
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+
+.form-control::placeholder {
+  color: var(--placeholder);
+}
+
+.form-check-label {
+  color: var(--text);
+}
+
 /* Navbar */
 .site-header {
   background: var(--surface);
