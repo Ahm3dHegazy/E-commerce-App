@@ -1,25 +1,23 @@
-## .NET
 bin/
 obj/
-
-# Catch any path with literal backslashes (Windows→macOS migration artifacts)
-*[\\]*
+publish/
+publish.zip
 *.user
 *.suo
-*.userosscache
-*.sln.docstates
-
-## Visual Studio
+*.userprefs
 .vs/
-*.sln.ide/
+*.opendb
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+.vscode/
 
-## Rider
-.idea/
-*.sln.iml
-
-## OS
+# macOS
 .DS_Store
-Thumbs.db
 
-## Node
-node_modules/
+# .NET
+appsettings.Development.json
+secret.*
+*/obj/
+*/bin/
