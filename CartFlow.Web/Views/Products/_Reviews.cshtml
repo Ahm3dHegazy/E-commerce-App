@@ -13,8 +13,7 @@
                 <div class="review-head">
                     <strong class="review-user">@r.UserName</strong>
                     @* Inline stars: render compact star-only partial with the decimal rating *@
-                    @{ var avg = (decimal)r.Rate; }
-                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
+                    <partial name="~/Views/Shared/_StarOnly.cshtml" model="@((decimal)r.Rate)" />
                     <span class="review-date">@r.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</span>
                 </div>
                 <div class="review-body">@r.Comment</div>

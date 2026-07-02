@@ -1,7 +1,7 @@
-﻿@using CartFlow.Data.Entities
+﻿@using CartFlow.Web.Models
 @{
     ViewData["Title"] = "Home";
-    var featured = ViewBag.FeaturedProducts as List<Product> ?? new();
+    var featured = ViewBag.FeaturedProducts as List<ProductViewModel> ?? new();
 }
 
 <div class="page-section">
@@ -12,8 +12,7 @@
             <p>Browse our curated collection of products with fast checkout and reliable delivery.</p>
             <div class="action-row">
                 <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
-                @if (!Context.User.Identity.IsAuthenticated)
-                {
+                @if (Context.User.Identity?.IsAuthenticated != true) {
                     <a class="btn btn-outline-primary" asp-controller="Account" asp-action="SignUp">Create account</a>
                 }
             </div>
@@ -24,12 +23,11 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="~/images/hero.png" alt="CartFlow shopping" />
+            <img src="~/images/hero.png" alt="CartFlow shopping"/>
         </div>
     </section>
 
-    @if (featured.Count > 0)
-    {
+    @if (featured.Count > 0) {
         <section class="section-card">
             <div class="section-header section-header--row">
                 <div>
@@ -40,52 +38,56 @@
             </div>
 
             <div class="product-grid mt-3">
-                @foreach (var product in featured)
-                {
+                @foreach (var product in featured) {
                     <div class="product-card">
                         <div class="product-image">
-                            <a href="@Url.Action("Details", "Products", new { id = product.Id })" style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
+                            <a href="@Url.Action("Details", "Products", new { id = product.Id })"
+                               style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
                                 @{
-                                    var primaryImage = product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
-                                        ?? product.ProductImages?.FirstOrDefault()?.Image;
+                                    var primaryImage = product.ImageUrl;
                                 }
-                                @if (!string.IsNullOrEmpty(primaryImage))
-                                {
-                                    <img src="@primaryImage" alt="@product.Name" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
-                                }
-                                else
-                                {
-                                    <span style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@product.Name[0]</span>
+                                @if (!string.IsNullOrEmpty(primaryImage)) {
+                                    <img src="@primaryImage" alt="@product.Name"
+                                         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>
+                                } else {
+                                    <span
+                                        style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@product.Initial</span>
                                 }
                             </a>
                         </div>
                         <div class="product-body">
-                            <span class="category-badge">@product.Category?.Name</span>
+                            <span class="category-badge">@product.CategoryName</span>
                             <h3>@product.Name</h3>
+                            
+                            <div class="home-rating">
+                                <div class="mt-2" style="display:inline-flex;align-items:center;gap:8px;">
+                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", product.AverageRating)
+                                    <span class="avg-rating-text" style="margin-left:6px;font-weight:600;">@product.AverageRating.ToString("0.0")</span>
+                                    <span class="rating-count" style="margin-left:6px;opacity:.8;">(@product.ReviewCount reviews)</span>
+                                </div>
+                            </div>
+
+                            
                             <div class="product-meta">
                                 <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
-                                @if (product.StockQuantity > 10)
-                                {
+                                @if (product.StockQuantity > 10) {
                                     <span class="stock-badge stock-in">In stock</span>
-                                }
-                                else if (product.StockQuantity > 0)
-                                {
+                                } else if (product.StockQuantity > 0) {
                                     <span class="stock-badge stock-low">@product.StockQuantity left</span>
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="stock-badge stock-out">Out of stock</span>
                                 }
                             </div>
                             <div class="action-row">
                                 <!-- تم تحويل الزر هنا إلى Form لإرسال طلب POST آمن يطابق الـ Controller تماماً ويمنع الـ 404 -->
                                 <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
-                                    <input type="hidden" name="productId" value="@product.Id" />
-                                    <input type="hidden" name="quantity" value="1" />
+                                    <input type="hidden" name="productId" value="@product.Id"/>
+                                    <input type="hidden" name="quantity" value="1"/>
                                     <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
                                 </form>
 
-                                <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">Details</a>
+                                <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Details"
+                                   asp-route-id="@product.Id">Details</a>
                             </div>
                         </div>
                     </div>

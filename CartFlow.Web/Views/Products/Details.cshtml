@@ -91,7 +91,7 @@
             <div class="rating-summary" style="display:flex;align-items:center;gap:8px;">
                 @{
                     var avg = Model.AverageRating;
-                    var count = mockReviews.Length;
+                    var count = Model.ReviewCount;
                 }
                 @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
                 <span class="avg-rating-text" style="font-weight:600;">@avg.ToString("0.0")</span>
