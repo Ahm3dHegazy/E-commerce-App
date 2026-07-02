@@ -1315,6 +1315,104 @@ body {
 .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
 .empty-state h3 { font-size: 1.1rem; font-weight: 600; }
 
+/* Orders list */
+.orders-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.order-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.order-card:hover {
+  border-color: var(--accent-glow);
+}
+
+.order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.15rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.order-card-id {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.order-card-id strong {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.order-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.order-card-body {
+  display: flex;
+  gap: 2rem;
+  padding: 0.85rem 1.15rem;
+}
+
+.order-card-detail {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.order-card-detail > span:last-child {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.order-total {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.order-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+}
+
+.order-status--ordered {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.order-status--shipped {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+}
+
+.order-status--delivered {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent);
+}
+
+.order-status--cancelled {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.order-status--returned {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+
 /* Field grid */
 .field-grid {
   display: grid;
