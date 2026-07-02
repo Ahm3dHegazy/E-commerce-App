@@ -9,14 +9,17 @@ public class ProductService(AppDbContext context) : IProductService
 {
     public async Task<List<Product>> GetFeaturedAsync(int count)
     {
-        return await context.Products
+        var products = await context.Products
             .Include(p => p.Category)
             .Include(p => p.ProductImages)
-            .GroupBy(p => p.CategoryId)
-            .SelectMany(g => g.OrderBy(p => EF.Functions.Random()).Take(1))
-            .OrderBy(p => EF.Functions.Random())
-            .Take(count)
             .ToListAsync();
+
+        return products
+            .GroupBy(p => p.CategoryId)
+            .SelectMany(g => g.OrderBy(_ => Random.Shared.Next()).Take(1))
+            .OrderBy(_ => Random.Shared.Next())
+            .Take(count)
+            .ToList();
     }
 
     public async Task<List<Product>> GetAllAsync(string? searchTerm = null, int? categoryId = null)
