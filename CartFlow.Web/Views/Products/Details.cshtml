@@ -46,7 +46,7 @@
 </div>
 
 <div class="main">
-    <div class="detail-grid">
+    <div class="detail-grid detail-grid--reviews">
 
         <div>
             <div class="img-panel">
@@ -72,8 +72,6 @@
                     }
                 </div>
             }
-
-
         </div>
 
         <div class="info-panel">
@@ -147,6 +145,31 @@
                 Back to products
             </a>
 
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <div class="reviews-inner">
+            <h4 class="reviews-heading">Reviews <span class="reviews-count">(@mockReviews.Length)</span></h4>
+
+            <div class="reviews-list">
+                @foreach (var r in mockReviews)
+                {
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-avatar">@r.Name[0]</div>
+                            <div class="review-meta">
+                                <span class="review-name">@r.Name</span>
+                                <div class="review-stars">
+                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
+                                </div>
+                            </div>
+                            <span class="review-date">@r.Date</span>
+                        </div>
+                        <p class="review-text">@r.Text</p>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
