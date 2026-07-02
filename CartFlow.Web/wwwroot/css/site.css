@@ -480,6 +480,8 @@ body {
   font-size: 3rem;
   font-weight: 800;
   color: var(--img-text);
+  position: relative;
+  overflow: hidden;
 }
 
 .product-image img {
