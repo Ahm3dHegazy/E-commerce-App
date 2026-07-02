@@ -46,7 +46,7 @@
 </div>
 
 <div class="main">
-    <div class="detail-grid">
+    <div class="detail-grid detail-grid--reviews">
 
         <div>
             <div class="img-panel">
@@ -73,27 +73,6 @@
                 </div>
             }
 
-            <div class="left-mock-reviews" style="margin-top:90px;">
-                <a class="reviews-link" href="#" style="color:var(--bs-body-color);text-decoration:none;font-weight:600;">
-                    Reviews (@mockReviews.Length)
-                </a>
-
-                <div class="mock-reviews-list" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
-                    @foreach (var r in mockReviews)
-                    {
-                        <div class="mock-review" style="background:#fff;border:1px solid #eef0f2;border-radius:8px;padding:12px;">
-                            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-                                <strong>@r.Name</strong>
-                                <span style="display:flex;align-items:center;gap:8px;">
-                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
-                                    <small style="opacity:.7;margin-left:6px;">@r.Date</small>
-                                </span>
-                            </div>
-                            <div style="margin-top:8px;color:var(--bs-body-color);opacity:.9;">@r.Text</div>
-                        </div>
-                    }
-                </div>
-            </div>
         </div>
 
         <div class="info-panel">
@@ -167,6 +146,31 @@
                 Back to products
             </a>
 
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <div class="reviews-inner">
+            <h4 class="reviews-heading">Reviews <span class="reviews-count">(@mockReviews.Length)</span></h4>
+
+            <div class="reviews-list">
+                @foreach (var r in mockReviews)
+                {
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-avatar">@r.Name[0]</div>
+                            <div class="review-meta">
+                                <span class="review-name">@r.Name</span>
+                                <div class="review-stars">
+                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
+                                </div>
+                            </div>
+                            <span class="review-date">@r.Date</span>
+                        </div>
+                        <p class="review-text">@r.Text</p>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
