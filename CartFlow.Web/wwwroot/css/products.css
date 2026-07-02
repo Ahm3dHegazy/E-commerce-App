@@ -24,7 +24,6 @@ body {
 
 /* ── Breadcrumb strip ── */
 .breadcrumb-bar {
-    background: #1a1a2e;
     padding: 14px 24px;
 }
 
@@ -33,11 +32,11 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: rgba(255,255,255,.5);
+    color: var(--muted);
 }
 
     .breadcrumb a {
-        color: rgba(255,255,255,.7);
+        color: var(--primary);
         text-decoration: none;
         transition: color .15s;
     }
@@ -51,7 +50,7 @@ body {
     }
 
     .breadcrumb span {
-        color: rgba(255,255,255,.9);
+        color: var(--text);
     }
 
 /* ── Main layout ── */
@@ -107,8 +106,7 @@ body {
 }
 
 .thumbnails .thumb.active {
-    border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(16,185,129,0.08);
+    border-color: var(--border);
 }
 
 .thumbnails .thumb img {
@@ -117,13 +115,6 @@ body {
     object-fit: cover;
     border-radius: 6px;
 }
-
-    .img-panel::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 70% 25%, rgba(16,185,129,.22) 0%, transparent 65%);
-    }
 
 .qty-control {
     display: flex;

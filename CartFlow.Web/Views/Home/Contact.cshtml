@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="page-section">
+    <section class="section-card">
+        <div class="section-header text-center mb-4">
+            <p class="section-label">Get In Touch</p>
+            <h1>Contact Us</h1>
+            <p class="section-text text-muted">Have a question or feedback? We'd love to hear from you.</p>
+        </div>
+        
+        <div class="row g-4 mt-2">
+            <!-- عمود معلومات الاتصال -->
+            <div class="col-md-5">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(var(--bs-primary-rgb), 0.05); border: 1px solid rgba(var(--bs-primary-rgb), 0.1);">
+                    <h3 class="h5 fw-bold text-primary mb-4">Contact Information</h3>
+                    
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="fs-4 text-primary"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div>
+                            <h4 class="h6 fw-semibold mb-1">Our Location</h4>
+                            <p class="small mb-0 opacity-75">Beni Suef, Egypt</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="fs-4 text-primary"><i class="bi bi-envelope-fill"></i></div>
+                        <div>
+                            <h4 class="h6 fw-semibold mb-1">Email Us</h4>
+                            <p class="small mb-0 opacity-75">support@@cartflow.com</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="fs-4 text-primary"><i class="bi bi-telephone-fill"></i></div>
+                        <div>
+                            <h4 class="h6 fw-semibold mb-1">Call Us</h4>
+                            <p class="small mb-0 opacity-75">+20 123 456 7890</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عمود فورم إرسال الرسالة -->
+            <div class="col-md-7">
+                <form onsubmit="event.preventDefault(); alert('Thank you for contacting us! Your message has been sent successfully.'); this.reset();">
+                    <div class="mb-3">
+                        <label for="contactName" class="form-label fw-medium">Your Name</label>
+                        <input type="text" class="form-control" id="contactName" placeholder="Eslam Mohammed" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactEmail" class="form-label fw-medium">Email Address</label>
+                        <input type="email" class="form-control" id="contactEmail" placeholder="name@@example.com" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactMessage" class="form-label fw-medium">Message</label>
+                        <textarea class="form-control" id="contactMessage" rows="4" placeholder="How can we help you?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

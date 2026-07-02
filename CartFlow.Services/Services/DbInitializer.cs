@@ -1,3 +1,5 @@
+using System.IO;
+using System.Linq;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
 using CartFlow.Data.Enums;
@@ -87,6 +89,36 @@ public static class DbInitializer
         await GetOrCreateProductAsync(db, "Wireless Mouse", "Ergonomic silent-click wireless mouse.", 40, 349m, subMice);
         await GetOrCreateProductAsync(db, "Gaming Mouse", "High-DPI gaming mouse with customizable buttons.", 15, 599m, subMice);
 
+        await db.SaveChangesAsync();
+
+        // Seed product images
+        var products = await db.Products.ToListAsync();
+        var imagesBase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products");
+        foreach (var product in products)
+        {
+            var folder = Path.Combine(imagesBase, product.Id.ToString());
+            if (!Directory.Exists(folder)) continue;
+
+            var files = Directory.GetFiles(folder)
+                .Select(Path.GetFileName)
+                .Where(f => !f.StartsWith("."))
+                .OrderBy(f => f)
+                .ToList();
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                var imagePath = $"/images/products/{product.Id}/{files[i]}";
+                if (!await db.ProductImages.AnyAsync(pi => pi.Image == imagePath))
+                {
+                    db.ProductImages.Add(new ProductImage
+                    {
+                        ProductId = product.Id,
+                        Image = imagePath,
+                        IsPrimary = i == 0
+                    });
+                }
+            }
+        }
         await db.SaveChangesAsync();
 
         // Seed user

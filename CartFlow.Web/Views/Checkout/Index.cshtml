@@ -4,143 +4,165 @@
     ViewData["Title"] = "Checkout";
 }
 
-<div class="container my-5">
-    <div class="row g-5">
-        
-        <div class="col-md-7 col-lg-8">
-            <h4 class="mb-3 fw-bold text-primary">Shipping Address</h4>
-            
-            <form asp-controller="Checkout" asp-action="Index" method="post" class="needs-validation" novalidate>
+<div class="page-section">
+    <section class="section-card">
+        <div class="section-header">
+            <p class="section-label">Checkout</p>
+            <h1>Complete your order</h1>
+            <p class="section-text">Fill in your shipping details and choose a payment method.</p>
+        </div>
+
+        <div class="checkout-layout">
+            <form asp-controller="Checkout" asp-action="Index" method="post" class="checkout-form" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-semibold"></div>
 
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label asp-for="FirstName" class="form-label fw-medium">First Name</label>
-                        <input asp-for="FirstName" class="form-control" placeholder="Eslam" />
-                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                <div class="checkout-fieldset">
+                    <h4 class="checkout-legend"><i class="bi bi-geo-alt"></i> Shipping Address</h4>
+
+                    <div class="field-grid">
+                        <div class="field-group">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Eslam" />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Mohamed" />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-sm-6">
-                        <label asp-for="LastName" class="form-label fw-medium">Last Name</label>
-                        <input asp-for="LastName" class="form-control" placeholder="Mohamed" />
-                        <span asp-validation-for="LastName" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-12">
-                        <label asp-for="Email" class="form-label fw-medium">Email Address</label>
+                    <div class="field-group">
+                        <label asp-for="Email" class="form-label">Email Address</label>
                         <input asp-for="Email" type="email" class="form-control" placeholder="example@bsu.edu.eg" />
                         <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-12">
-                        <label asp-for="AddressLine1" class="form-label fw-medium">Address</label>
+                    <div class="field-group">
+                        <label asp-for="AddressLine1" class="form-label">Address</label>
                         <input asp-for="AddressLine1" class="form-control" placeholder="123 Main St, Beni Suef" />
                         <span asp-validation-for="AddressLine1" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-5">
-                        <label asp-for="City" class="form-label fw-medium">City</label>
-                        <input asp-for="City" class="form-control" placeholder="Beni Suef" />
-                        <span asp-validation-for="City" class="text-danger small"></span>
+                    <div class="field-grid field-grid--3">
+                        <div class="field-group">
+                            <label asp-for="City" class="form-label">City</label>
+                            <input asp-for="City" class="form-control" placeholder="Beni Suef" />
+                            <span asp-validation-for="City" class="text-danger small"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label asp-for="State" class="form-label">State / Region</label>
+                            <input asp-for="State" class="form-control" placeholder="Beni Suef Governorate" />
+                            <span asp-validation-for="State" class="text-danger small"></span>
+                        </div>
+
+                        <div class="field-group">
+                            <label asp-for="PostalCode" class="form-label">Postal Code</label>
+                            <input asp-for="PostalCode" class="form-control" placeholder="62511" />
+                            <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <label asp-for="State" class="form-label fw-medium">State / Region</label>
-                        <input asp-for="State" class="form-control" placeholder="Beni Suef Governorate" />
-                        <span asp-validation-for="State" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label asp-for="PostalCode" class="form-label fw-medium">Postal Code</label>
-                        <input asp-for="PostalCode" class="form-control" placeholder="62511" />
-                        <span asp-validation-for="PostalCode" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-12">
-                        <label asp-for="Country" class="form-label fw-medium">Country</label>
+                    <div class="field-group">
+                        <label asp-for="Country" class="form-label">Country</label>
                         <input asp-for="Country" class="form-control" placeholder="Egypt" />
                         <span asp-validation-for="Country" class="text-danger small"></span>
                     </div>
                 </div>
 
-                <hr class="my-4">
+                <div class="checkout-fieldset">
+                    <h4 class="checkout-legend"><i class="bi bi-credit-card"></i> Payment Method</h4>
 
-                <h4 class="mb-3 fw-bold text-primary">Payment Method</h4>
-                <div class="my-3">
-                    <div class="form-check mb-2">
-                        <input id="cash" name="PaymentMethod" type="radio" class="form-check-input" value="Cash" checked required>
-                        <label class="form-check-label" for="cash">Cash on Delivery (COD)</label>
-                    </div>
-                    <div class="form-check">
-                        <input id="credit" name="PaymentMethod" type="radio" class="form-check-input" value="CreditCard" required>
-                        <label class="form-check-label" for="credit">Credit Card / Visa</label>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="PaymentMethod" value="Cash" checked required>
+                            <span class="payment-option-content">
+                                <i class="bi bi-cash-stack"></i>
+                                <div>
+                                    <strong>Cash on Delivery</strong>
+                                    <small>Pay when you receive</small>
+                                </div>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="PaymentMethod" value="CreditCard" required>
+                            <span class="payment-option-content">
+                                <i class="bi bi-credit-card-2-front"></i>
+                                <div>
+                                    <strong>Credit Card / Visa</strong>
+                                    <small>Pay securely online</small>
+                                </div>
+                            </span>
+                        </label>
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                <button class="w-100 btn btn-warning btn-lg fw-bold py-3 shadow-sm" type="submit" style="background-color: #ffc107; color: #000; border: none;">
+                <button class="btn btn-primary btn-lg fw-bold w-100 py-3" type="submit">
                     <i class="bi bi-shield-check"></i> Place Order
                 </button>
             </form>
-        </div>
 
-        <div class="col-md-5 col-lg-4">
-            <div class="card border-0 bg-light p-4 rounded-3 shadow-sm sticky-md-top" style="top: 2rem;">
-                <h4 class="d-flex justify-content-between align-middle mb-3 text-secondary fw-semibold">
-                    <span>Order Summary</span>
-                </h4>
-                
-                <ul class="list-group list-group-flush mb-3 rounded-2 bg-transparent">
+            <aside class="checkout-sidebar">
+                <div class="order-summary-card">
+                    <h5>Order Summary</h5>
+
                     @{
                         var checkoutItems = ViewBag.CartItems as List<CartFlow.Web.Models.CartItemViewModel>;
                     }
 
                     @if (checkoutItems != null && checkoutItems.Any())
                     {
-                        @foreach (var item in checkoutItems)
-                        {
-                            <li class="list-group-item d-flex justify-content-between lh-sm bg-transparent border-bottom py-3">
-                                <div>
-                                    <h6 class="my-0 fw-semibold">@item.ProductName</h6>
-                                    <small class="text-muted">Qty: @item.Quantity × EGP @item.UnitPrice.ToString("N2")</small>
-                                </div>
-                                <span class="text-muted fw-medium">EGP @((item.Quantity * item.UnitPrice).ToString("N2"))</span>
-                            </li>
-                        }
+                        <ul class="summary-items">
+                            @foreach (var item in checkoutItems)
+                            {
+                                <li>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <div class="summary-item-thumb">
+                                            <img src="@item.ImageUrl" alt="@item.ProductName" />
+                                        </div>
+                                    }
+                                    <div class="summary-item-info">
+                                        <span class="summary-item-name">@item.ProductName</span>
+                                        <span class="summary-item-qty">Qty: @item.Quantity &times; EGP @item.UnitPrice.ToString("N2")</span>
+                                    </div>
+                                    <span class="summary-item-price">EGP @((item.Quantity * item.UnitPrice).ToString("N2"))</span>
+                                </li>
+                            }
+                        </ul>
                     }
                     else
                     {
-                        <li class="list-group-item bg-transparent text-center py-3 text-muted">
-                            No items in checkout.
-                        </li>
+                        <p class="summary-empty">No items in checkout.</p>
                     }
-                </ul>
 
-                <div class="card-footer bg-transparent border-0 px-0">
                     @{
                         decimal subtotal = checkoutItems?.Sum(i => i.Quantity * i.UnitPrice) ?? 0;
                         decimal shipping = 50.00m;
                         decimal total = subtotal + shipping;
                     }
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Subtotal</span>
-                        <span class="text-dark">EGP @subtotal.ToString("N2")</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Shipping</span>
-                        <span class="text-dark">EGP @shipping.ToString("N2")</span>
-                    </div>
-                    <hr class="my-2">
-                    <div class="d-flex justify-content-between text-dark">
-                        <strong class="fs-5">Total</strong>
-                        <strong class="fs-5 text-success">EGP @total.ToString("N2")</strong>
+
+                    <div class="summary-totals">
+                        <div class="summary-total-row">
+                            <span>Subtotal</span>
+                            <span>EGP @subtotal.ToString("N2")</span>
+                        </div>
+                        <div class="summary-total-row">
+                            <span>Shipping</span>
+                            <span>EGP @shipping.ToString("N2")</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-total-row summary-total-row--grand">
+                            <span>Total</span>
+                            <span>EGP @total.ToString("N2")</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </aside>
         </div>
-
-    </div>
+    </section>
 </div>
 
 @section Scripts {

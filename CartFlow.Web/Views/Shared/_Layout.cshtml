@@ -33,7 +33,6 @@
                         @await Component.InvokeAsync("CategoryMenu")
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
                         
-                        <!-- التعديل هنا: إضافة عداد المنتجات ذكي وبشكل متناسق مع التصميم -->
                         <li class="nav-item">
                             <a class="nav-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
                                 Cart
@@ -77,6 +76,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" asp-action="Profile" asp-controller="Account">My Profile</a></li>
+                                    <li><a class="dropdown-item" asp-action="MyOrders" asp-controller="Orders">My Orders</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Log out</a></li>
                                 </ul>
@@ -100,7 +100,12 @@
     <footer class="site-footer border-top">
         <div class="container-lg py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
             <span>&copy; 2026 - CartFlow</span>
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="d-flex gap-3">
+                <a asp-controller="Home" asp-action="About">About Us</a>
+                <!-- 🔥 التعديل هنا: إضافة رابط صفحة الاتصال بنا بشكل صحيح ومتناسق -->
+                <a asp-controller="Home" asp-action="Contact">Contact Us</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
         </div>
     </footer>
 
@@ -122,6 +127,5 @@
                 });
             })();
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+    @await RenderSectionAsync("Scripts", required: false)</body>
 </html>

@@ -31,22 +31,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-// التعديل الآمن هنا لتخطي كراش الـ Parameterless Constructor الخاص بالـ Seed
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        // عمل Migration تلقائي لضمان بناء الجداول لو كانت ناقصة
         await db.Database.MigrateAsync();
 
-        // قمنا بعمل تعليق لسطر الـ Seed لأنه يستدعي الـ DbContext بطريقة خاطئة تسبب الكراش
-        // await DbInitializer.SeedAsync(db);
+        await DbInitializer.SeedAsync(db);
     }
     catch (Exception ex)
     {
-        // يمكنك متابعة أي خطأ هنا في الـ Console إذا ظهر
         Console.WriteLine($"Migration/Seeding Error: {ex.Message}");
     }
 }

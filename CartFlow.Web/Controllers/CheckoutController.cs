@@ -36,6 +36,8 @@ namespace CartFlow.Web.Controllers
 
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null || !cart.CartItems.Any())
@@ -50,6 +52,18 @@ namespace CartFlow.Web.Controllers
                 LastName = user.LastName,
                 Email = user.Email
             };
+
+            ViewBag.CartItems = cart.CartItems.Select(ci => new CartItemViewModel
+            {
+                Id = ci.Id,
+                ProductId = ci.ProductId,
+                ProductName = ci.Product.Name,
+                UnitPrice = ci.UnitPrice,
+                Quantity = ci.Quantity,
+                ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                    ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
+                    ?? string.Empty
+            }).ToList();
 
             return View(viewModel);
         }

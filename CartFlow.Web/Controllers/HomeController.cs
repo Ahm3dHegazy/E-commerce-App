@@ -12,7 +12,7 @@ namespace CartFlow.Web.Controllers {
         }
 
         public async Task<IActionResult> Index() {
-            ViewBag.FeaturedProducts = await _productService.GetFeaturedAsync(4);
+            ViewBag.FeaturedProducts = await _productService.GetFeaturedAsync(6);
             return View();
         }
 
@@ -23,6 +23,15 @@ namespace CartFlow.Web.Controllers {
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
         }
     }
 }

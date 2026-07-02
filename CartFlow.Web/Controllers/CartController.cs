@@ -33,6 +33,9 @@ namespace CartFlow.Web.Controllers
                 .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
                         .ThenInclude(p => p.Category)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
             var viewModel = new CartViewModel();
@@ -41,11 +44,14 @@ namespace CartFlow.Web.Controllers
             {
                 viewModel.Items = cart.CartItems.Select(ci => new CartItemViewModel
                 {
-                    // ملحوظة: تأكد من إضافة Id في الـ CartItemViewModel إذا كنت تستخدمه في الـ View لأزرار الحذف والتعديل
+                    Id = ci.Id,
                     ProductName = ci.Product.Name,
                     CategoryName = ci.Product.Category?.Name ?? "No Category",
                     UnitPrice = ci.UnitPrice,
-                    Quantity = ci.Quantity
+                    Quantity = ci.Quantity,
+                    ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                        ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
+                        ?? string.Empty
                 }).ToList();
             }
 
@@ -105,7 +111,7 @@ namespace CartFlow.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            // 🔥 التعديل الذكي هنا: جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
+            // جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
             string? returnUrl = Request.Headers["Referer"].ToString();
             if (!string.IsNullOrEmpty(returnUrl))
             {

@@ -1,0 +1,56 @@
+@model CartFlow.Web.Models.MyOrdersViewModel
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="page-section">
+    <section class="section-card">
+        <div class="section-header">
+            <p class="section-label">Orders</p>
+            <h1>My orders</h1>
+            <p class="section-text">Review your past orders and track their status.</p>
+        </div>
+
+        @if (Model.Orders.Any())
+        {
+            <div class="orders-list">
+                @foreach (var order in Model.Orders)
+                {
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <div class="order-card-id">
+                                <span class="order-label">Order</span>
+                                <strong>#@order.OrderNumber</strong>
+                            </div>
+                            <span class="order-status order-status--@order.Status.ToLowerInvariant()">@order.Status</span>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-card-detail">
+                                <span class="order-label">Date</span>
+                                <span>@order.OrderDate.ToString("MMM dd, yyyy")</span>
+                            </div>
+                            <div class="order-card-detail">
+                                <span class="order-label">Items</span>
+                                <span>@order.ItemCount</span>
+                            </div>
+                            <div class="order-card-detail">
+                                <span class="order-label">Total</span>
+                                <span class="order-total">EGP @order.Total.ToString("N2")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="icon"><i class="bi bi-bag-x"></i></div>
+                <h3>No orders yet</h3>
+                <p>You haven't placed any orders. Start shopping to see your orders here.</p>
+                <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
+            </div>
+        }
+    </section>
+</div>

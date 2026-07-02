@@ -21,7 +21,8 @@
 
     var rnd = new Random((Model.Id > 0 ? Model.Id : 1) * 1009);
     var mockCount = rnd.Next(1, 11); // between 1 and 10
-    var mockReviews = Enumerable.Range(0, mockCount).Select(i => {
+    var mockReviews = Enumerable.Range(0, mockCount).Select(i =>
+    {
         var name = reviewerNames[rnd.Next(reviewerNames.Length)];
         var rating = rnd.Next(1, 6);
         var date = DateTime.Today.AddDays(-rnd.Next(0, 365)).ToString("yyyy-MM-dd");
@@ -29,13 +30,10 @@
         return new { Name = name, Rating = (decimal)rating, Date = date, Text = text };
     }).ToArray();
 }
-
 <link rel="stylesheet" href="~/css/products.css" asp-append-version="true" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
 
-<!-- Breadcrumb -->
 <div class="breadcrumb-bar">
     <nav class="breadcrumb">
         <a asp-action="Index">Products</a>
@@ -47,114 +45,111 @@
     </nav>
 </div>
 
-<!-- Detail layout -->
 <div class="main">
     <div class="detail-grid">
 
-            <!-- Left: image + thumbnails gallery -->
-            <div>
-                <div class="img-panel">
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                    {
-                        <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" />
-                    }
-                    else
-                    {
-                        <span class="img-initial">@Model.Initial</span>
-                    }
-                </div>
-
-                @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+        <div>
+            <div class="img-panel">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
-                    <div class="thumbnails" role="list">
-                        @foreach (var img in Model.ImageUrls)
-                        {
-                            var active = img == Model.ImageUrl ? "active" : string.Empty;
-                            <button type="button" class="thumb @active" data-src="@img" aria-label="Thumbnail">
-                                <img src="@img" alt="@Model.Name" />
-                            </button>
-                        }
-                    </div>
+                    <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" />
                 }
-
-                <!-- Mock reviews block placed under thumbnails (left column) - always shown -->
-                <div class="left-mock-reviews" style="margin-top:90px;">
-                    <a class="reviews-link" href="#" style="color:var(--bs-body-color);text-decoration:none;font-weight:600;">
-                        Reviews (@mockReviews.Length)
-                    </a>
-
-                    <div class="mock-reviews-list" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
-                        @foreach(var r in mockReviews) {
-                            <div class="mock-review" style="background:#fff;border:1px solid #eef0f2;border-radius:8px;padding:12px;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-                                    <strong>@r.Name</strong>
-                                    <span style="display:flex;align-items:center;gap:8px;">
-                                        @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
-                                        <small style="opacity:.7;margin-left:6px;">@r.Date</small>
-                                    </span>
-                                </div>
-                                <div style="margin-top:8px;color:var(--bs-body-color);opacity:.9;">@r.Text</div>
-                            </div>
-                        }
-                    </div>
-                </div>
+                else
+                {
+                    <span class="img-initial">@Model.Initial</span>
+                }
             </div>
 
-            <!-- Right: info -->
-            <div class="info-panel">
+            @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+            {
+                <div class="thumbnails" role="list">
+                    @foreach (var img in Model.ImageUrls)
+                    {
+                        var active = img == Model.ImageUrl ? "active" : string.Empty;
+                        <button type="button" class="thumb @active" data-src="@img" aria-label="Thumbnail">
+                            <img src="@img" alt="@Model.Name" />
+                        </button>
+                    }
+                </div>
+            }
 
-                <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="category-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M7 7h.01M3 3h8l9 9a2 2 0 0 1 0 2.83l-5.17 5.17a2 2 0 0 1-2.83 0L3 11V3z" />
-                    </svg>
-                    @Model.CategoryName
+            <div class="left-mock-reviews" style="margin-top:90px;">
+                <a class="reviews-link" href="#" style="color:var(--bs-body-color);text-decoration:none;font-weight:600;">
+                    Reviews (@mockReviews.Length)
                 </a>
 
-                <h2>@Model.Name</h2>
-
-                <!-- Ratings summary directly under product name -->
-                <div class="rating-summary" style="display:flex;align-items:center;gap:8px;">
-                    @{
-                        var avg = Model.AverageRating;
-                        var count = mockReviews.Length;
+                <div class="mock-reviews-list" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+                    @foreach (var r in mockReviews)
+                    {
+                        <div class="mock-review" style="background:#fff;border:1px solid #eef0f2;border-radius:8px;padding:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                                <strong>@r.Name</strong>
+                                <span style="display:flex;align-items:center;gap:8px;">
+                                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", r.Rating)
+                                    <small style="opacity:.7;margin-left:6px;">@r.Date</small>
+                                </span>
+                            </div>
+                            <div style="margin-top:8px;color:var(--bs-body-color);opacity:.9;">@r.Text</div>
+                        </div>
                     }
-                    @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
-                    <span class="avg-rating-text" style="font-weight:600;">@avg.ToString("0.0")</span>
-                    <span class="rating-count" style="opacity:.8;">(@count reviews)</span>
                 </div>
+            </div>
+        </div>
 
-                <div class="divider"></div>
+        <div class="info-panel">
 
-                <div class="price-display">
-                    <span class="currency">EGP</span>@Model.UnitPrice.ToString("N2")
-                </div>
-                @if (!string.IsNullOrWhiteSpace(Model.Description))
-                {
-                    <p class="description">@Model.Description</p>
+            <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="category-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M7 7h.01M3 3h8l9 9a2 2 0 0 1 0 2.83l-5.17 5.17a2 2 0 0 1-2.83 0L3 11V3z" />
+                </svg>
+                @Model.CategoryName
+            </a>
+
+            <h2>@Model.Name</h2>
+
+            <div class="rating-summary" style="display:flex;align-items:center;gap:8px;">
+                @{
+                    var avg = Model.AverageRating;
+                    var count = mockReviews.Length;
                 }
+                @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
+                <span class="avg-rating-text" style="font-weight:600;">@avg.ToString("0.0")</span>
+                <span class="rating-count" style="opacity:.8;">(@count reviews)</span>
+            </div>
 
-                <div class="divider"></div>
+            <div class="divider"></div>
 
-                <div class="stock-row">
-                    <span class="stock-dot" aria-hidden="true"></span>
-                    <span class="stock-value">@(Model.StockQuantity > 0 ? "In Stock" : "Out of Stock")</span>
-                    <span class="stock-count">(@Model.StockQuantity units available)</span>
-                </div>
+            <div class="price-display">
+                <span class="currency">EGP</span>@Model.UnitPrice.ToString("N2")
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p class="description">@Model.Description</p>
+            }
 
-                <!-- Quantity with +/- -->
+            <div class="divider"></div>
+
+            <div class="stock-row">
+                <span class="stock-dot" aria-hidden="true"></span>
+                <span class="stock-value">@(Model.StockQuantity > 0 ? "In Stock" : "Out of Stock")</span>
+                <span class="stock-count">(@Model.StockQuantity units available)</span>
+            </div>
+
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-flex flex-column gap-3">
+                <input type="hidden" name="productId" value="@Model.Id" />
+
                 <div class="qty-block">
                     <label class="qty-label" for="qtyInput">Quantity</label>
                     <div class="qty-control">
                         <button type="button" class="btn-qty" data-action="decrement">-</button>
-                        <input class="qty-input" type="number" id="qtyInput" name="qty" min="1" value="1" />
+                        <input class="qty-input" type="number" id="qtyInput" name="quantity" min="1" max="@Model.StockQuantity" value="1" />
                         <button type="button" class="btn-qty" data-action="increment">+</button>
                     </div>
                 </div>
 
-                <!-- Add to Cart -->
-                <button class="btn-add-cart" @(Model.StockQuantity == 0 ? "disabled" : "")>
+                <button type="submit" class="btn-add-cart" @(Model.StockQuantity == 0 ? "disabled" : "")>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -162,21 +157,19 @@
                     </svg>
                     @(Model.StockQuantity == 0 ? "Out of Stock" : "Add to Cart")
                 </button>
+            </form>
 
-                <!-- Back link -->
-                <a asp-action="Index" class="back-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Back to products
-                </a>
+            <a asp-action="Index" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to products
+            </a>
 
-            </div>
         </div>
+    </div>
 </div>
-
-<!-- Reviews removed from product details; average rating kept above -->
 
 <script>
     (function(){
