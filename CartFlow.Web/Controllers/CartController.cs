@@ -26,14 +26,18 @@ namespace CartFlow.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var viewModel = new CartViewModel();
+
+            // If user is not authenticated, show an empty cart page rather than redirecting to login
             if (string.IsNullOrEmpty(userIdString))
             {
-                return RedirectToAction("Login", "Account");
+                return View(viewModel);
             }
 
             int userId = int.Parse(userIdString);
 
-            // جلب السلة بناءً على الـ UserId الخاص بـ Cart Flow Entities
+            // Load cart for authenticated user
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
@@ -42,8 +46,6 @@ namespace CartFlow.Web.Controllers
                     .ThenInclude(ci => ci.Product)
                         .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
-
-            var viewModel = new CartViewModel();
 
             if (cart != null)
             {
