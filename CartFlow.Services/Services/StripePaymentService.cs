@@ -4,7 +4,10 @@ using Stripe;
 
 namespace CartFlow.Services.Services {
 	public class StripePaymentService : IStripePaymentService {
+		private readonly IConfiguration _configuration;
+
 		public StripePaymentService(IConfiguration configuration) {
+			_configuration = configuration;
 			StripeConfiguration.ApiKey = configuration["StripeKeys:SecretKey"];
 		}
 
@@ -15,9 +18,8 @@ namespace CartFlow.Services.Services {
 					Amount = (long)(amount * 100),
 					Currency = currency,
 					PaymentMethod = paymentMethodId,
-					ConfirmationMethod = "manual",
+					ConfirmationMethod = "automatic",
 					Confirm = true,
-					ReturnUrl = "https://localhost:5043/Checkout/Confirmation",
 				};
 
 				var service = new PaymentIntentService();
