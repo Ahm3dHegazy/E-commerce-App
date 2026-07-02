@@ -118,6 +118,12 @@
                             @foreach (var item in checkoutItems)
                             {
                                 <li>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <div class="summary-item-thumb">
+                                            <img src="@item.ImageUrl" alt="@item.ProductName" />
+                                        </div>
+                                    }
                                     <div class="summary-item-info">
                                         <span class="summary-item-name">@item.ProductName</span>
                                         <span class="summary-item-qty">Qty: @item.Quantity &times; EGP @item.UnitPrice.ToString("N2")</span>

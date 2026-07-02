@@ -33,6 +33,9 @@ namespace CartFlow.Web.Controllers
                 .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
                         .ThenInclude(p => p.Category)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
             var viewModel = new CartViewModel();
@@ -41,12 +44,14 @@ namespace CartFlow.Web.Controllers
             {
                 viewModel.Items = cart.CartItems.Select(ci => new CartItemViewModel
                 {
-                    // 🔥 التعديل الجوهري: ربط الـ Id الخاص بـ CartItem لتشغيل أزرار التعديل والحذف في الـ View مسبقاً
                     Id = ci.Id,
                     ProductName = ci.Product.Name,
                     CategoryName = ci.Product.Category?.Name ?? "No Category",
                     UnitPrice = ci.UnitPrice,
-                    Quantity = ci.Quantity
+                    Quantity = ci.Quantity,
+                    ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                        ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
+                        ?? string.Empty
                 }).ToList();
             }
 

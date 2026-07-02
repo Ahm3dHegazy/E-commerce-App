@@ -24,12 +24,18 @@
                 <div class="cart-items">
                     @foreach (var item in Model.Items)
                     {
-                        <div class="cart-item">
-                            <div class="cart-item-body">
-                                <div class="cart-item-info">
-                                    <span class="cart-item-name">@item.ProductName</span>
-                                    <span class="cart-item-category">@item.CategoryName</span>
-                                </div>
+                    <div class="cart-item">
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <div class="cart-item-thumb">
+                                <img src="@item.ImageUrl" alt="@item.ProductName" />
+                            </div>
+                        }
+                        <div class="cart-item-body">
+                            <div class="cart-item-info">
+                                <span class="cart-item-name">@item.ProductName</span>
+                                <span class="cart-item-category">@item.CategoryName</span>
+                            </div>
 
                                 <div class="cart-item-details">
                                     <div class="cart-item-qty">

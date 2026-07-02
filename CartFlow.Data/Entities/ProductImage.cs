@@ -7,7 +7,6 @@ namespace CartFlow.Data.Entities {
         public int ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
-        [Url]
         public string Image { get; set; }
         public bool IsPrimary { get; set; }
     }
