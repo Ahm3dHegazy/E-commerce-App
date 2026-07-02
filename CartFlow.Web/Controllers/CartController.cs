@@ -1,6 +1,8 @@
 using CartFlow.Data;
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
+using CartFlow.Services.Interfaces;
+using CartFlow.Services.Services;
 using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +13,12 @@ namespace CartFlow.Web.Controllers
     public class CartController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ICartService _cartService;
 
-        public CartController(AppDbContext context)
+        public CartController(AppDbContext context,ICartService cartService)
         {
             _context = context;
+            _cartService = cartService;
         }
 
         // 1. Index() : عرض السلة وتفاصيلها بناءً على الـ Cart و الـ ViewModels
@@ -156,6 +160,14 @@ namespace CartFlow.Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearCart()
+        {
+            await _cartService.ClearCartAsync();
             return RedirectToAction(nameof(Index));
         }
     }

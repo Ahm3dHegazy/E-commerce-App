@@ -24,18 +24,18 @@
                 <div class="cart-items">
                     @foreach (var item in Model.Items)
                     {
-                    <div class="cart-item">
-                        @if (!string.IsNullOrEmpty(item.ImageUrl))
-                        {
-                            <div class="cart-item-thumb">
-                                <img src="@item.ImageUrl" alt="@item.ProductName" />
-                            </div>
-                        }
-                        <div class="cart-item-body">
-                            <div class="cart-item-info">
-                                <span class="cart-item-name">@item.ProductName</span>
-                                <span class="cart-item-category">@item.CategoryName</span>
-                            </div>
+                        <div class="cart-item">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <div class="cart-item-thumb">
+                                    <img src="@item.ImageUrl" alt="@item.ProductName" />
+                                </div>
+                            }
+                            <div class="cart-item-body">
+                                <div class="cart-item-info">
+                                    <span class="cart-item-name">@item.ProductName</span>
+                                    <span class="cart-item-category">@item.CategoryName</span>
+                                </div>
 
                                 <div class="cart-item-details">
                                     <div class="cart-item-qty">
@@ -92,6 +92,14 @@
                         <div class="cart-actions">
                             <a class="btn btn-primary w-100" asp-controller="Checkout" asp-action="Index">Proceed to checkout</a>
                             <a class="btn btn-outline-primary w-100" asp-controller="Products" asp-action="Index">Continue shopping</a>
+
+                            <form asp-controller="Cart" asp-action="ClearCart" method="post" class="w-100"
+                                  onsubmit="return confirm('Remove all items from your cart?');">
+                                <button type="submit" class="btn btn-outline-danger w-100">
+                                    <i class="bi bi-trash"></i>
+                                    Clear cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

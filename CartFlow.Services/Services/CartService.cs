@@ -12,4 +12,11 @@ public class CartService(AppDbContext context) : ICartService {
                 .ThenInclude(p => p.Category)
             .ToListAsync();
     }
+
+    public async Task ClearCartAsync()
+    {
+        var items = await context.CartItems.ToListAsync();
+        context.CartItems.RemoveRange(items);
+        await context.SaveChangesAsync();
+    }
 }
