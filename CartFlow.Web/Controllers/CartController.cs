@@ -41,7 +41,8 @@ namespace CartFlow.Web.Controllers
             {
                 viewModel.Items = cart.CartItems.Select(ci => new CartItemViewModel
                 {
-                    // ملحوظة: تأكد من إضافة Id في الـ CartItemViewModel إذا كنت تستخدمه في الـ View لأزرار الحذف والتعديل
+                    // 🔥 التعديل الجوهري: ربط الـ Id الخاص بـ CartItem لتشغيل أزرار التعديل والحذف في الـ View مسبقاً
+                    Id = ci.Id,
                     ProductName = ci.Product.Name,
                     CategoryName = ci.Product.Category?.Name ?? "No Category",
                     UnitPrice = ci.UnitPrice,
@@ -105,7 +106,7 @@ namespace CartFlow.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            // 🔥 التعديل الذكي هنا: جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
+            // جلب الرابط الأصلي الذي ضغط منه المستخدم وإعادته إليه مجدداً
             string? returnUrl = Request.Headers["Referer"].ToString();
             if (!string.IsNullOrEmpty(returnUrl))
             {
