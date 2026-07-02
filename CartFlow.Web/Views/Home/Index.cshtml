@@ -12,7 +12,10 @@
             <p>Browse our curated collection of products with fast checkout and reliable delivery.</p>
             <div class="action-row">
                 <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
-                <a class="btn btn-outline-primary" asp-controller="Account" asp-action="SignUp">Create account</a>
+                @if (!Context.User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-outline-primary" asp-controller="Account" asp-action="SignUp">Create account</a>
+                }
             </div>
             <div class="hero-tags">
                 <span class="hero-tag">Free shipping</span>
