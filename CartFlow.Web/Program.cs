@@ -55,6 +55,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Handle non-exception status codes (404, 500, etc.) by re-executing to the Error controller
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
