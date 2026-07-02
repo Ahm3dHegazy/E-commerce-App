@@ -12,6 +12,7 @@ public class ProductService(AppDbContext context) : IProductService
         var products = await context.Products
             .Include(p => p.Category)
             .Include(p => p.ProductImages)
+            .Include(p => p.Reviews)
             .ToListAsync();
 
         return products
@@ -27,6 +28,7 @@ public class ProductService(AppDbContext context) : IProductService
         var query = context.Products
             .Include(p => p.Category)
             .Include(p => p.ProductImages)
+            .Include(p => p.Reviews)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -43,6 +45,7 @@ public class ProductService(AppDbContext context) : IProductService
         return await context.Products
             .Include(p => p.Category)
             .Include(p => p.ProductImages)
+            .Include(p => p.Reviews)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 

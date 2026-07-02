@@ -40,9 +40,14 @@
             <div class="product-grid mt-3">
                 @foreach (var product in featured) {
                     <div class="product-card">
+<<<<<<< HEAD
                         <div class="product-image">
                             <a href="@Url.Action("Details", "Products", new { id = product.Id })"
                                style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
+=======
+                        <a class="product-link" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" style="text-decoration:none;color:inherit;display:block;">
+                            <div class="product-image">
+>>>>>>> 0145c5703c0d32f992d5554189814aed8d1c4631
                                 @{
                                     var primaryImage = product.ImageUrl;
                                 }
@@ -53,6 +58,7 @@
                                     <span
                                         style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@product.Initial</span>
                                 }
+<<<<<<< HEAD
                             </a>
                         </div>
                         <div class="product-body">
@@ -88,7 +94,37 @@
 
                                 <a class="btn btn-outline-primary btn-sm" asp-controller="Products" asp-action="Details"
                                    asp-route-id="@product.Id">Details</a>
+=======
                             </div>
+
+                            <div class="product-body">
+                                <span class="category-badge">@product.Category?.Name</span>
+                                <h3>@product.Name</h3>
+                                <div class="product-meta">
+                                    <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
+                                    @if (product.StockQuantity > 10)
+                                    {
+                                        <span class="stock-badge stock-in">In stock</span>
+                                    }
+                                    else if (product.StockQuantity > 0)
+                                    {
+                                        <span class="stock-badge stock-low">@product.StockQuantity left</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="stock-badge stock-out">Out of stock</span>
+                                    }
+                                </div>
+>>>>>>> 0145c5703c0d32f992d5554189814aed8d1c4631
+                            </div>
+                        </a>
+
+                        <div class="action-row mt-2">
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 }

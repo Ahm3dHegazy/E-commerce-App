@@ -1,0 +1,10 @@
+@model int
+@{
+    ViewData["Title"] = $"Error {Model}";
+}
+
+<div class="container" style="padding:36px 0;">
+    <h1>Error @Model</h1>
+    <p>Something unexpected happened. Status code: <strong>@Model</strong>.</p>
+    <p style="margin-top:12px;"><a asp-controller="Home" asp-action="Index">Return to home</a></p>
+</div>

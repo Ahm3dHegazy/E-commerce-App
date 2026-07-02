@@ -1,7 +1,6 @@
 /* Page-specific styles for Products/Details view (extracted from Details.cshtml)
    Keep visual appearance identical; these are localized styles and can be moved
    into a scoped stylesheet later if desired. */
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -21,7 +20,6 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
-
 /* ── Breadcrumb strip ── */
 .breadcrumb-bar {
     padding: 14px 24px;
@@ -52,7 +50,6 @@ body {
     .breadcrumb span {
         color: var(--text);
     }
-
 /* ── Main layout ── */
 .main {
     padding: 40px 24px 72px;
@@ -71,7 +68,6 @@ body {
         gap: 28px;
     }
 }
-
 /* ── Left: image ── */
 .img-panel {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
@@ -85,7 +81,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 /* Thumbnails */
 .thumbnails {
     display: flex;
@@ -93,28 +88,27 @@ body {
     margin-top: 14px;
 }
 
+    .thumbnails .thumb {
+        width: 72px;
+        height: 72px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 6px;
+        background: #fff;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+    }
 
-.thumbnails .thumb {
-    width: 72px;
-    height: 72px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 6px;
-    background: #fff;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(16,24,40,0.04);
-}
+        .thumbnails .thumb.active {
+            border-color: var(--border);
+        }
 
-.thumbnails .thumb.active {
-    border-color: var(--border);
-}
-
-.thumbnails .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 6px;
-}
+        .thumbnails .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
 
 .qty-control {
     display: flex;
@@ -140,20 +134,29 @@ body {
     display: inline-block;
 }
 
-.stock-count { opacity: .8; margin-left: 6px; }
-
+.stock-count {
+    opacity: .8;
+    margin-left: 6px;
+}
 /* Rating summary small tweaks */
-.rating-summary .avg-rating-text { color: var(--muted); font-weight:700; }
-.rating-summary .rating-count { color: var(--accent); font-weight:600; }
+.rating-summary .avg-rating-text {
+    color: var(--muted);
+    font-weight: 700;
+}
 
-    .img-panel img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        inset: 0;
-        border-radius: var(--radius);
-    }
+.rating-summary .rating-count {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.img-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+}
 
 .img-initial {
     font-size: 120px;
@@ -165,7 +168,6 @@ body {
     z-index: 1;
     user-select: none;
 }
-
 /* ── Right: info panel ── */
 .info-panel {
     background: var(--surface);
@@ -225,7 +227,7 @@ body {
     height: 1px;
     background: var(--border);
 }
-
+/* (reverted recent review styles) */
 .description {
     font-size: 14px;
     color: var(--muted);
@@ -248,7 +250,6 @@ body {
     font-weight: 700;
     color: var(--text);
 }
-
 /* Quantity selector */
 .qty-block {
     display: flex;
@@ -284,7 +285,6 @@ body {
     .qty-input:focus {
         border-color: var(--accent);
     }
-
 /* Buttons */
 .btn-add-cart {
     width: 100%;
@@ -333,7 +333,95 @@ body {
         color: var(--accent);
     }
 
-/* Reviews */
+/* ── [YOUR CHANGES] Clickable Product Cards ── */
+.product-card {
+    position: relative;
+}
+
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+    .product-link:hover {
+        filter: brightness(0.98);
+    }
+
+.product-card .product-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 160px;
+    background: linear-gradient(135deg,#111827,#0b1220);
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card .product-body {
+    padding: 12px 10px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+}
+
+.product-card h3 {
+    margin: 6px 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.product-card .action-row {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.product-card .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-card .product-link {
+    cursor: pointer;
+}
+
+.product-card .image-rating {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 5;
+    font-weight: 700;
+    font-size: .85rem;
+}
+
+    .product-card .image-rating .stars i {
+        font-size: .9rem;
+    }
+
+    .product-card .image-rating .avg-text {
+        opacity: .95;
+        margin-left: 2px;
+    }
+
+    .product-card .image-rating .rating-count {
+        opacity: .8;
+        margin-left: 4px;
+        font-weight: 600;
+    }
+
+/* ── [TEAM CHANGES] Reviews Section Styles ── */
 .reviews-section {
     padding: 0 24px 48px;
 }
