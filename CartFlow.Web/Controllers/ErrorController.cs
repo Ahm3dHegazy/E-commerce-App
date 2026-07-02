@@ -4,6 +4,7 @@ namespace CartFlow.Web.Controllers
 {
     public class ErrorController : Controller
     {
+        [HttpGet]
         [Route("Error/{statusCode}")]
         public IActionResult StatusCodeHandler(int statusCode)
         {
