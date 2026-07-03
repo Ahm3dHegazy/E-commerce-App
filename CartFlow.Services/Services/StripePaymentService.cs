@@ -18,7 +18,6 @@ namespace CartFlow.Services.Services {
 				Amount = (long)(amount * 100),
 				Currency = currency,
 				PaymentMethod = paymentMethodId,
-				ConfirmationMethod = "automatic",
 				Confirm = true,
 				AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions {
 					Enabled = true,

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../TrackWeight" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../aimcore" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../blog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../discord-example-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../gitWork" vcs="Git" />
+  </component>
+</project>
