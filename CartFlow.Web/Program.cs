@@ -20,8 +20,6 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 // Register ephemeral in-memory review service for development. Replace with DB-backed impl later.
 builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow.Services.Services.InMemoryReviewService>();
 
-builder.Services.AddScoped<IStripePaymentService, StripePaymentService>();
-
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

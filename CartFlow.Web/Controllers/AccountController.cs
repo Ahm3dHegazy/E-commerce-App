@@ -8,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace CartFlow.Web.Controllers {
-    public class AccountController(IAccountService accountService) : Controller {
+    using CartFlow.Web.Extensions;
+    using CartFlow.Services.Interfaces;
+
+    public class AccountController(IAccountService accountService, ICartService cartService) : Controller {
         public IActionResult SignIn() {
             return View();
         }
@@ -30,9 +33,25 @@ namespace CartFlow.Web.Controllers {
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(principal);
+                // Merge guest session cart (if any) into user's DB cart before finalizing sign-in
+                try
+                {
+                    var guestVm = HttpContext.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
+                    if (guestVm != null && guestVm.Any())
+                    {
+                        var dto = guestVm.Select(g => new GuestCartItemDto { ProductId = g.ProductId, Quantity = g.Quantity }).ToList();
+                        await cartService.MergeGuestCartAsync(user.Id, dto);
+                        HttpContext.Session.Remove("Cart");
+                    }
+                }
+                catch
+                {
+                    // Non-fatal: merging failed; proceed with sign-in so user isn't blocked
+                }
 
-            return RedirectToLocal(returnUrl);
+                await HttpContext.SignInAsync(principal);
+
+                return RedirectToLocal(returnUrl);
         }
 
         public IActionResult SignUp() {
@@ -52,6 +71,22 @@ namespace CartFlow.Web.Controllers {
                 };
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
+
+                // Merge guest cart into newly created user cart
+                try
+                {
+                    var guestVm = HttpContext.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
+                    if (guestVm != null && guestVm.Any())
+                    {
+                        var dto = guestVm.Select(g => new GuestCartItemDto { ProductId = g.ProductId, Quantity = g.Quantity }).ToList();
+                        await cartService.MergeGuestCartAsync(user.Id, dto);
+                        HttpContext.Session.Remove("Cart");
+                    }
+                }
+                catch
+                {
+                    // proceed even if merge fails
+                }
 
                 await HttpContext.SignInAsync(principal);
 
