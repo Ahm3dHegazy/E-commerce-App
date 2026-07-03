@@ -19,7 +19,20 @@ else
     <div class="product-grid">
         @foreach (var p in Model.Products)
         {
-            <div class="product-card">
+            <div class="product-card" style="position:relative;">
+                
+                @{
+                    // التحقق إذا كان المنتج مضاف مسبقاً في الـ Cookies لتلوين القلب عند تحميل الصفحة
+                    var favoritesCookie = Context.Request.Cookies["CartFlow_Favorites"];
+                    var isFavorited = !string.IsNullOrEmpty(favoritesCookie) && favoritesCookie.Split(',').Contains(p.Id.ToString());
+                }
+                <button type="button" class="btn-favorite" onclick="toggleFavorite(@p.Id)"
+                        style="position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(255, 255, 255, 0.85); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); color: #dc3545; transition: transform 0.2s ease, background-color 0.2s;"
+                        onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
+                        aria-label="Toggle Favorite">
+                    <i id="fav-icon-@p.Id" class="bi @(isFavorited ? "bi-heart-fill" : "bi-heart")" style="font-size: 1.2rem;"></i>
+                </button>
+
                 <div class="product-image">
                     <a href="@Url.Action("Details", "Products", new { id = p.Id })" style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
                         @if (!string.IsNullOrEmpty(p.ImageUrl))
@@ -42,7 +55,10 @@ else
 
                     @* Star rating placed below name and above price. Uses shared partial. *@
                     <div class="mt-2" style="display:inline-flex;align-items:center;gap:8px;">
-                        @{ var avg = p.Reviews?.Any() == true ? Math.Round(p.Reviews.Average(r => r.Rate), 1) : 0m; var count = p.Reviews?.Count() ?? 0; }
+                        @{
+                            var avg = p.Reviews?.Any() == true ? Math.Round(p.Reviews.Average(r => r.Rate), 1) : 0m;
+                            var count = p.Reviews?.Count() ?? 0;
+                        }
                         @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
                         <span class="avg-rating-text" style="margin-left:6px;font-weight:600;">@avg.ToString("0.0")</span>
                         <span class="rating-count" style="margin-left:6px;opacity:.8;">(@count reviews)</span>
@@ -58,7 +74,6 @@ else
                     </div>
 
                     <div class="action-row">
-
                         <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="productId" value="@p.Id" />
@@ -73,3 +88,31 @@ else
         }
     </div>
 }
+
+<script>
+    function toggleFavorite(productId) {
+        var token = $('input[name="__RequestVerificationToken"]').val(); // حماية من الـ CSRF
+        
+        $.ajax({
+            url: '/Products/ToggleFavorite',
+            type: 'POST',
+            data: {
+                productId: productId,
+                __RequestVerificationToken: token
+            },
+            success: function (data) {
+                if (data.success) {
+                    var icon = $('#fav-icon-' + productId);
+                    if (data.isAdded) {
+                        icon.removeClass('bi-heart').addClass('bi-heart-fill');
+                    } else {
+                        icon.removeClass('bi-heart-fill').addClass('bi-heart');
+                    }
+                }
+            },
+            error: function () {
+                console.error("Error updating favorites setup.");
+            }
+        });
+    }
+</script>

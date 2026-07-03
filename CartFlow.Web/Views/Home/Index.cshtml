@@ -12,7 +12,8 @@
             <p>Browse our curated collection of products with fast checkout and reliable delivery.</p>
             <div class="action-row">
                 <a class="btn btn-primary" asp-controller="Products" asp-action="Index">Browse products</a>
-                @if (Context.User.Identity?.IsAuthenticated != true) {
+                @if (Context.User.Identity?.IsAuthenticated != true)
+                {
                     <a class="btn btn-outline-primary" asp-controller="Account" asp-action="SignUp">Create account</a>
                 }
             </div>
@@ -23,11 +24,12 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="~/images/hero.png" alt="CartFlow shopping"/>
+            <img src="~/images/hero.png" alt="CartFlow shopping" />
         </div>
     </section>
 
-    @if (featured.Count > 0) {
+    @if (featured.Count > 0)
+    {
         <section class="section-card">
             <div class="section-header section-header--row">
                 <div>
@@ -38,17 +40,32 @@
             </div>
 
             <div class="product-grid mt-3">
-                @foreach (var product in featured) {
-                    <div class="product-card">
+                @foreach (var product in featured)
+                {
+                    <div class="product-card" style="position:relative;">
+                        
+                        @{
+                            var favoritesCookie = Context.Request.Cookies["CartFlow_Favorites"];
+                            var isFavorited = !string.IsNullOrEmpty(favoritesCookie) && favoritesCookie.Split(',').Contains(product.Id.ToString());
+                        }
+                        <button type="button" class="btn-favorite" onclick="toggleFavorite(@product.Id)"
+                                style="position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(255, 255, 255, 0.85); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); color: #dc3545; transition: transform 0.2s ease;"
+                                onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
+                                aria-label="Toggle Favorite">
+                            <i id="fav-icon-@product.Id" class="bi @(isFavorited ? "bi-heart-fill" : "bi-heart")" style="font-size: 1.2rem;"></i>
+                        </button>
+
                         <div class="product-image">
                             <a href="@Url.Action("Details", "Products", new { id = product.Id })"
-                               style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
-                                @if (!string.IsNullOrEmpty(product.ImageUrl)) {
+                                   style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
                                     <img src="@product.ImageUrl" alt="@product.Name"
-                                         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>
-                                } else {
-                                    <span
-                                        style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@product.Initial</span>
+                                         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+                                }
+                                else
+                                {
+                                    <span style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@product.Initial</span>
                                 }
                             </a>
                         </div>
@@ -56,7 +73,9 @@
                             <span class="category-badge">@product.CategoryName</span>
                             <h3>@product.Name</h3>
 
-                            @{ var avg = product.Reviews?.Any() == true ? Math.Round(product.Reviews.Average(r => r.Rate), 1) : 0m; var count = product.Reviews?.Count() ?? 0; }
+                            @{
+                                var avg = product.Reviews?.Any() == true ? Math.Round(product.Reviews.Average(r => r.Rate), 1) : 0m; var count = product.Reviews?.Count() ?? 0;
+                            }
                             <div class="mt-2" style="display:inline-flex;align-items:center;gap:8px;">
                                 @Html.Partial("~/Views/Shared/_StarOnly.cshtml", avg)
                                 <span class="avg-rating-text" style="margin-left:6px;font-weight:600;">@avg.ToString("0.0")</span>
@@ -65,19 +84,24 @@
 
                             <div class="product-meta">
                                 <span class="price">EGP @product.UnitPrice.ToString("N2")</span>
-                                @if (product.StockQuantity > 10) {
+                                @if (product.StockQuantity > 10)
+                                {
                                     <span class="stock-badge stock-in">In stock</span>
-                                } else if (product.StockQuantity > 0) {
+                                }
+                                else if (product.StockQuantity > 0)
+                                {
                                     <span class="stock-badge stock-low">@product.StockQuantity left</span>
-                                } else {
+                                }
+                                else
+                                {
                                     <span class="stock-badge stock-out">Out of stock</span>
                                 }
                             </div>
                             <div class="action-row">
                                 <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" name="productId" value="@product.Id"/>
-                                    <input type="hidden" name="quantity" value="1"/>
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
                                     <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
                                 </form>
 
@@ -106,3 +130,31 @@
         </article>
     </section>
 </div>
+
+<script>
+    function toggleFavorite(productId) {
+        var token = $('input[name="__RequestVerificationToken"]').val();
+        
+        $.ajax({
+            url: '/Products/ToggleFavorite',
+            type: 'POST',
+            data: {
+                productId: productId,
+                __RequestVerificationToken: token
+            },
+            success: function (data) {
+                if (data.success) {
+                    var icon = $('#fav-icon-' + productId);
+                    if (data.isAdded) {
+                        icon.removeClass('bi-heart').addClass('bi-heart-fill');
+                    } else {
+                        icon.removeClass('bi-heart-fill').addClass('bi-heart');
+                    }
+                }
+            },
+            error: function () {
+                console.error("Error processing request on home view.");
+            }
+        });
+    }
+</script>

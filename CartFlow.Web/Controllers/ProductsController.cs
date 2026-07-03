@@ -9,6 +9,8 @@ namespace CartFlow.Web.Controllers;
 
 public class ProductsController(IProductService productService, AppDbContext context, CartFlow.Services.Interfaces.IReviewService reviewService) : Controller
 {
+    private const string FavoritesCookieName = "CartFlow_Favorites";
+
     public async Task<IActionResult> Index(string? searchTerm, int? categoryId)
     {
         var products = await productService.GetAllAsync(searchTerm, categoryId);
@@ -33,7 +35,6 @@ public class ProductsController(IProductService productService, AppDbContext con
             Categories = await context.Categories.ToListAsync()
         };
 
-        // تمرير المراجعات الحقيقية لكروت الصفحة الرئيسية والـ ViewModel سيحسب الـ AverageRating تلقائياً
         if (viewModel.Products.Any())
         {
             var reviewTasks = viewModel.Products.Select(p => reviewService.GetReviewsForProductAsync(p.Id)).ToList();
@@ -72,10 +73,74 @@ public class ProductsController(IProductService productService, AppDbContext con
             Initial = string.IsNullOrEmpty(product.Name) ? string.Empty : product.Name[0].ToString().ToUpper()
         };
 
-        // جلب المراجعات الـ 9 الحقيقية وضخها في الـ ViewModel ليقوم بحساب المتوسط تلقائياً
         var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<ReviewDto>();
         viewModel.Reviews = dtos.ToList();
 
         return View(viewModel);
+    }
+
+    public async Task<IActionResult> Favorites()
+    {
+        var favoritesCookie = Request.Cookies[FavoritesCookieName];
+        var favoriteIds = new List<int>();
+
+        if (!string.IsNullOrEmpty(favoritesCookie))
+        {
+            favoriteIds = favoritesCookie.Split(',')
+                .Select(id => int.TryParse(id, out var parsedId) ? parsedId : 0)
+                .Where(id => id > 0)
+                .ToList();
+        }
+
+        var allProducts = await productService.GetAllAsync(null, null);
+        var favoriteProducts = allProducts.Where(p => favoriteIds.Contains(p.Id)).Select(p => new ProductViewModel
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            UnitPrice = p.UnitPrice,
+            StockQuantity = p.StockQuantity,
+            CategoryName = p.Category?.Name,
+            CategoryId = p.CategoryId,
+            ImageUrl = p.ProductImages?.FirstOrDefault()?.Image,
+            Initial = string.IsNullOrEmpty(p.Name) ? string.Empty : p.Name[0].ToString().ToUpper()
+        }).ToList();
+
+        return View(favoriteProducts);
+    }
+
+    [HttpPost]
+    public IActionResult ToggleFavorite(int productId)
+    {
+        var favoritesCookie = Request.Cookies[FavoritesCookieName];
+        var favoriteIds = new List<string>();
+
+        if (!string.IsNullOrEmpty(favoritesCookie))
+        {
+            favoriteIds = favoritesCookie.Split(',').ToList();
+        }
+
+        bool isAdded;
+        if (favoriteIds.Contains(productId.ToString()))
+        {
+            favoriteIds.Remove(productId.ToString());
+            isAdded = false;
+        }
+        else
+        {
+            favoriteIds.Add(productId.ToString());
+            isAdded = true;
+        }
+
+        var options = new CookieOptions
+        {
+            Expires = DateTime.Now.AddDays(30),
+            Path = "/",
+            HttpOnly = true
+        };
+
+        Response.Cookies.Append(FavoritesCookieName, string.Join(",", favoriteIds), options);
+
+        return Json(new { success = true, isAdded = isAdded });
     }
 }

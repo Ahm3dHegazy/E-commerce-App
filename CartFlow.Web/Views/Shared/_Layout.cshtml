@@ -35,9 +35,16 @@
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
                         
                         <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-1" asp-area="" asp-controller="Products" asp-action="Favorites">
+                                <i class="bi bi-heart-fill text-danger"></i>
+                                Favorites
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
                                 Cart
-                                @{ 
+                                @{
                                     var userIdString = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
                                     int itemsCount = 0;
 
@@ -121,7 +128,6 @@
             <span>&copy; 2026 - CartFlow</span>
             <div class="d-flex gap-3">
                 <a asp-controller="Home" asp-action="About">About Us</a>
-                <!-- 🔥 التعديل هنا: إضافة رابط صفحة الاتصال بنا بشكل صحيح ومتناسق -->
                 <a asp-controller="Home" asp-action="Contact">Contact Us</a>
                 <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
@@ -146,5 +152,6 @@
                 });
             })();
     </script>
-    @await RenderSectionAsync("Scripts", required: false)</body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>

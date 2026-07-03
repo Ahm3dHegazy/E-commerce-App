@@ -1,0 +1,31 @@
+﻿@model List<CartFlow.Web.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "My Favorites";
+}
+
+<div class="container my-5">
+    <h2>My Favorite Products</h2>
+    <hr />
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text text-success fw-bold">EGP @product.UnitPrice</p>
+                            <a href="/Products/Details/@product.Id" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">Your favorites list is empty.</div>
+    }
+</div>
