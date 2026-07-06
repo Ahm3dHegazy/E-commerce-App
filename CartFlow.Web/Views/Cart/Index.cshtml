@@ -15,7 +15,7 @@
                     <p class="section-text">Review and adjust the items before checkout.</p>
                 </div>
                 <div class="summary-chip summary-chip--price">
-                    <strong>@Model.Items.Count</strong>
+                    <strong>@Model.Items.Sum(i => i.Quantity)</strong>
                     <span>items</span>
                 </div>
             </div>
