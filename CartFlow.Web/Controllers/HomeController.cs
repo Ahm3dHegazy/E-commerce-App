@@ -31,11 +31,9 @@ namespace CartFlow.Web.Controllers {
                 Initial = string.IsNullOrEmpty(p.Name) ? string.Empty : p.Name[0].ToString().ToUpper()
             }).ToList();
 
-            var reviewTasks = viewModels.Select(p => _reviewService.GetReviewsForProductAsync(p.Id)).ToList();
-            var reviewResults = await Task.WhenAll(reviewTasks);
-            for (int i = 0; i < viewModels.Count; i++)
+            foreach (var vm in viewModels)
             {
-                viewModels[i].Reviews = reviewResults[i].ToList();
+                vm.Reviews = (await _reviewService.GetReviewsForProductAsync(vm.Id)).ToList();
             }
 
             ViewBag.FeaturedProducts = viewModels;

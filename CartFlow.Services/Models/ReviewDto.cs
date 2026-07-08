@@ -8,6 +8,7 @@ namespace CartFlow.Services.Models
     /// </summary>
     public class ReviewDto
     {
+        public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
         public decimal Rate { get; set; }
         public string Comment { get; set; } = string.Empty;

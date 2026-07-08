@@ -203,9 +203,9 @@
                     {
                         <div class="review-card">
                             <div class="review-header">
-                                <div class="review-avatar">U</div>
+                                <div class="review-avatar">@(string.IsNullOrEmpty(r.UserName) ? "U" : r.UserName[0])</div>
                                 <div class="review-meta">
-                                    <span class="review-name">Verified Buyer</span>
+                                    <span class="review-name">@r.UserName</span>
                                     <div class="review-stars">
                                         @Html.Partial("~/Views/Shared/_StarOnly.cshtml", (decimal)r.Rate)
                                     </div>
@@ -221,6 +221,43 @@
                     <p class="text-muted p-3">No reviews yet for this product. Be the first to review!</p>
                 }
             </div>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="review-form-wrapper">
+                    <h5 class="review-form-heading">Write a Review</h5>
+                    <form asp-action="AddReview" method="post" class="review-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Id" />
+
+                        <div class="form-group">
+                            <label for="rating">Rating</label>
+                            <select name="rating" id="rating" class="form-control" required>
+                                <option value="">Select rating</option>
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment">Comment</label>
+                            <textarea name="comment" id="comment" class="form-control" rows="4" required
+                                      placeholder="Share your experience with this product..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted" style="margin-top:1rem;">
+                    <a asp-controller="Account" asp-action="SignIn">Sign in</a> to write a review.
+                </p>
+            }
         </div>
     </div>
 </div>

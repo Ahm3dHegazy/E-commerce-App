@@ -19,8 +19,7 @@ builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 // Register Stripe payment service
 builder.Services.AddScoped<CartFlow.Services.Interfaces.IStripePaymentService, CartFlow.Services.Services.StripePaymentService>();
-// Register ephemeral in-memory review service for development. Replace with DB-backed impl later.
-builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow.Services.Services.InMemoryReviewService>();
+builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow.Services.Services.ReviewService>();
 
 
 

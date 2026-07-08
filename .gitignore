@@ -12,6 +12,7 @@ packages/
 project.lock.json
 project.assets.json
 .vscode/
+.idea/
 
 # macOS
 .DS_Store

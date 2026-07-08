@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CartFlow.Data.Data;
 using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
@@ -37,12 +38,9 @@ public class ProductsController(IProductService productService, AppDbContext con
 
         if (viewModel.Products.Any())
         {
-            var reviewTasks = viewModel.Products.Select(p => reviewService.GetReviewsForProductAsync(p.Id)).ToList();
-            var reviewResults = await Task.WhenAll(reviewTasks);
-
-            for (int i = 0; i < viewModel.Products.Count; i++)
+            foreach (var p in viewModel.Products)
             {
-                viewModel.Products[i].Reviews = reviewResults[i]?.ToList() ?? new List<ReviewDto>();
+                p.Reviews = (await reviewService.GetReviewsForProductAsync(p.Id))?.ToList() ?? new List<ReviewDto>();
             }
         }
 
@@ -142,5 +140,32 @@ public class ProductsController(IProductService productService, AppDbContext con
         Response.Cookies.Append(FavoritesCookieName, string.Join(",", favoriteIds), options);
 
         return Json(new { success = true, isAdded = isAdded });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddReview(int productId, int rating, string comment)
+    {
+        if (User.Identity?.IsAuthenticated != true)
+            return Challenge();
+
+        if (rating < 1 || rating > 5)
+        {
+            TempData["Error"] = "Rating must be between 1 and 5.";
+            return RedirectToAction("Details", new { id = productId });
+        }
+
+        if (string.IsNullOrWhiteSpace(comment))
+        {
+            TempData["Error"] = "Comment cannot be empty.";
+            return RedirectToAction("Details", new { id = productId });
+        }
+
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+            return Challenge();
+
+        await reviewService.AddReviewAsync(productId, userId, rating, comment);
+        TempData["Success"] = "Review added successfully!";
+        return RedirectToAction("Details", new { id = productId });
     }
 }

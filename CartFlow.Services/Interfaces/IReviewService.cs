@@ -9,4 +9,5 @@ public interface IReviewService
     /// Returns DTOs defined in the Services layer to avoid circular dependencies.
     /// </summary>
     Task<List<ReviewDto>> GetReviewsForProductAsync(int productId);
+    Task AddReviewAsync(int productId, int userId, int rating, string comment);
 }

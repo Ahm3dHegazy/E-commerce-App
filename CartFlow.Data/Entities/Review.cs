@@ -5,6 +5,7 @@ namespace CartFlow.Data.Entities {
     public class Review {
         public int Id { get; set; }
         public string Comment  { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Precision(18, 2)]
         public decimal Rate { get; set; }
