@@ -40,10 +40,14 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        var imagesPath = Path.Combine(
+            env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot"),
+            "images", "products");
 
         await db.Database.MigrateAsync();
 
-        await DbInitializer.SeedAsync(db);
+        await DbInitializer.SeedAsync(db, imagesPath);
     }
     catch (Exception ex)
     {

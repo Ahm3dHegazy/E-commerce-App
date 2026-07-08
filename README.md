@@ -39,14 +39,14 @@
 
 ## Features
 
-- **User Management** — registration, login, profile management
-- **Product Catalog** — category filtering, search, image galleries with thumbnails
-- **Shopping Cart** — guest session cart merges into DB cart on login
-- **Checkout** — seamless Stripe payment integration
-- **Product Reviews** — star ratings with comments, DB-backed
-- **Order Management** — order history with details
-- **Favorites** — cookie-based wishlist for logged-in and guest users
-- **Responsive Design** — mobile-friendly layout with dark/light theme toggle
+- **User Management** - registration, login, profile management
+- **Product Catalog** - category filtering, search, image galleries with thumbnails
+- **Shopping Cart** - guest session cart merges into DB cart on login
+- **Checkout** - seamless Stripe payment integration
+- **Product Reviews** - star ratings with comments, DB-backed
+- **Order Management** - order history with details
+- **Favorites** - cookie-based wishlist for logged-in and guest users
+- **Responsive Design** - mobile-friendly layout with dark/light theme toggle
 
 ---
 
@@ -136,27 +136,27 @@ Use the following test card for payments:
 
 ```
 ecommerce-app/
-├── CartFlow.Web/             — ASP.NET MVC application
-│   ├── Controllers/          — Request handlers
-│   ├── Views/                — Razor UI templates
-│   ├── Models/               — View models
-│   └── wwwroot/              — Static assets (CSS, JS, images)
-├── CartFlow.Services/        — Business logic & DTOs
-│   ├── Interfaces/           — Service contracts
-│   ├── Models/               — Data transfer objects
-│   └── Services/             — Implementations
-├── CartFlow.Data/            — Data layer
-│   ├── Data/                 — DbContext & configurations
-│   ├── Entities/             — Domain models
-│   └── Migrations/           — EF Core schema migrations
-└── CartFlow.sln              — Solution file
+├── CartFlow.Web/             - ASP.NET MVC application
+│   ├── Controllers/          - Request handlers
+│   ├── Views/                - Razor UI templates
+│   ├── Models/               - View models
+│   └── wwwroot/              - Static assets (CSS, JS, images)
+├── CartFlow.Services/        - Business logic & DTOs
+│   ├── Interfaces/           - Service contracts
+│   ├── Models/               - Data transfer objects
+│   └── Services/             - Implementations
+├── CartFlow.Data/            - Data layer
+│   ├── Data/                 - DbContext & configurations
+│   ├── Entities/             - Domain models
+│   └── Migrations/           - EF Core schema migrations
+└── CartFlow.sln              - Solution file
 ```
 
 ---
 
 ## Deployment
 
-### FTP Deployment (Windows Hosting — MonsterASP.net, etc.)
+### FTP Deployment (Windows Hosting - MonsterASP.net, etc.)
 
 ```bash
 dotnet publish CartFlow.Web -c Release -o ./publish

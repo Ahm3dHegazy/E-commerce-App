@@ -9,7 +9,7 @@ namespace CartFlow.Services.Services;
 
 public static class DbInitializer
 {
-    public static async Task SeedAsync(AppDbContext db)
+    public static async Task SeedAsync(AppDbContext db, string imagesBasePath)
     {
         var catApparel = await GetOrCreateCategoryAsync(db, "Apparel", "Clothing and fashion wearables", null);
         var catAccessories = await GetOrCreateCategoryAsync(db, "Accessories", "Small add-ons and complements", null);
@@ -91,12 +91,22 @@ public static class DbInitializer
 
         await db.SaveChangesAsync();
 
-        // Seed product images
+        // Seed product images — remove orphans (DB records with no file on disk)
+        var allImages = await db.ProductImages.ToListAsync();
+        foreach (var img in allImages)
+        {
+            var filePath = Path.Combine(imagesBasePath, img.ProductId.ToString(), Path.GetFileName(img.Image));
+            if (!File.Exists(filePath))
+            {
+                db.ProductImages.Remove(img);
+            }
+        }
+
+        // Add records for any files on disk that don't have a DB record
         var products = await db.Products.ToListAsync();
-        var imagesBase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products");
         foreach (var product in products)
         {
-            var folder = Path.Combine(imagesBase, product.Id.ToString());
+            var folder = Path.Combine(imagesBasePath, product.Id.ToString());
             if (!Directory.Exists(folder)) continue;
 
             var files = Directory.GetFiles(folder)
