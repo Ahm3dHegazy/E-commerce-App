@@ -95,11 +95,14 @@
                     <ul class="navbar-nav align-items-lg-center gap-lg-1">
                         @if (Context.User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown" role="button">
+                            <li class="nav-item dropdown d-flex align-items-center gap-1">
+                                <a class="nav-link" asp-action="Profile" asp-controller="Account">
                                     <i class="bi bi-person-circle fs-5"></i>
                                     @(ViewData["UserName"] ?? Context.User.Identity?.Name ?? "User")
                                 </a>
+                                <button class="btn btn-link nav-link p-0" data-bs-toggle="dropdown" aria-expanded="false" title="Menu">
+                                    <i class="bi bi-list fs-4"></i>
+                                </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" asp-action="Profile" asp-controller="Account">My Profile</a></li>
                                     <li><a class="dropdown-item" asp-action="MyOrders" asp-controller="Orders">My Orders</a></li>
