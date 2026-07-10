@@ -16,7 +16,6 @@ public class AppDbContext : DbContext {
     public DbSet<Category> Categories { get; set; }
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<Review> Reviews { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
