@@ -67,10 +67,11 @@
 ### Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for SQL Server) or LocalDB
 - Stripe test API keys ([get them free](https://dashboard.stripe.com/test/apikeys))
 
 ### Setup
+
+#### macOS
 
 **1. Clone the repository**
 
@@ -79,19 +80,19 @@ git clone https://github.com/4bdurahmann/ecommerce-app.git
 cd ecommerce-app
 ```
 
-**2. Set the connection string**
-
-```bash
-dotnet user-secrets set "ConnectionStrings:constr" "Server=localhost,1433;Database=CartFlow;User Id=sa;Password=your_password;TrustServerCertificate=True;Encrypt=False"
-```
-
-**3. Start SQL Server (Docker)**
+**2. Start SQL Server (Docker)**
 
 ```bash
 docker run -e "ACCEPT_EULA=Y" \
            -e "SA_PASSWORD=your_password" \
            -p 1433:1433 \
            -d mcr.microsoft.com/mssql/server:2022-latest
+```
+
+**3. Set the connection string**
+
+```bash
+dotnet user-secrets set "ConnectionStrings:constr" "Server=localhost,1433;Database=CartFlow;User Id=sa;Password=your_password;TrustServerCertificate=True;Encrypt=False"
 ```
 
 **4. Configure Stripe keys**
@@ -104,6 +105,46 @@ dotnet user-secrets set "StripeKeys:PublishableKey" "pk_test_your_publishable_ke
 **5. Run the application**
 
 ```bash
+cd CartFlow.Web
+dotnet run
+```
+
+#### Windows (LocalDB)
+
+**1. Clone the repository**
+
+```powershell
+git clone https://github.com/4bdurahmann/ecommerce-app.git
+cd ecommerce-app
+```
+
+**2. Install LocalDB** (if not already installed)
+
+LocalDB ships with Visual Studio and SQL Server Express.  
+Verify it's available:
+
+```powershell
+sqllocaldb info
+```
+
+If not installed, download [SQL Server Express](https://go.microsoft.com/fwlink/?linkid=866658) and select **LocalDB** during setup.
+
+**3. Set the connection string**
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:constr" "Server=(localdb)\MSSQLLocalDB;Database=CartFlow;Integrated Security=SSPI;TrustServerCertificate=True"
+```
+
+**4. Configure Stripe keys**
+
+```powershell
+dotnet user-secrets set "StripeKeys:SecretKey" "sk_test_your_secret_key"
+dotnet user-secrets set "StripeKeys:PublishableKey" "pk_test_your_publishable_key"
+```
+
+**5. Run the application**
+
+```powershell
 cd CartFlow.Web
 dotnet run
 ```
