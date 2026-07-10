@@ -16,10 +16,10 @@ namespace CartFlow.Web.Controllers
     public class CheckoutController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly IStripePaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
         private readonly IConfiguration _configuration;
 
-        public CheckoutController(AppDbContext context, IStripePaymentService paymentService, IConfiguration configuration)
+        public CheckoutController(AppDbContext context, IPaymentService paymentService, IConfiguration configuration)
         {
             _context = context;
             _paymentService = paymentService;

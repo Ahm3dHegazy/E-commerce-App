@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Stripe;
 
 namespace CartFlow.Services.Services {
-	public class StripePaymentService : IStripePaymentService {
+	public class StripePaymentService : IPaymentService {
 		private readonly IConfiguration _configuration;
 
 		public StripePaymentService(IConfiguration configuration) {

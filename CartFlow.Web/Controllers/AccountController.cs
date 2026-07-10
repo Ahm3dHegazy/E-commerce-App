@@ -1,6 +1,5 @@
 using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CartFlow.Web.Controllers {
     using CartFlow.Web.Extensions;
     using CartFlow.Services.Interfaces;
+    using Microsoft.AspNetCore.Authentication;
 
     public class AccountController(IAccountService accountService, ICartService cartService) : Controller {
         public IActionResult SignIn() {
