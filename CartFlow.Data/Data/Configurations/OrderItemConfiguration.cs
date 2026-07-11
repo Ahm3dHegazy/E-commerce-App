@@ -10,7 +10,7 @@ namespace CartFlow.Data.Data.Configurations {
             builder.HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(oi => oi.Product)
                 .WithMany(p => p.OrderItems)

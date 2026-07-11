@@ -13,8 +13,8 @@ namespace CartFlow.Services.Services {
 
 		public async Task<PaymentIntentResult> CreatePaymentIntentAsync(decimal amount, string currency,
 			string paymentMethodId) {
-			try {
-			var options = new PaymentIntentCreateOptions {
+			try { 
+				var options = new PaymentIntentCreateOptions {
 				Amount = (long)(amount * 100),
 				Currency = currency,
 				PaymentMethod = paymentMethodId,
