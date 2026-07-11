@@ -1,5 +1,5 @@
 namespace CartFlow.Services.Interfaces {
-	public interface IStripePaymentService {
+	public interface IPaymentService {
 		Task<PaymentIntentResult> CreatePaymentIntentAsync(decimal amount, string currency, string paymentMethodId);
 	}
 
