@@ -1,10 +1,10 @@
 ﻿@model List<CartFlow.Web.Models.ProductViewModel>
 @{
-    ViewData["Title"] = "My Favorites";
+    ViewData["Title"] = "Whishlist";
 }
 
 <div class="container my-5">
-    <h2>My Favorite Products</h2>
+    <h2>Whishlist Products</h2>
     <hr />
     @if (Model.Any())
     {
@@ -26,6 +26,6 @@
     }
     else
     {
-        <div class="alert alert-info">Your favorites list is empty.</div>
+        <div class="alert alert-info">Your whishlist is empty.</div>
     }
 </div>
