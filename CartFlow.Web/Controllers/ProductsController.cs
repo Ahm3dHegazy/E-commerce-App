@@ -77,7 +77,7 @@ public class ProductsController(IProductService productService, AppDbContext con
         return View(viewModel);
     }
 
-    public async Task<IActionResult> Whishlist()
+    public async Task<IActionResult> Wishlist()
     {
         var favoritesCookie = Request.Cookies[FavoritesCookieName];
         var favoriteIds = new List<int>();
