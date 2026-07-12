@@ -1,25 +1,29 @@
-using CartFlow.Services.Interfaces;
 using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 
-namespace CartFlow.Web.Controllers {
-    using CartFlow.Web.Extensions;
+namespace CartFlow.Web.Controllers
+{
     using CartFlow.Services.Interfaces;
+    using CartFlow.Web.Extensions;
     using Microsoft.AspNetCore.Authentication;
 
-    public class AccountController(IAccountService accountService, ICartService cartService) : Controller {
-        public IActionResult SignIn() {
+    public class AccountController(IAccountService accountService, ICartService cartService) : Controller
+    {
+        public IActionResult SignIn()
+        {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(string email, string password, string? returnUrl) {
+        public async Task<IActionResult> SignIn(string email, string password, string? returnUrl)
+        {
             var user = await accountService.SignInAsync(email, password);
-            if (user is null) {
+            if (user is null)
+            {
                 ModelState.AddModelError("", "Invalid Email or Password.");
                 return View();
             }
@@ -33,33 +37,35 @@ namespace CartFlow.Web.Controllers {
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-                // Merge guest session cart (if any) into user's DB cart before finalizing sign-in
-                try
+            // Merge guest session cart (if any) into user's DB cart before finalizing sign-in
+            try
+            {
+                var guestVm = HttpContext.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
+                if (guestVm != null && guestVm.Any())
                 {
-                    var guestVm = HttpContext.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
-                    if (guestVm != null && guestVm.Any())
-                    {
-                        var dto = guestVm.Select(g => new GuestCartItemDto { ProductId = g.ProductId, Quantity = g.Quantity }).ToList();
-                        await cartService.MergeGuestCartAsync(user.Id, dto);
-                        HttpContext.Session.Remove("Cart");
-                    }
+                    var dto = guestVm.Select(g => new GuestCartItemDto { ProductId = g.ProductId, Quantity = g.Quantity }).ToList();
+                    await cartService.MergeGuestCartAsync(user.Id, dto);
+                    HttpContext.Session.Remove("Cart");
                 }
-                catch
-                {
-                    // Non-fatal: merging failed; proceed with sign-in so user isn't blocked
-                }
+            }
+            catch
+            {
+                // Non-fatal: merging failed; proceed with sign-in so user isn't blocked
+            }
 
-                await HttpContext.SignInAsync(principal);
+            await HttpContext.SignInAsync(principal);
 
-                return RedirectToLocal(returnUrl);
+            return RedirectToLocal(returnUrl);
         }
 
-        public IActionResult SignUp() {
+        public IActionResult SignUp()
+        {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp(string firstName, string lastName, string email, string password) {
+        public async Task<IActionResult> SignUp(string firstName, string lastName, string email, string password)
+        {
             try
             {
                 var user = await accountService.SignUpAsync(firstName, lastName, email, password);
@@ -154,12 +160,14 @@ namespace CartFlow.Web.Controllers {
             return RedirectToAction("Profile");
         }
 
-        public async Task<IActionResult> Logout() {
+        public async Task<IActionResult> Logout()
+        {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        private IActionResult RedirectToLocal(string? returnUrl) {
+        private IActionResult RedirectToLocal(string? returnUrl)
+        {
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             return RedirectToAction("Index", "Home");

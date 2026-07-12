@@ -3,7 +3,7 @@ namespace CartFlow.Web.Models
     public class CartItemViewModel
     {
         public int Id { get; set; }
-        public int CartItemId => Id; 
+        public int CartItemId => Id;
         public int ProductId { get; set; }
 
         public string ProductName { get; set; } = string.Empty;

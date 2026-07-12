@@ -192,6 +192,60 @@
         </div>
     </div>
 
+    @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
+    {
+        <div class="related-products-section" style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
+            <h4 class="mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;">Related Products</h4>
+            <div class="product-grid">
+                @foreach (var rp in Model.RelatedProducts)
+                {
+                    <div class="product-card">
+                        <div class="product-image">
+                            <a href="@Url.Action("Details", "Products", new { id = rp.Id })" style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
+                                @if (!string.IsNullOrEmpty(rp.ImageUrl))
+                                {
+                                    <img src="@rp.ImageUrl" alt="@rp.Name" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+                                }
+                                else
+                                {
+                                    <span style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@rp.Initial</span>
+                                }
+                            </a>
+                        </div>
+
+                        <div class="product-body">
+                            <h3>@rp.Name</h3>
+
+                            <div>
+                                <span class="category-badge">@rp.CategoryName</span>
+                            </div>
+
+                            <div class="product-meta">
+                                <span class="price">
+                                    <span style="font-size:.7rem;font-weight:600;opacity:.75;">EGP</span> @rp.UnitPrice.ToString("N2")
+                                </span>
+                                <span class="stock-badge @(rp.StockQuantity > 10 ? "stock-in" : rp.StockQuantity > 0 ? "stock-low" : "stock-out")">
+                                    @(rp.StockQuantity > 10 ? "In Stock" : rp.StockQuantity > 0 ? "Low Stock" : "Out of Stock")
+                                </span>
+                            </div>
+
+                            <div class="action-row">
+                                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100 add-to-cart-form">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@rp.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-primary btn-sm w-100" @(rp.StockQuantity == 0 ? "disabled" : "")>
+                                        @(rp.StockQuantity == 0 ? "Out of stock" : "Add to cart")
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
 <div class="reviews-section">
         <div class="reviews-inner">
             <h4 class="reviews-heading">Reviews <span class="reviews-count">(@Model.ReviewCount)</span></h4>
@@ -218,7 +272,7 @@
                 }
                 else
                 {
-                    <p class="text-muted p-3">No reviews yet for this product. Be the first to review!</p>
+                    <p style="padding: 0.25rem 0; margin-bottom: 0; color: var(--muted);">No reviews yet for this product. Be the first to review!</p>
                 }
             </div>
 
@@ -261,60 +315,6 @@
         </div>
     </div>
 </div>
-
-@if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
-{
-    <div class="related-products-section" style="margin-top: 2.5rem;">
-        <h4 class="mb-3" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;">Related Products</h4>
-        <div class="product-grid">
-            @foreach (var rp in Model.RelatedProducts)
-            {
-                <div class="product-card">
-                    <div class="product-image">
-                        <a href="@Url.Action("Details", "Products", new { id = rp.Id })" style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;">
-                            @if (!string.IsNullOrEmpty(rp.ImageUrl))
-                            {
-                                <img src="@rp.ImageUrl" alt="@rp.Name" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
-                            }
-                            else
-                            {
-                                <span style="font-size:3rem;font-weight:800;color:rgba(255,255,255,.15);user-select:none;">@rp.Initial</span>
-                            }
-                        </a>
-                    </div>
-
-                    <div class="product-body">
-                        <h3>@rp.Name</h3>
-
-                        <div>
-                            <span class="category-badge">@rp.CategoryName</span>
-                        </div>
-
-                        <div class="product-meta">
-                            <span class="price">
-                                <span style="font-size:.7rem;font-weight:600;opacity:.75;">EGP</span> @rp.UnitPrice.ToString("N2")
-                            </span>
-                            <span class="stock-badge @(rp.StockQuantity > 10 ? "stock-in" : rp.StockQuantity > 0 ? "stock-low" : "stock-out")">
-                                @(rp.StockQuantity > 10 ? "In Stock" : rp.StockQuantity > 0 ? "Low Stock" : "Out of Stock")
-                            </span>
-                        </div>
-
-                        <div class="action-row">
-                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100 add-to-cart-form">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="productId" value="@rp.Id" />
-                                <input type="hidden" name="quantity" value="1" />
-                                <button type="submit" class="btn btn-primary btn-sm w-100" @(rp.StockQuantity == 0 ? "disabled" : "")>
-                                    @(rp.StockQuantity == 0 ? "Out of stock" : "Add to cart")
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-}
 
 <script>
     (function(){

@@ -1,66 +1,74 @@
 using CartFlow.Data.Data;
 using CartFlow.Data.Entities;
 using CartFlow.Services.Interfaces;
-using CartFlow.Web.Models;
 using CartFlow.Web.Extensions;
+using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace CartFlow.Web.Controllers {
-	public class CartController : Controller {
-		private readonly AppDbContext _context;
-		private readonly ICartService _cartService;
+namespace CartFlow.Web.Controllers
+{
+    public class CartController : Controller
+    {
+        private readonly AppDbContext _context;
+        private readonly ICartService _cartService;
 
-		public CartController(AppDbContext context, ICartService cartService) {
-			_context = context;
-			_cartService = cartService;
-		}
+        public CartController(AppDbContext context, ICartService cartService)
+        {
+            _context = context;
+            _cartService = cartService;
+        }
 
 
-		public async Task<IActionResult> Index() {
-			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        public async Task<IActionResult> Index()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			var viewModel = new CartViewModel();
+            var viewModel = new CartViewModel();
 
-			// If user is not authenticated, try loading anonymous cart from session
-			if (string.IsNullOrEmpty(userIdString)) {
-				// Try to load anonymous cart from session
-				var sessionItems = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart");
-				if (sessionItems != null) {
-					viewModel.Items = sessionItems;
-				}
+            // If user is not authenticated, try loading anonymous cart from session
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                // Try to load anonymous cart from session
+                var sessionItems = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart");
+                if (sessionItems != null)
+                {
+                    viewModel.Items = sessionItems;
+                }
 
-				return View(viewModel);
-			}
+                return View(viewModel);
+            }
 
-			int userId = int.Parse(userIdString);
+            int userId = int.Parse(userIdString);
 
-			// Load cart for authenticated user
-			var cart = await _context.Carts
-				.Include(c => c.CartItems)
-				.ThenInclude(ci => ci.Product)
-				.ThenInclude(p => p.Category)
-				.Include(c => c.CartItems)
-				.ThenInclude(ci => ci.Product)
-				.ThenInclude(p => p.ProductImages)
-				.FirstOrDefaultAsync(c => c.UserId == userId);
+            // Load cart for authenticated user
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .ThenInclude(p => p.Category)
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .ThenInclude(p => p.ProductImages)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-			if (cart != null) {
-				viewModel.Items = cart.CartItems.Select(ci => new CartItemViewModel {
-					Id = ci.Id,
-					ProductName = ci.Product.Name,
-					CategoryName = ci.Product.Category?.Name ?? "No Category",
-					UnitPrice = ci.UnitPrice,
-					Quantity = ci.Quantity,
-					ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
-					           ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
-					           ?? string.Empty
-				}).ToList();
-			}
+            if (cart != null)
+            {
+                viewModel.Items = cart.CartItems.Select(ci => new CartItemViewModel
+                {
+                    Id = ci.Id,
+                    ProductName = ci.Product.Name,
+                    CategoryName = ci.Product.Category?.Name ?? "No Category",
+                    UnitPrice = ci.UnitPrice,
+                    Quantity = ci.Quantity,
+                    ImageUrl = ci.Product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                               ?? ci.Product.ProductImages?.FirstOrDefault()?.Image
+                               ?? string.Empty
+                }).ToList();
+            }
 
-			return View(viewModel);
-		}
+            return View(viewModel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -169,40 +177,48 @@ namespace CartFlow.Web.Controllers {
 
         // 3. [HttpPost] RemoveFromCart: حذف عنصر من السلة
         [HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> RemoveFromCart(int cartItemId) {
-			var cartItem = await _context.CartItems.FindAsync(cartItemId);
-			if (cartItem != null) {
-				_context.CartItems.Remove(cartItem);
-				await _context.SaveChangesAsync();
-			}
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromCart(int cartItemId)
+        {
+            var cartItem = await _context.CartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                _context.CartItems.Remove(cartItem);
+                await _context.SaveChangesAsync();
+            }
 
-			return RedirectToAction(nameof(Index));
-		}
+            return RedirectToAction(nameof(Index));
+        }
 
-		// 4. [HttpPost] UpdateQuantity: تحديث الكمية
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> UpdateQuantity(int cartItemId, int quantity) {
-			var cartItem = await _context.CartItems.FindAsync(cartItemId);
-			if (cartItem != null) {
-				if (quantity <= 0) {
-					_context.CartItems.Remove(cartItem);
-				} else {
-					cartItem.Quantity = quantity;
-				}
+        // 4. [HttpPost] UpdateQuantity: تحديث الكمية
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateQuantity(int cartItemId, int quantity)
+        {
+            var cartItem = await _context.CartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                if (quantity <= 0)
+                {
+                    _context.CartItems.Remove(cartItem);
+                }
+                else
+                {
+                    cartItem.Quantity = quantity;
+                }
 
-				await _context.SaveChangesAsync();
-			}
+                await _context.SaveChangesAsync();
+            }
 
-			return RedirectToAction(nameof(Index));
-		}
+            return RedirectToAction(nameof(Index));
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ClearCart() {
-			await _cartService.ClearCartAsync();
-			return RedirectToAction(nameof(Index));
-		}
-	}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearCart()
+        {
+            await _cartService.ClearCartAsync();
+            return RedirectToAction(nameof(Index));
+        }
+    }
 }

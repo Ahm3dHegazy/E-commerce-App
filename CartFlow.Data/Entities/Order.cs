@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CartFlow.Data.Entities {
-    public class Order {
+namespace CartFlow.Data.Entities
+{
+    public class Order
+    {
         public int Id { get; set; }
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]

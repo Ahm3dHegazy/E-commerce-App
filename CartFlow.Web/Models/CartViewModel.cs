@@ -1,5 +1,7 @@
-namespace CartFlow.Web.Models {
-    public class CartViewModel {
+namespace CartFlow.Web.Models
+{
+    public class CartViewModel
+    {
         public List<CartItemViewModel> Items { get; set; } = new();
 
         public decimal Shipping { get; set; } = 5.00m;

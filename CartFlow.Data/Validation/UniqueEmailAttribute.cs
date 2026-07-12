@@ -1,8 +1,6 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using CartFlow.Data.Data;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace CartFlow.Data.Validation
 {

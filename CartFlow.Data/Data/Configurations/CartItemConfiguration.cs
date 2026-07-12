@@ -2,9 +2,12 @@ using CartFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartFlow.Data.Data.Configurations {
-    public class CartItemConfiguration : IEntityTypeConfiguration<CartItem> {
-        public void Configure(EntityTypeBuilder<CartItem> builder) {
+namespace CartFlow.Data.Data.Configurations
+{
+    public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
+    {
+        public void Configure(EntityTypeBuilder<CartItem> builder)
+        {
             builder.HasKey(ci => ci.Id);
 
             builder.HasOne(ci => ci.Cart)

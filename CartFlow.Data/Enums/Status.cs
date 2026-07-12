@@ -1,5 +1,7 @@
-namespace CartFlow.Data.Enums {
-    public enum Status {
+namespace CartFlow.Data.Enums
+{
+    public enum Status
+    {
         Ordered,
         Shipped,
         Delivered,

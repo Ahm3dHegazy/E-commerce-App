@@ -1,5 +1,7 @@
-namespace CartFlow.Web.Models {
-    public class CheckoutViewModel {
+namespace CartFlow.Web.Models
+{
+    public class CheckoutViewModel
+    {
         public string FirstName { get; set; } = string.Empty;
 
         public string LastName { get; set; } = string.Empty;

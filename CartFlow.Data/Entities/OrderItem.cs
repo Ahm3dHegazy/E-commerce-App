@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace CartFlow.Data.Entities {
-    public class OrderItem {
+namespace CartFlow.Data.Entities
+{
+    public class OrderItem
+    {
         public int Id { get; set; }
         public int Quantity { get; set; }
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace CartFlow.Services.Models
 {
     /// <summary>

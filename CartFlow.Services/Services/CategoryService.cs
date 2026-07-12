@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CartFlow.Services.Services;
 
-public class CategoryService(AppDbContext context) : ICategoryService {
-    public async Task<List<Category>> GetAllWithHierarchyAsync() {
+public class CategoryService(AppDbContext context) : ICategoryService
+{
+    public async Task<List<Category>> GetAllWithHierarchyAsync()
+    {
         return await context.Categories
             .Include(c => c.Subcategories)
                 .ThenInclude(sc => sc.Products)

@@ -24,7 +24,8 @@ builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => {
+    .AddCookie(options =>
+    {
         options.LoginPath = "/Account/SignIn";
         options.LogoutPath = "/Account/Logout";
         options.AccessDeniedPath = "/Account/SignIn";

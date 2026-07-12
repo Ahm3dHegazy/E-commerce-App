@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace CartFlow.Data.Entities {
-    public class CartItem {
+namespace CartFlow.Data.Entities
+{
+    public class CartItem
+    {
         public int Id { get; set; }
         public int CartId { get; set; }
         [ForeignKey(nameof(CartId))]

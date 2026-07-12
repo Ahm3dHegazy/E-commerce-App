@@ -1,14 +1,11 @@
 ﻿using CartFlow.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using CartFlow.Data.Validation;
+using System.ComponentModel.DataAnnotations;
 
-namespace CartFlow.Data.Entities {
-    public class User {
+namespace CartFlow.Data.Entities
+{
+    public class User
+    {
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

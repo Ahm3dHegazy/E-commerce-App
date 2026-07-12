@@ -2,9 +2,12 @@ using CartFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartFlow.Data.Data.Configurations {
-    public class ReviewConfiguration : IEntityTypeConfiguration<Review> {
-        public void Configure(EntityTypeBuilder<Review> builder) {
+namespace CartFlow.Data.Data.Configurations
+{
+    public class ReviewConfiguration : IEntityTypeConfiguration<Review>
+    {
+        public void Configure(EntityTypeBuilder<Review> builder)
+        {
             builder.HasKey(r => r.Id);
 
             builder.Property(r => r.Comment)

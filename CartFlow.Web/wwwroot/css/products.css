@@ -511,7 +511,7 @@ body {
 
 /* ── Review Form ── */
 .review-form-wrapper {
-    margin-top: 1.5rem;
+    margin-top: 0.75rem;
     padding: 1.5rem;
     background: var(--surface);
     border: 1px solid var(--border);

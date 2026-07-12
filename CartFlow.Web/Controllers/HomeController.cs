@@ -3,17 +3,21 @@ using CartFlow.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace CartFlow.Web.Controllers {
-    public class HomeController : Controller {
+namespace CartFlow.Web.Controllers
+{
+    public class HomeController : Controller
+    {
         private readonly IProductService _productService;
         private readonly IReviewService _reviewService;
 
-        public HomeController(IProductService productService, IReviewService reviewService) {
+        public HomeController(IProductService productService, IReviewService reviewService)
+        {
             _productService = productService;
             _reviewService = reviewService;
         }
 
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index()
+        {
             var products = await _productService.GetFeaturedAsync(6);
 
             var viewModels = products.Select(p => new ProductViewModel
@@ -40,12 +44,14 @@ namespace CartFlow.Web.Controllers {
             return View();
         }
 
-        public IActionResult Privacy() {
+        public IActionResult Privacy()
+        {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() {
+        public IActionResult Error()
+        {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         public IActionResult About()

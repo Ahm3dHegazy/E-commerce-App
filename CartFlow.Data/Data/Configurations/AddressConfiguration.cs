@@ -1,13 +1,13 @@
 using CartFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace CartFlow.Data.Data.Configurations {
-    public class AddressConfiguration : IEntityTypeConfiguration<Address> {
-        public void Configure(EntityTypeBuilder<Address> builder) {
+namespace CartFlow.Data.Data.Configurations
+{
+    public class AddressConfiguration : IEntityTypeConfiguration<Address>
+    {
+        public void Configure(EntityTypeBuilder<Address> builder)
+        {
             builder.HasKey(e => e.Id);
 
             builder.Property(e => e.Governorate)

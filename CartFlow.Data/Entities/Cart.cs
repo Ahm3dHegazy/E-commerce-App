@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CartFlow.Data.Entities {
-    public class Cart {
+namespace CartFlow.Data.Entities
+{
+    public class Cart
+    {
         public int Id { get; set; }
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]

@@ -1,5 +1,7 @@
-namespace CartFlow.Data.Enums {
-    public enum Role {
+namespace CartFlow.Data.Enums
+{
+    public enum Role
+    {
         ADMIN,
         CUSTOMER
     }

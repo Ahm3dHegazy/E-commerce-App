@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace CartFlow.Data.Entities {
-    public class Address {
+namespace CartFlow.Data.Entities
+{
+    public class Address
+    {
         public int Id { get; set; }
         public string Governorate { get; set; }
         public string City { get; set; }

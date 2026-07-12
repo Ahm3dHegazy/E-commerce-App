@@ -1,11 +1,13 @@
 using CartFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static CartFlow.Data.Entities.User;
 
-namespace CartFlow.Data.Data.Configurations {
-    public class UserConfiguration : IEntityTypeConfiguration<User> {
-        public void Configure(EntityTypeBuilder<User> builder) {
+namespace CartFlow.Data.Data.Configurations
+{
+    public class UserConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
             builder.HasKey(e => e.Id);
 
             builder.Property(e => e.FirstName)

@@ -2,9 +2,12 @@ using CartFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartFlow.Data.Data.Configurations {
-    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage> {
-        public void Configure(EntityTypeBuilder<ProductImage> builder) {
+namespace CartFlow.Data.Data.Configurations
+{
+    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
+    {
+        public void Configure(EntityTypeBuilder<ProductImage> builder)
+        {
             builder.HasKey(pi => pi.Id);
 
             builder.Property(pi => pi.Image)
