@@ -49,5 +49,41 @@ public class ProductService(AppDbContext context) : IProductService
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<List<Product>> GetRelatedAsync(int productId, int categoryId, int count)
+    {
+        var sameCategory = await context.Products
+            .Include(p => p.Category)
+            .Include(p => p.ProductImages)
+            .Include(p => p.Reviews)
+            .Where(p => p.CategoryId == categoryId && p.Id != productId)
+            .ToListAsync();
+
+        var related = sameCategory
+            .OrderBy(_ => Random.Shared.Next())
+            .Take(count)
+            .ToList();
+
+        // Not enough products in the same category: top up with other products
+        // so the section still shows a full row.
+        if (related.Count < count)
+        {
+            var excludedIds = related.Select(p => p.Id).Append(productId).ToList();
+
+            var fillerProducts = await context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductImages)
+                .Include(p => p.Reviews)
+                .Where(p => !excludedIds.Contains(p.Id))
+                .ToListAsync();
+
+            related.AddRange(fillerProducts
+                .OrderBy(_ => Random.Shared.Next())
+                .Take(count - related.Count));
+        }
+
+        return related;
+    }
+
+
 
 }

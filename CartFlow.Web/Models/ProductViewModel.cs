@@ -19,6 +19,8 @@
         // القائمة الحقيقية للمراجعات
         public List<CartFlow.Services.Models.ReviewDto> Reviews { get; set; } = new();
 
+        public List<ProductViewModel> RelatedProducts { get; set; } = new();
+
         // الخصائص الذكية المحسوبة ديناميكياً تلقائياً بمجرد ملء القائمة أعلاه 🔥
         public decimal AverageRating => Reviews?.Any() == true ? (decimal)Math.Round(Reviews.Average(r => r.Rate), 2) : 0m;
         public int ReviewCount => Reviews?.Count() ?? 0;

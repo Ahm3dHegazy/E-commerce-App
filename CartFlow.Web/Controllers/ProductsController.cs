@@ -74,6 +74,20 @@ public class ProductsController(IProductService productService, AppDbContext con
         var dtos = (await reviewService.GetReviewsForProductAsync(product.Id)) ?? new List<ReviewDto>();
         viewModel.Reviews = dtos.ToList();
 
+        var related = await productService.GetRelatedAsync(product.Id, product.CategoryId, 4);
+        viewModel.RelatedProducts = related.Select(p => new ProductViewModel
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            UnitPrice = p.UnitPrice,
+            StockQuantity = p.StockQuantity,
+            CategoryName = p.Category?.Name,
+            CategoryId = p.CategoryId,
+            ImageUrl = p.ProductImages?.FirstOrDefault()?.Image,
+            Initial = string.IsNullOrEmpty(p.Name) ? string.Empty : p.Name[0].ToString().ToUpper()
+        }).ToList();
+
         return View(viewModel);
     }
 
