@@ -3,6 +3,8 @@
     ViewData["Title"] = "Wishlist";
 }
 
+@Html.AntiForgeryToken()
+
 <div class="container my-5">
     <div class="d-flex align-items-center gap-3 mb-4">
         <i class="bi bi-heart fs-2"></i>
@@ -10,14 +12,20 @@
     </div>
     <hr />
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-            @foreach (var product in Model)
+    <div id="wishlistGrid" class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" style="display: @(Model != null && Model.Any() ? "flex" : "none");">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
             {
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 product-card" style="position:relative; transition: transform 0.2s; border-radius: 12px; overflow: hidden;">
-                        
+                <div class="col" id="wishlist-item-@product.Id">
+                    <div class="card h-100 shadow-sm border-0 product-card" style="position:relative; transition: transform 0.2s, opacity 0.25s; border-radius: 12px; overflow: hidden;">
+
+                        <button type="button" class="btn-remove-wishlist" data-product-id="@product.Id"
+                                aria-label="Remove from wishlist"
+                                style="position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); color: #6c757d; transition: transform 0.2s ease, background-color 0.2s, color 0.2s;">
+                            <i class="bi bi-x-lg" style="font-size: 1rem;"></i>
+                        </button>
+
                         <div class="product-image" style="height: 240px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; position: relative;">
                             @if (!string.IsNullOrEmpty(product.ImageUrl))
                             {
@@ -34,7 +42,7 @@
                                 <span class="badge bg-light text-secondary mb-2" style="font-size: 0.75rem;">@product.CategoryName</span>
                                 <h5 class="card-title text-dark text-truncate" style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem;">@product.Name</h5>
                             </div>
-                            
+
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="text-success fw-bold" style="font-size: 1.1rem;">
                                     <span style="font-size: 0.75rem; font-weight: 600; opacity: 0.8;">EGP</span> @product.UnitPrice.ToString("N2")
@@ -45,17 +53,73 @@
                     </div>
                 </div>
             }
+        }
+    </div>
+
+    <div id="wishlistEmptyState" class="text-center py-5" style="display: @(Model != null && Model.Any() ? "none" : "block");">
+        <div class="mb-3 text-muted">
+            <i class="bi bi-heart" style="font-size: 4rem; opacity: 0.3;"></i>
         </div>
-    }
-    else
-    {
-        <div class="text-center py-5">
-            <div class="mb-3 text-muted">
-                <i class="bi bi-heart" style="font-size: 4rem; opacity: 0.3;"></i>
-            </div>
-            <h3 class="text-secondary">Your wishlist is empty</h3>
-            <p class="text-muted">Explore our products and tap the heart icon to save your top picks here.</p>
-            <a href="/Products" class="btn btn-primary rounded-pill mt-3 px-4">Browse Products</a>
-        </div>
-    }
+        <h3 class="text-secondary">Your wishlist is empty</h3>
+        <p class="text-muted">Explore our products and tap the heart icon to save your top picks here.</p>
+        <a href="/Products" class="btn btn-primary rounded-pill mt-3 px-4">Browse Products</a>
+    </div>
 </div>
+
+<script>
+    document.querySelectorAll('.btn-remove-wishlist').forEach(function (btn) {
+        btn.addEventListener('mouseover', function () {
+            btn.style.transform = 'scale(1.1)';
+            btn.style.backgroundColor = '#dc3545';
+            btn.style.color = '#fff';
+        });
+        btn.addEventListener('mouseout', function () {
+            btn.style.transform = 'scale(1)';
+            btn.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            btn.style.color = '#6c757d';
+        });
+
+        btn.addEventListener('click', async function () {
+            if (btn.disabled) return;
+            btn.disabled = true;
+
+            var productId = btn.getAttribute('data-product-id');
+            var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            var card = document.getElementById('wishlist-item-' + productId);
+
+            try {
+                var formData = new FormData();
+                formData.append('productId', productId);
+                formData.append('__RequestVerificationToken', token);
+
+                const res = await fetch('/Products/ToggleFavorite', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!res.ok) throw new Error('Network response was not ok');
+                const data = await res.json();
+
+                if (data.success && card) {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    setTimeout(function () {
+                        card.remove();
+
+                        var grid = document.getElementById('wishlistGrid');
+                        var emptyState = document.getElementById('wishlistEmptyState');
+                        if (grid && grid.children.length === 0) {
+                            grid.style.display = 'none';
+                            if (emptyState) emptyState.style.display = 'block';
+                        }
+                    }, 250);
+                } else {
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                console.error('Error removing item from wishlist', e);
+                btn.disabled = false;
+            }
+        });
+    });
+</script>
