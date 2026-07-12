@@ -62,85 +62,113 @@ namespace CartFlow.Web.Controllers {
 			return View(viewModel);
 		}
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> AddToCart(int productId, int quantity) {
-			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			var product = await _context.Products
-				.Include(p => p.ProductImages)
-				.Include(p => p.Category)
-				.FirstOrDefaultAsync(p => p.Id == productId);
+            var product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == productId);
 
-			if (product == null) {
-				return NotFound();
-			}
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-			if (string.IsNullOrEmpty(userIdString)) {
-				// Anonymous user: store cart in session
-				var sessionCart = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart") ??
-				                  new List<CartItemViewModel>();
-				var existing = sessionCart.FirstOrDefault(ci => ci.ProductId == productId);
-				if (existing != null) {
-					existing.Quantity += quantity;
-					existing.UnitPrice = product.UnitPrice;
-				} else {
-					sessionCart.Add(new CartItemViewModel {
-						ProductId = productId,
-						ProductName = product.Name,
-						CategoryName = product.Category?.Name ?? "No Category",
-						UnitPrice = product.UnitPrice,
-						Quantity = quantity,
-						ImageUrl = product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
-						           ?? product.ProductImages?.FirstOrDefault()?.Image
-						           ?? string.Empty
-					});
-				}
+            int cartCount;
 
-				HttpContext.Session.SetObject("Cart", sessionCart);
-			} else {
-				int userId = int.Parse(userIdString);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                // Anonymous user: store cart in session
+                var sessionCart = HttpContext.Session.GetObject<List<CartItemViewModel>>("Cart") ??
+                                  new List<CartItemViewModel>();
+                var existing = sessionCart.FirstOrDefault(ci => ci.ProductId == productId);
+                if (existing != null)
+                {
+                    existing.Quantity += quantity;
+                    existing.UnitPrice = product.UnitPrice;
+                }
+                else
+                {
+                    sessionCart.Add(new CartItemViewModel
+                    {
+                        ProductId = productId,
+                        ProductName = product.Name,
+                        CategoryName = product.Category?.Name ?? "No Category",
+                        UnitPrice = product.UnitPrice,
+                        Quantity = quantity,
+                        ImageUrl = product.ProductImages?.FirstOrDefault(pi => pi.IsPrimary)?.Image
+                                   ?? product.ProductImages?.FirstOrDefault()?.Image
+                                   ?? string.Empty
+                    });
+                }
 
-				// Find or create cart for authenticated user
-				var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
-				if (cart == null) {
-					cart = new Cart {
-						UserId = userId
-					};
-					_context.Carts.Add(cart);
-					await _context.SaveChangesAsync(); // save to generate id
-				}
+                HttpContext.Session.SetObject("Cart", sessionCart);
+                cartCount = sessionCart.Sum(ci => ci.Quantity);
+            }
+            else
+            {
+                int userId = int.Parse(userIdString);
 
-				var cartItem = await _context.CartItems
-					.FirstOrDefaultAsync(ci => ci.CartId == cart.Id && ci.ProductId == productId);
+                // Find or create cart for authenticated user
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
+                if (cart == null)
+                {
+                    cart = new Cart
+                    {
+                        UserId = userId
+                    };
+                    _context.Carts.Add(cart);
+                    await _context.SaveChangesAsync(); // save to generate id
+                }
 
-				if (cartItem != null) {
-					cartItem.Quantity += quantity;
-					cartItem.UnitPrice = product.UnitPrice;
-				} else {
-					cartItem = new CartItem {
-						CartId = cart.Id,
-						ProductId = productId,
-						Quantity = quantity,
-						UnitPrice = product.UnitPrice
-					};
-					_context.CartItems.Add(cartItem);
-				}
+                var cartItem = await _context.CartItems
+                    .FirstOrDefaultAsync(ci => ci.CartId == cart.Id && ci.ProductId == productId);
 
-				await _context.SaveChangesAsync();
-			}
+                if (cartItem != null)
+                {
+                    cartItem.Quantity += quantity;
+                    cartItem.UnitPrice = product.UnitPrice;
+                }
+                else
+                {
+                    cartItem = new CartItem
+                    {
+                        CartId = cart.Id,
+                        ProductId = productId,
+                        Quantity = quantity,
+                        UnitPrice = product.UnitPrice
+                    };
+                    _context.CartItems.Add(cartItem);
+                }
 
-			// Return user to referring page when possible
-			string? returnUrl = Request.Headers["Referer"].ToString();
-			if (!string.IsNullOrEmpty(returnUrl)) {
-				return Redirect(returnUrl);
-			}
+                await _context.SaveChangesAsync();
 
-			return RedirectToAction(nameof(Index));
-		}
+                cartCount = await _context.CartItems
+                    .Where(ci => ci.CartId == cart.Id)
+                    .SumAsync(ci => ci.Quantity);
+            }
 
-		// 3. [HttpPost] RemoveFromCart: حذف عنصر من السلة
-		[HttpPost]
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, cartCount });
+            }
+
+            // Return user to referring page when possible
+            string? returnUrl = Request.Headers["Referer"].ToString();
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 3. [HttpPost] RemoveFromCart: حذف عنصر من السلة
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> RemoveFromCart(int cartItemId) {
 			var cartItem = await _context.CartItems.FindAsync(cartItemId);

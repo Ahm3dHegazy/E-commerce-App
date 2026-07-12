@@ -20,7 +20,7 @@ else
         @foreach (var p in Model.Products)
         {
             <div class="product-card" style="position:relative;">
-                
+
                 @{
                     // التحقق إذا كان المنتج مضاف مسبقاً في الـ Cookies لتلوين القلب عند تحميل الصفحة
                     var favoritesCookie = Context.Request.Cookies["CartFlow_Favorites"];
@@ -74,7 +74,7 @@ else
                     </div>
 
                     <div class="action-row">
-                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100">
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="w-100 add-to-cart-form">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="productId" value="@p.Id" />
                             <input type="hidden" name="quantity" value="1" />
@@ -92,7 +92,7 @@ else
 <script>
     function toggleFavorite(productId) {
         var token = $('input[name="__RequestVerificationToken"]').val(); // حماية من الـ CSRF
-        
+
         $.ajax({
             url: '/Products/ToggleFavorite',
             type: 'POST',

@@ -74,14 +74,11 @@
                                             itemsCount = 0;
                                         }
                                     }
-
-                                    if (itemsCount > 0)
-                                    {
-                                        <span class="badge bg-danger rounded-pill" style="position: absolute; top: -2px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.45em;">
-                                            @itemsCount
-                                        </span>
-                                    }
                                 }
+                                <span id="cartCountBadge" class="badge bg-danger rounded-pill"
+                                      style="position: absolute; top: -2px; right: -8px; font-size: 0.65rem; padding: 0.25em 0.45em; display: @(itemsCount > 0 ? "inline-block" : "none");">
+                                    @itemsCount
+                                </span>
                             </a>
                         </li>
                     </ul>
@@ -141,9 +138,79 @@
         </div>
     </footer>
 
+    <div class="cart-modal-overlay" id="cartModalOverlay">
+        <div class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cartModalMessage">
+            <button type="button" class="cart-modal-close" id="cartModalClose" aria-label="Close">&times;</button>
+            <p class="cart-modal-message" id="cartModalMessage">Product was successfully added to your cart.</p>
+            <div class="cart-modal-actions">
+                <button type="button" class="btn-continue-shopping" id="cartModalContinue">Continue shopping</button>
+                <a class="btn-view-cart" asp-controller="Cart" asp-action="Index">View Cart</a>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            var overlay = document.getElementById('cartModalOverlay');
+            if (!overlay) return;
+
+            function hide() { overlay.classList.remove('show'); }
+
+            window.showAddedToCartModal = function () { overlay.classList.add('show'); };
+
+            document.getElementById('cartModalClose').addEventListener('click', hide);
+            document.getElementById('cartModalContinue').addEventListener('click', hide);
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) hide();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') hide();
+            });
+        })();
+
+        // Intercept every "Add to Cart" form and submit it via fetch so the
+        // confirmation modal can be shown without a full page reload.
+        document.addEventListener('submit', async function (e) {
+            var form = e.target;
+            if (!form.classList || !form.classList.contains('add-to-cart-form')) return;
+
+            e.preventDefault();
+            var button = form.querySelector('button[type="submit"]');
+            var originalDisabled = button ? button.disabled : false;
+            if (button) button.disabled = true;
+
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: new FormData(form)
+                });
+
+                if (!res.ok) throw new Error('Network response was not ok');
+
+                const data = await res.json();
+
+                var badge = document.getElementById('cartCountBadge');
+                if (badge && typeof data.cartCount === 'number') {
+                    badge.textContent = data.cartCount;
+                    badge.style.display = data.cartCount > 0 ? 'inline-block' : 'none';
+                }
+
+                if (typeof window.showAddedToCartModal === 'function') {
+                    window.showAddedToCartModal();
+                }
+            } catch (err) {
+                console.error('Add to cart error', err);
+                // Fall back to a normal form submission if the request failed.
+                form.submit();
+            } finally {
+                if (button) button.disabled = originalDisabled;
+            }
+        });
+    </script>
     <script>
             (function() {
                 var btn = document.getElementById('themeToggle');
