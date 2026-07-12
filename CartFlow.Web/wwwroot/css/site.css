@@ -1713,106 +1713,38 @@ body {
 }
 
 /* Add-to-cart confirmation modal */
-.cart-modal-overlay {
-    display: none;
+.cart-toast {
     position: fixed;
-    inset: 0;
-    background: rgba(26, 26, 46, 0.65);
-    z-index: 1080;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-    .cart-modal-overlay.show {
-        display: flex;
-    }
-
-.cart-modal {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-hover);
-    width: 100%;
-    max-width: 420px;
-    padding: 2rem 1.75rem 1.75rem;
-    position: relative;
-    text-align: center;
-    animation: cart-modal-in 0.2s ease-out;
-}
-
-@keyframes cart-modal-in {
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.cart-modal-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.9rem;
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    line-height: 1;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 0.25rem;
-}
-
-    .cart-modal-close:hover {
-        color: var(--text);
-    }
-
-.cart-modal-message {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: var(--text);
-    margin: 0 0 1.5rem;
-    line-height: 1.35;
-}
-
-.cart-modal-actions {
+    top: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: var(--accent);
+    color: var(--text-inverse);
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    z-index: 1100;
     display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
 }
 
-    .cart-modal-actions .btn-continue-shopping,
-    .cart-modal-actions .btn-view-cart {
-        border: none;
-        border-radius: 999px;
-        padding: 0.65rem 1.4rem;
-        font-weight: 600;
-        font-size: 0.95rem;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
+    .cart-toast.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+        pointer-events: auto;
     }
 
-    .cart-modal-actions .btn-continue-shopping {
-        background: var(--surface-alt);
-        color: var(--text);
-    }
+.cart-toast-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+}
 
-        .cart-modal-actions .btn-continue-shopping:hover {
-            background: var(--border);
-        }
-
-    .cart-modal-actions .btn-view-cart {
-        background: var(--accent);
-        color: var(--text-inverse);
-    }
-
-        .cart-modal-actions .btn-view-cart:hover {
-            background: var(--accent-hover);
-            color: var(--text-inverse);
-        }
+.cart-toast-message {
+    line-height: 1.3;
+}

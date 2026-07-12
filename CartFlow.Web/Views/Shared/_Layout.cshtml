@@ -138,41 +138,28 @@
         </div>
     </footer>
 
-    <div class="cart-modal-overlay" id="cartModalOverlay">
-        <div class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cartModalMessage">
-            <button type="button" class="cart-modal-close" id="cartModalClose" aria-label="Close">&times;</button>
-            <p class="cart-modal-message" id="cartModalMessage">Product was successfully added to your cart.</p>
-            <div class="cart-modal-actions">
-                <button type="button" class="btn-continue-shopping" id="cartModalContinue">Continue shopping</button>
-                <a class="btn-view-cart" asp-controller="Cart" asp-action="Index">View Cart</a>
-            </div>
-        </div>
+    <div class="cart-toast" id="cartToast">
+        <span class="cart-toast-icon">&#10003;</span>
+        <span class="cart-toast-message" id="cartToastMessage">Product was successfully added to your cart.</span>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-        (function () {
-            var overlay = document.getElementById('cartModalOverlay');
-            if (!overlay) return;
+        var toastEl = document.getElementById('cartToast');
+        var toastTimer = null;
+        var toastMessage = document.getElementById('cartToastMessage');
 
-            function hide() { overlay.classList.remove('show'); }
+        window.showCartToast = function (msg) {
+            if (toastTimer) clearTimeout(toastTimer);
+            if (msg) toastMessage.textContent = msg;
+            toastEl.classList.add('show');
+            toastTimer = setTimeout(function () {
+                toastEl.classList.remove('show');
+            }, 3000);
+        };
 
-            window.showAddedToCartModal = function () { overlay.classList.add('show'); };
-
-            document.getElementById('cartModalClose').addEventListener('click', hide);
-            document.getElementById('cartModalContinue').addEventListener('click', hide);
-            overlay.addEventListener('click', function (e) {
-                if (e.target === overlay) hide();
-            });
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') hide();
-            });
-        })();
-
-        // Intercept every "Add to Cart" form and submit it via fetch so the
-        // confirmation modal can be shown without a full page reload.
         document.addEventListener('submit', async function (e) {
             var form = e.target;
             if (!form.classList || !form.classList.contains('add-to-cart-form')) return;
@@ -199,12 +186,9 @@
                     badge.style.display = data.cartCount > 0 ? 'inline-block' : 'none';
                 }
 
-                if (typeof window.showAddedToCartModal === 'function') {
-                    window.showAddedToCartModal();
-                }
+                window.showCartToast();
             } catch (err) {
                 console.error('Add to cart error', err);
-                // Fall back to a normal form submission if the request failed.
                 form.submit();
             } finally {
                 if (button) button.disabled = originalDisabled;
