@@ -18,6 +18,66 @@ namespace CartFlow.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult GoogleLogin(string? returnUrl)
+        {
+            var redirectUrl = Url.Action(nameof(GoogleResponse), "Account", new { returnUrl });
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            return Challenge(properties, Microsoft.AspNetCore.Authentication.Google.GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GoogleResponse(string? returnUrl)
+        {
+            var result = await HttpContext.AuthenticateAsync("External");
+            if (!result.Succeeded || result.Principal is null)
+            {
+                TempData["Error"] = "Google sign-in failed. Please try again.";
+                return RedirectToAction(nameof(SignIn));
+            }
+
+            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                TempData["Error"] = "Google didn't share an email address, so we couldn't sign you in.";
+                return RedirectToAction(nameof(SignIn));
+            }
+
+            var firstName = result.Principal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
+            var lastName = result.Principal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty;
+
+            var user = await accountService.FindOrCreateExternalUserAsync(email, firstName, lastName);
+
+            var claims = new List<Claim> {
+        new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+        new(ClaimTypes.Email, user.Email)
+    };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // Merge guest session cart (if any) into user's DB cart, same as regular sign-in
+            try
+            {
+                var guestVm = HttpContext.Session.GetObject<List<CartFlow.Web.Models.CartItemViewModel>>("Cart");
+                if (guestVm != null && guestVm.Any())
+                {
+                    var dto = guestVm.Select(g => new GuestCartItemDto { ProductId = g.ProductId, Quantity = g.Quantity }).ToList();
+                    await cartService.MergeGuestCartAsync(user.Id, dto);
+                    HttpContext.Session.Remove("Cart");
+                }
+            }
+            catch
+            {
+                // Non-fatal: merging failed; proceed with sign-in so user isn't blocked
+            }
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await HttpContext.SignOutAsync("External");
+
+            return RedirectToLocal(returnUrl);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SignIn(string email, string password, string? returnUrl)
         {

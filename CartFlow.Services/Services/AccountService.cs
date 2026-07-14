@@ -41,6 +41,7 @@ public class AccountService(AppDbContext context) : IAccountService
         return await context.Users.FindAsync(id);
     }
 
+    // after
     public async Task<User?> UpdateProfileAsync(int id, string firstName, string lastName, string email, string phone)
     {
         var user = await context.Users.FindAsync(id);
@@ -51,6 +52,28 @@ public class AccountService(AppDbContext context) : IAccountService
         user.Email = email;
         user.Phone = phone;
 
+        await context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<User> FindOrCreateExternalUserAsync(string email, string firstName, string lastName)
+    {
+        var existing = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        if (existing is not null) return existing;
+
+        var user = new User
+        {
+            FirstName = string.IsNullOrWhiteSpace(firstName) ? "Google" : firstName,
+            LastName = string.IsNullOrWhiteSpace(lastName) ? "User" : lastName,
+            Email = email,
+            // External-login users don't set a local password. Store a random,
+            // unguessable placeholder so it can never be used to sign in
+            // through the normal email/password form.
+            Password = Guid.NewGuid().ToString("N"),
+            UserRole = Role.CUSTOMER
+        };
+
+        context.Users.Add(user);
         await context.SaveChangesAsync();
         return user;
     }

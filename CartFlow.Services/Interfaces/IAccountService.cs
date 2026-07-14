@@ -9,4 +9,6 @@ public interface IAccountService
     Task<User?> SignUpAsync(string firstName, string lastName, string email, string password);
     Task<User?> GetByIdAsync(int id);
     Task<User?> UpdateProfileAsync(int id, string firstName, string lastName, string email, string phone);
+
+    Task<User> FindOrCreateExternalUserAsync(string email, string firstName, string lastName);
 }
