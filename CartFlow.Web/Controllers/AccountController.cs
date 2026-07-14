@@ -11,11 +11,80 @@ namespace CartFlow.Web.Controllers
     using CartFlow.Web.Extensions;
     using Microsoft.AspNetCore.Authentication;
 
-    public class AccountController(IAccountService accountService, ICartService cartService) : Controller
+    public class AccountController(IAccountService accountService, ICartService cartService, IEmailService emailService) : Controller
     {
         public IActionResult SignIn()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                var token = await accountService.GeneratePasswordResetTokenAsync(email);
+                if (token is not null)
+                {
+                    var resetLink = Url.Action(nameof(ResetPassword), "Account",
+                        new { email, token }, protocol: Request.Scheme);
+
+                    await emailService.SendPasswordResetEmailAsync(email, resetLink!);
+                }
+            }
+
+            // Always show the same message, whether or not the email exists,
+            // so we don't reveal which addresses are registered.
+            ViewData["Submitted"] = true;
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(token))
+            {
+                return RedirectToAction(nameof(ForgotPassword));
+            }
+
+            ViewData["email"] = email;
+            ViewData["token"] = token;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email, string token, string newPassword, string confirmPassword)
+        {
+            ViewData["email"] = email;
+            ViewData["token"] = token;
+
+            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 6)
+            {
+                ModelState.AddModelError("", "Password must be at least 6 characters.");
+                return View();
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "Passwords do not match.");
+                return View();
+            }
+
+            var success = await accountService.ResetPasswordAsync(email, token, newPassword);
+            if (!success)
+            {
+                ModelState.AddModelError("", "This reset link is invalid or has expired. Please request a new one.");
+                return View();
+            }
+
+            TempData["Success"] = "Your password has been reset. Please sign in.";
+            return RedirectToAction(nameof(SignIn));
         }
 
         [HttpGet]

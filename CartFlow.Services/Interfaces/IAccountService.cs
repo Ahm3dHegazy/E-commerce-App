@@ -11,4 +11,8 @@ public interface IAccountService
     Task<User?> UpdateProfileAsync(int id, string firstName, string lastName, string email, string phone);
 
     Task<User> FindOrCreateExternalUserAsync(string email, string firstName, string lastName);
+
+    // Password reset
+    Task<string?> GeneratePasswordResetTokenAsync(string email);
+    Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
 }

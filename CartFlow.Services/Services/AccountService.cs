@@ -78,4 +78,36 @@ public class AccountService(AppDbContext context) : IAccountService
         return user;
     }
 
+    public async Task<string?> GeneratePasswordResetTokenAsync(string email)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        if (user is null) return null;
+
+        // URL-safe random token
+        var token = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+
+        user.PasswordResetToken = token;
+        user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+
+        await context.SaveChangesAsync();
+        return token;
+    }
+
+    public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u =>
+            u.Email.ToLower() == email.ToLower() &&
+            u.PasswordResetToken == token);
+
+        if (user is null) return false;
+        if (user.PasswordResetTokenExpiry is null || user.PasswordResetTokenExpiry < DateTime.UtcNow) return false;
+
+        user.Password = newPassword;
+        user.PasswordResetToken = null;
+        user.PasswordResetTokenExpiry = null;
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
 }

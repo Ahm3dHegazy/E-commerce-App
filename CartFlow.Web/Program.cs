@@ -18,8 +18,10 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 // Register Stripe payment service
-builder.Services.AddScoped<CartFlow.Services.Interfaces.IPaymentService, CartFlow.Services.Services.StripePaymentService>();
-builder.Services.AddScoped<CartFlow.Services.Interfaces.IReviewService, CartFlow.Services.Services.ReviewService>();
+builder.Services.AddScoped<IPaymentService, StripePaymentService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
 

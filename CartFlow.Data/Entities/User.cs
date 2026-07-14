@@ -16,6 +16,8 @@ namespace CartFlow.Data.Entities
         public string Password { get; set; } = string.Empty;
         public Role UserRole { get; set; }
         public string Phone { get; set; } = string.Empty;
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
         public List<Address> Addresses { get; set; } = new();
     }
 }
